@@ -10,7 +10,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Flagrow\Latex\Listeners;
+namespace Flagrow\Split\Listeners;
 
 use Flarum\Event\ConfigureClientView;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -38,7 +38,14 @@ class AddClientAssets
             $event->addAssets([
                 __DIR__.'/../../js/forum/dist/extension.js',
             ]);
-            $event->addBootstrapper('flagrow/latex/main');
+            $event->addBootstrapper('flagrow/split/main');
+        }
+
+        if ($event->isAdmin()) {
+            $event->addAssets([
+                __DIR__.'/../../js/admin/dist/extension.js',
+            ]);
+            $event->addBootstrapper('flagrow/split/main');
         }
     }
 }
