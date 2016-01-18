@@ -80,5 +80,6 @@ class AddSplitApi
         // $event->get('/flags', 'flags.index', Controller\ListFlagsController::class);
         // $event->post('/split', 'split.run', Controller\RunSplitController::class);
         // $event->delete('/posts/{id}/flags', 'flags.delete', Controller\DeleteFlagsController::class);
+        $event->post('/split', 'flagrow.split.run', RunSplitController::class);
     }
 }
