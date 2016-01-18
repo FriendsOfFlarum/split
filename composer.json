@@ -1,0 +1,43 @@
+{
+    "name": "flagrow/flarum-ext-split",
+    "description": "",
+    "keywords": ["split", "flarum", "flagrow"],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matteo Pompili",
+            "email": "matpompili@gmail.com"
+        },
+        {
+            "name": "Daniël Klabbers",
+            "email": "daniel+flarum@klabbers.email",
+            "homepage": "http://hyn.io"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/flagrow/flarum-ext-split/issues",
+        "source": "https://github.com/flagrow/flarum-ext-split"
+    },
+    "require": {
+        "flarum/core": "^0.1.0-beta.4"
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Split",
+            "icon": {
+                "name": "code-fork",
+                "backgroundColor": "#000",
+                "color": "#555"
+            }
+        },
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Flagrow\\Split\\": "src/"
+        }
+    }
+}
