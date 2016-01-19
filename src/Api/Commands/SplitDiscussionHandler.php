@@ -58,6 +58,8 @@ class UploadImageHandler
      */
     public function handle(SplitDiscussion $command)
     {
+        $this->assertCan($command->actor, 'canSplit');
+
         $this->validator->assertValid([
             'discussion_id' => $command->discussionId,
             'posts'         => $command->posts,
