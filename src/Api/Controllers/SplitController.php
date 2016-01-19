@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of flagrow/flarum-ext-image-upload.
+ * This file is part of flagrow/flarum-ext-split.
  *
  * Copyright (c) Flagrow.
  *
@@ -11,12 +11,13 @@
  */
 namespace Flagrow\Split\Api\Controllers;
 
+use Flagrow\Split\Commands\SplitDiscussion;
 use Flarum\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class RunSplitController extends AbstractResourceController
+class SplitController extends AbstractResourceController
 {
     /**
      * The serializer instance for this request.
@@ -50,7 +51,7 @@ class RunSplitController extends AbstractResourceController
         $actor = $request->getAttribute('actor');
 
         return $this->bus->dispatch(
-            new SplitDiscussion($postId, base64_decode($file), $actor)
+            new SplitDiscussion($originalDiscussion, $title, $posts, $actor)
         );
     }
 }
