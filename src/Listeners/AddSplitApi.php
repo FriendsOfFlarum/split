@@ -12,6 +12,7 @@
 
 namespace Flagrow\Split\Listeners;
 
+use Flagrow\Split\Api\Controllers\SplitController;
 use Flarum\Api\Serializer\PostSerializer;
 use Flarum\Event\ConfigureApiRoutes;
 use Flarum\Event\PrepareApiAttributes;
