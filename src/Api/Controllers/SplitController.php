@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of flagrow/flarum-ext-image-upload.
+ * This file is part of flagrow/flarum-ext-split.
  *
  * Copyright (c) Flagrow.
  *
@@ -16,7 +16,7 @@ use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
-class RunSplitController extends AbstractResourceController
+class SplitController extends AbstractResourceController
 {
     /**
      * The serializer instance for this request.
