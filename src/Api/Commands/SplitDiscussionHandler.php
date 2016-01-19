@@ -14,12 +14,12 @@ namespace Flagrow\Split\Commands;
 
 use Flagrow\Split\Validators\SplitDiscussionValidator;
 use Flarum\Core\Access\AssertPermissionTrait;
+use Flarum\Core\Discussion;
 use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;
 use Flarum\Core\Support\DispatchEventsTrait;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Foundation\Application;
 
 class UploadImageHandler
 {
@@ -33,7 +33,6 @@ class UploadImageHandler
      * @param Dispatcher                  $events
      * @param UserRepository              $users
      * @param PostRepository              $posts
-     * @param Application                 $app
      * @param SettingsRepositoryInterface $settings
      * @param SplitDiscussionValidator    $validator
      */
@@ -41,20 +40,19 @@ class UploadImageHandler
         Dispatcher $events,
         UserRepository $users,
         PostRepository $posts,
-        Application $app,
         SettingsRepositoryInterface $settings,
         SplitDiscussionValidator $validator
     ) {
         $this->events    = $events;
         $this->users     = $users;
         $this->posts     = $posts;
-        $this->app       = $app;
         $this->settings  = $settings;
         $this->validator = $validator;
     }
 
     /**
      * @param SplitDiscussion $command
+     * @return \Flarum\Core\Discussion
      */
     public function handle(SplitDiscussion $command)
     {
@@ -65,5 +63,18 @@ class UploadImageHandler
             'posts'         => $command->posts,
             'title'         => $command->title
         ]);
+
+        sort($command->posts, SORT_NUMERIC);
+        $firstSplittedPostId = head($command->posts);
+
+        $firstSplittedPost = $this->posts->findOrFail($firstSplittedPostId);
+
+        // create a new discussion for the user of the first splitted reply.
+        $discussion = Discussion::start($command->title, $firstSplittedPost->user);
+        // now find all splitted posts and assign these to the new discussion.
+        $splittedPosts = $this->posts->findByIds($command->posts);
+        $splittedPosts->update(['discussion_id' => $discussion->id]);
+
+        return $discussion;
     }
 }
