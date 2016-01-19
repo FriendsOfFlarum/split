@@ -18,7 +18,7 @@ class SplitSerializer extends AbstractSerializer
     /**
      * @var string
      */
-    protected $type = 'split';
+    protected $type = 'flagrow-split';
     /**
      * Get the default set of serialized attributes for a model.
      *
@@ -27,9 +27,11 @@ class SplitSerializer extends AbstractSerializer
      */
     protected function getDefaultAttributes($model)
     {
+
         return [
-            'url' => $model->file_name,
-            'post_id' => (int) $model->post_id,
+            'new_discussion_title' => $model->new_discussion_title,
+            'actor' => (int) $model->actor,
+
         ];
     }
 }
