@@ -54,9 +54,9 @@ class SplitDiscussion
      */
     public function __construct($discussionId = null, $title, $posts = [], User $actor)
     {
-        $this->$discussionId = $discussionId;
-        $this->$title = $title;
-        $this->$posts = $posts;
+        $this->discussionId = $discussionId;
+        $this->title = $title;
+        $this->posts = $posts;
         $this->actor = $actor;
     }
 }
