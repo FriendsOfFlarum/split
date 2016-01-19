@@ -69,7 +69,7 @@ export default class SplitPostModal extends Modal {
         const data = new FormData();
         data.append('new_discussion_title', this.newDiscussionTitle());
         data.append('actor', app.session.user);
-        data.append('post', this.props.post);    
+        data.append('post', this.props.post);
 
         app.request({
             method: 'POST',

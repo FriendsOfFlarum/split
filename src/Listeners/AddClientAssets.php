@@ -12,7 +12,9 @@
 
 namespace Flagrow\Split\Listeners;
 
+use DirectoryIterator;
 use Flarum\Event\ConfigureClientView;
+use Flarum\Event\ConfigureLocales;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddClientAssets
@@ -26,7 +28,6 @@ class AddClientAssets
     {
         $events->listen(ConfigureClientView::class, [$this, 'addForumAssets']);
         $events->listen(ConfigureLocales::class, [$this, 'addLocales']);
-    }
     }
 
     /**
