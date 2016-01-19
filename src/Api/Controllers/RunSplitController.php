@@ -10,8 +10,7 @@
  * file that was distributed with this source code.
  */
 namespace Flagrow\Split\Api\Controllers;
-use Flagrow\Split\Api\Serializers\ImageSerializer;
-//use Flagrow\ImageUpload\Commands\UploadImage;
+
 use Flarum\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,7 +23,7 @@ class RunSplitController extends AbstractResourceController
      *
      * @var ImageSerializer
      */
-    public $serializer = ImageSerializer::class;
+    public $serializer = SplitSerializer::class;
     /**
      * @var Dispatcher
      */
@@ -45,11 +44,13 @@ class RunSplitController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $postId = array_get($request->getQueryParams(), 'post');
+        $originalDiscussion = array_get($request->getQueryParams(), 'discussion_id');
+        $title = array_get($request->getQueryParams(), 'title');
+        $posts = array_get($request->getQueryParams(), 'posts');
         $actor = $request->getAttribute('actor');
-        $file = array_get($request->getParsedBody(), 'image');
+
         return $this->bus->dispatch(
-            new UploadImage($postId, base64_decode($file), $actor)
+            new SplitDiscussion($postId, base64_decode($file), $actor)
         );
     }
 }
