@@ -13,7 +13,7 @@
 namespace Flagrow\Split\Listeners;
 
 use Flagrow\Split\Api\Controllers\SplitController;
-use Flarum\Api\Serializer\PostSerializer;
+use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Event\ConfigureApiRoutes;
 use Flarum\Event\PrepareApiAttributes;
 use Flarum\Flags\Api\Controller;
@@ -49,7 +49,7 @@ class AddSplitApi
      */
     public function prepareApiAttributes(PrepareApiAttributes $event)
     {
-        if ($event->isSerializer(PostSerializer::class)) {
+        if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canSplit'] = $event->actor->can('split', $event->model);
         }
     }
