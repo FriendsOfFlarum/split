@@ -11,6 +11,7 @@
  */
 namespace Flagrow\Split\Api\Controllers;
 
+use Flagrow\Split\Commands\SplitDiscussion;
 use Flarum\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
@@ -50,7 +51,7 @@ class SplitController extends AbstractResourceController
         $actor = $request->getAttribute('actor');
 
         return $this->bus->dispatch(
-            new SplitDiscussion($postId, base64_decode($file), $actor)
+            new SplitDiscussion($originalDiscussion, $title, $posts, $actor)
         );
     }
 }
