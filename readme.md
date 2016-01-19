@@ -1,4 +1,4 @@
-# flargrow/flarum-ext-split
+# flagrow/flarum-ext-split
 
 [![Latest Stable Version](https://poser.pugx.org/flagrow/flarum-ext-split/v/stable)][packagist-link] [![License](https://poser.pugx.org/flagrow/flarum-ext-split/license)][packagist-link] [![Gitter](https://badges.gitter.im/flagrow/flarum-ext-split.svg)](https://gitter.im/flagrow/chat)
 
