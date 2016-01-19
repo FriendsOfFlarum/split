@@ -12,6 +12,7 @@
 
 namespace Flagrow\Split\Commands;
 
+use Flagrow\Split\Events\DiscussionWasSplit;
 use Flagrow\Split\Validators\SplitDiscussionValidator;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Discussion;
@@ -74,6 +75,10 @@ class UploadImageHandler
         // now find all splitted posts and assign these to the new discussion.
         $splittedPosts = $this->posts->findByIds($command->posts);
         $splittedPosts->update(['discussion_id' => $discussion->id]);
+
+        $this->events->fire(
+            new DiscussionWasSplit($command->actor, $splittedPosts, $command->discussionId, $discussion)
+        );
 
         return $discussion;
     }

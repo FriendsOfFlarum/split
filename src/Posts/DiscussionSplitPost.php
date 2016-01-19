@@ -35,4 +35,10 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     {
         // TODO: Implement saveAfter() method.
     }
+
+
+    public static function reply($discussionId, $userId, $posts)
+    {
+
+    }
 }
