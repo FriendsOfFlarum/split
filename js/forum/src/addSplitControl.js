@@ -9,29 +9,31 @@ import SplitPostModal from 'flagrow/split/components/SplitPostModal';
 
 export default function() {
 
-    var splitting = m.prop();
-    splitting(false);
-
     extend(PostControls, 'moderationControls', function(items, post) {
-        if (post.isHidden() || post.contentType() !== 'comment' || !post.canSplit()) return;
-
+        var discussion = post.discussion();
+        if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
         items.add('splitFrom', [
             m(Button, {
                 icon: 'code-fork',
-                onclick: function() {splitting(true);}.bind(this)
+                onclick: discussion.isSplitting.bind(this, true),
+                className: 'flagrow-split-startSplitButton',
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button')),
         ]);
     });
 
     extend(CommentPost.prototype, 'footerItems', function(items) {
+        var post = this.props.post;
+        var discussion = post.discussion();
+        console.log(discussion.isSplitting);
+        if (post.isHidden() || post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
         items.add('splitTo', [
             m(Button, {
                 icon: 'code-fork',
+                className: 'flagrow-split-endSplitButton',
+                onclick: discussion.isSplitting.bind(this, false),
                 //onclick: () => app.modal.show(new SplitPostModal(post)),
-                style: {display: (splitting() === true ? 'block' : 'none')}
+                style: {display: (discussion.isSplitting() === true ? "block" : "none")}
             }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))
         ]);
     });
-
-
 }

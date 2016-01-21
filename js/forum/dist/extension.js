@@ -1,6 +1,4 @@
 System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app', 'flarum/utils/PostControls', 'flarum/components/Button', 'flarum/components/CommentPost', 'flarum/components/DiscussionPage', 'flagrow/split/components/SplitPostModal'], function (_export) {
-    // import SplitController from 'flagrow/split/utils/SplitController';
-
     'use strict';
 
     var extend, app, PostControls, Button, CommentPost, DiscussionPage, SplitPostModal;
@@ -23,27 +21,27 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
         execute: function () {
             _export('default', function () {
 
-                var splitting = m.prop();
-                splitting(true);
-
-                console.log(splitting);
-
                 extend(PostControls, 'moderationControls', function (items, post) {
-                    if (post.isHidden() || post.contentType() !== 'comment' || !post.canSplit()) return;
-
+                    var discussion = post.discussion();
+                    if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
                     items.add('splitFrom', [m(Button, {
                         icon: 'code-fork',
-                        onclick: (function () {
-                            splitting(true);console.log(splitting());
-                        }).bind(this)
-                    }, app.translator.trans('flagrow-split.forum.post_controls.split_button')), m('p', {}, splitting())]);
+                        onclick: discussion.isSplitting.bind(this, true),
+                        className: 'flagrow-split-startSplitButton'
+                    }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))]);
                 });
 
                 extend(CommentPost.prototype, 'footerItems', function (items) {
+                    var post = this.props.post;
+                    var discussion = post.discussion();
+                    console.log(discussion.isSplitting);
+                    if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
                     items.add('splitTo', [m(Button, {
                         icon: 'code-fork',
+                        className: 'flagrow-split-endSplitButton',
+                        onclick: discussion.isSplitting.bind(this, false),
                         //onclick: () => app.modal.show(new SplitPostModal(post)),
-                        style: { display: splitting() === true ? 'block' : 'none' }
+                        style: { display: discussion.isSplitting() === true ? "block" : "none" }
                     }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))]);
                 });
             });
@@ -156,6 +154,8 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
     };
 });;
 System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flagrow/split/addSplitControl'], function (_export) {
+    // import SplitController from 'flagrow/split/utils/SplitController'
+
     'use strict';
 
     var extend, Model, addSplitControl;
@@ -168,9 +168,9 @@ System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flagrow
             addSplitControl = _flagrowSplitAddSplitControl['default'];
         }],
         execute: function () {
-
             app.initializers.add('flagrow-split', function (app) {
-                app.store.models.posts.prototype.canSplit = Model.attribute('canSplit');
+                app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
+                app.store.models.discussions.prototype.isSplitting = m.prop(false);
 
                 addSplitControl();
             });
@@ -193,25 +193,27 @@ System.register('flagrow/split/utils/SplitController', [], function (_export) {
                     key: 'init',
                     value: function init() {
                         console.log('SplitController initd');
-                        this.splitting = m.prop(false);
+                        this.splitting = false;
                     }
                 }, {
                     key: 'isSplitting',
                     value: function isSplitting() {
-                        console.log('checked splitting, result:', this.splitting());
-                        return this.splitting();
+                        console.log('checked splitting, result:', this.splitting);
+                        return this.splitting;
                     }
                 }, {
                     key: 'startSplitting',
                     value: function startSplitting() {
                         console.log('Started splitting');
-                        this.splitting(true);
+                        this.splitting = true;
+                        m.redraw.strategy("diff");
+                        m.redraw();
                     }
                 }, {
                     key: 'endSplitting',
                     value: function endSplitting() {
                         console.log('Ended splitting');
-                        this.splitting(false);
+                        this.splitting = false;
                     }
                 }]);
                 return SplitController;
