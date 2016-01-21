@@ -26,7 +26,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                     if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
                     items.add('splitFrom', [m(Button, {
                         icon: 'code-fork',
-                        onclick: discussion.isSplitting.bind(this, true),
+                        onclick: discussion.splitting.bind(this, true),
                         className: 'flagrow-split-startSplitButton'
                     }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))]);
                 });
@@ -34,14 +34,13 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                 extend(CommentPost.prototype, 'footerItems', function (items) {
                     var post = this.props.post;
                     var discussion = post.discussion();
-                    console.log(discussion.isSplitting);
                     if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
                     items.add('splitTo', [m(Button, {
                         icon: 'code-fork',
                         className: 'flagrow-split-endSplitButton',
-                        onclick: discussion.isSplitting.bind(this, false),
+                        onclick: discussion.splitting.bind(this, false),
                         //onclick: () => app.modal.show(new SplitPostModal(post)),
-                        style: { display: discussion.isSplitting() === true ? "block" : "none" }
+                        style: { display: discussion.splitting() ? "none" : "block" }
                     }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))]);
                 });
             });
@@ -153,24 +152,29 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
         }
     };
 });;
-System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flagrow/split/addSplitControl'], function (_export) {
+System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'flagrow/split/addSplitControl'], function (_export) {
     // import SplitController from 'flagrow/split/utils/SplitController'
 
     'use strict';
 
-    var extend, Model, addSplitControl;
+    var extend, Model, Discussion, addSplitControl;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
         }, function (_flarumModel) {
             Model = _flarumModel['default'];
+        }, function (_flarumModelsDiscussion) {
+            Discussion = _flarumModelsDiscussion['default'];
         }, function (_flagrowSplitAddSplitControl) {
             addSplitControl = _flagrowSplitAddSplitControl['default'];
         }],
         execute: function () {
             app.initializers.add('flagrow-split', function (app) {
                 app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
-                app.store.models.discussions.prototype.isSplitting = m.prop(false);
+
+                babelHelpers._extends(Discussion.prototype, {
+                    splitting: m.prop(false)
+                });
 
                 addSplitControl();
             });

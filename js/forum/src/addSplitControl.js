@@ -15,7 +15,7 @@ export default function() {
         items.add('splitFrom', [
             m(Button, {
                 icon: 'code-fork',
-                onclick: discussion.isSplitting.bind(this, true),
+                onclick: discussion.splitting.bind(this, true),
                 className: 'flagrow-split-startSplitButton',
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button')),
         ]);
@@ -24,15 +24,14 @@ export default function() {
     extend(CommentPost.prototype, 'footerItems', function(items) {
         var post = this.props.post;
         var discussion = post.discussion();
-        console.log(discussion.isSplitting);
         if (post.isHidden() || post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
         items.add('splitTo', [
             m(Button, {
                 icon: 'code-fork',
                 className: 'flagrow-split-endSplitButton',
-                onclick: discussion.isSplitting.bind(this, false),
+                onclick: discussion.splitting.bind(this, false),
                 //onclick: () => app.modal.show(new SplitPostModal(post)),
-                style: {display: (discussion.isSplitting() === true ? "block" : "none")}
+                style: {display: (discussion.splitting() ? "none" : "block")}
             }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))
         ]);
     });
