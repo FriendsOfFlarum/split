@@ -14,6 +14,7 @@ namespace Flagrow\Split\Posts;
 use Flarum\Core\Post;
 use Flarum\Core\Post\AbstractEventPost;
 use Flarum\Core\Post\MergeableInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class DiscussionSplitPost extends AbstractEventPost implements MergeableInterface {
 
@@ -34,5 +35,34 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     public function saveAfter(Post $previous)
     {
         // TODO: Implement saveAfter() method.
+    }
+
+
+    /**
+     * @param            $discussionId
+     * @param            $userId
+     * @param Collection $posts
+     * @return static
+     */
+    public static function reply($discussionId, $userId, Collection $posts)
+    {
+        $post = new Static;
+
+        $post->time = time();
+        $post->user_id = $userId;
+        $post->discussion_id = $discussionId;
+
+        $post->content = static::buildContent($posts);
+
+        return $post;
+    }
+
+    /**
+     * @param Collection $posts
+     * @return array
+     */
+    protected static function buildContent(Collection $posts)
+    {
+        return $posts->lists('id')->toArray();
     }
 }
