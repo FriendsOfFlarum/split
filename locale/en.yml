@@ -1,0 +1,6 @@
+flagrow-split:
+    forum:
+        post_controls:
+            split_button: Split from here
+        post_controls:
+            split_button: Split to here
