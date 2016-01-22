@@ -1,11 +1,11 @@
 export default class SplitController {
     init() {
-        console.log('SplitController initd');
+        console.log('SplitController init');
         this.splitting = false;
     }
 
     isSplitting() {
-        console.log('checked splitting, result:', this.splitting);
+        console.log('checked splitting, result:' + this.splitting);
         return this.splitting;
     }
 

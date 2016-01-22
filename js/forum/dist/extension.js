@@ -161,31 +161,29 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
         }
     };
 });;
-System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'flagrow/split/addSplitControl'], function (_export) {
-    // import SplitController from 'flagrow/split/utils/SplitController'
-
+System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flagrow/split/addSplitControl', 'flagrow/split/extendDiscussionPage'], function (_export) {
     'use strict';
 
-    var extend, Model, Discussion, addSplitControl;
+    var extend, Model, addSplitControl, extendDiscussionPage;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
         }, function (_flarumModel) {
             Model = _flarumModel['default'];
-        }, function (_flarumModelsDiscussion) {
-            Discussion = _flarumModelsDiscussion['default'];
         }, function (_flagrowSplitAddSplitControl) {
             addSplitControl = _flagrowSplitAddSplitControl['default'];
+        }, function (_flagrowSplitExtendDiscussionPage) {
+            extendDiscussionPage = _flagrowSplitExtendDiscussionPage['default'];
         }],
         execute: function () {
+
             app.initializers.add('flagrow-split', function (app) {
+
                 app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
 
-                babelHelpers._extends(Discussion.prototype, {
-                    splitting: m.prop(false)
-                });
+                extendDiscussionPage();
 
-                addSplitControl();
+                //addSplitControl();
             });
         }
     };
@@ -205,13 +203,13 @@ System.register('flagrow/split/utils/SplitController', [], function (_export) {
                 babelHelpers.createClass(SplitController, [{
                     key: 'init',
                     value: function init() {
-                        console.log('SplitController initd');
+                        console.log('SplitController init');
                         this.splitting = false;
                     }
                 }, {
                     key: 'isSplitting',
                     value: function isSplitting() {
-                        console.log('checked splitting, result:', this.splitting);
+                        console.log('checked splitting, result:' + this.splitting);
                         return this.splitting;
                     }
                 }, {
@@ -233,6 +231,27 @@ System.register('flagrow/split/utils/SplitController', [], function (_export) {
             })();
 
             _export('default', SplitController);
+        }
+    };
+});;
+System.register('flagrow/split/extendDiscussionPage', ['flarum/extend', 'flarum/components/DiscussionPage', 'flarum/utils/SplitController'], function (_export) {
+    'use strict';
+
+    var extend, DiscussionPage, Splitter;
+    return {
+        setters: [function (_flarumExtend) {
+            extend = _flarumExtend.extend;
+        }, function (_flarumComponentsDiscussionPage) {
+            DiscussionPage = _flarumComponentsDiscussionPage['default'];
+        }, function (_flarumUtilsSplitController) {
+            Splitter = _flarumUtilsSplitController['default'];
+        }],
+        execute: function () {
+            _export('default', function () {
+                extend(DiscussionPage, 'init', function () {
+                    this.splitter = new Splitter();
+                });
+            });
         }
     };
 });
