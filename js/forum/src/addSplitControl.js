@@ -11,11 +11,13 @@ export default function() {
 
     extend(PostControls, 'moderationControls', function(items, post) {
         var discussion = post.discussion();
+
         if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
+
         items.add('splitFrom', [
             m(Button, {
                 icon: 'code-fork',
-                onclick: discussion.splitting.bind(this, true),
+                onclick: () => discussion.splitting(true),
                 className: 'flagrow-split-startSplitButton',
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button')),
         ]);
@@ -24,14 +26,17 @@ export default function() {
     extend(CommentPost.prototype, 'footerItems', function(items) {
         var post = this.props.post;
         var discussion = post.discussion();
+
         if (post.isHidden() || post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
+
         items.add('splitTo', [
             m(Button, {
                 icon: 'code-fork',
-                className: 'flagrow-split-endSplitButton',
-                onclick: discussion.splitting.bind(this, false),
+                className: 'flagrow-split-endSplitButton Button Button--link',
+                onclick: () => discussion.splitting(false),
+                // @todo the above is a temporary test solution, we need to implement the modal
                 //onclick: () => app.modal.show(new SplitPostModal(post)),
-                style: {display: (discussion.splitting() ? "none" : "block")}
+                style: {display: (discussion.splitting() ? "block" : "none")}
             }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))
         ]);
     });

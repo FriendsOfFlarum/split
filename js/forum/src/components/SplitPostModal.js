@@ -29,7 +29,7 @@ export default class SplitPostModal extends Modal {
                         m('div', {className: 'Form-group'}, [
                             m(Button, {
                                 className: 'Button Button--primary Button--block',
-                                onclik: this.hide.bind(this)
+                                onclick: this.hide.bind(this)
                             }, app.translator.trans('flagrow-split.forum.split_post.dismiss_button'))
                         ])
                     ])

@@ -23,10 +23,14 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
 
                 extend(PostControls, 'moderationControls', function (items, post) {
                     var discussion = post.discussion();
+
                     if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
+
                     items.add('splitFrom', [m(Button, {
                         icon: 'code-fork',
-                        onclick: discussion.splitting.bind(this, true),
+                        onclick: function onclick() {
+                            return discussion.splitting(true);
+                        },
                         className: 'flagrow-split-startSplitButton'
                     }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))]);
                 });
@@ -34,13 +38,18 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                 extend(CommentPost.prototype, 'footerItems', function (items) {
                     var post = this.props.post;
                     var discussion = post.discussion();
+
                     if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
+
                     items.add('splitTo', [m(Button, {
                         icon: 'code-fork',
-                        className: 'flagrow-split-endSplitButton',
-                        onclick: discussion.splitting.bind(this, false),
+                        className: 'flagrow-split-endSplitButton Button Button--link',
+                        onclick: function onclick() {
+                            return discussion.splitting(false);
+                        },
+                        // @todo the above is a temporary test solution, we need to implement the modal
                         //onclick: () => app.modal.show(new SplitPostModal(post)),
-                        style: { display: discussion.splitting() ? "none" : "block" }
+                        style: { display: discussion.splitting() ? "block" : "none" }
                     }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))]);
                 });
             });
@@ -93,7 +102,7 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
                         if (this.success && !this.gotError) {
                             return [m('div', { className: 'Modal-body' }, [m('div', { className: 'Form Form--centered' }, [m('p', { className: 'helpText' }, app.translator.trans('flagrow-split.forum.split_post.confirmation_message')), m('div', { className: 'Form-group' }, [m(Button, {
                                 className: 'Button Button--primary Button--block',
-                                onclik: this.hide.bind(this)
+                                onclick: this.hide.bind(this)
                             }, app.translator.trans('flagrow-split.forum.split_post.dismiss_button'))])])])];
                         }
 
