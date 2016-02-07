@@ -12,7 +12,7 @@ export default function() {
     extend(PostControls, 'moderationControls', function(items, post) {
         const discussion = post.discussion();
 
-        if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
+        if (ppost.contentType() !== 'comment' || !discussion.canSplit()) return;
 
         items.add('splitFrom', [
             m(Button, {
@@ -30,7 +30,7 @@ export default function() {
         const post = this.props.post;
         const discussion = post.discussion();
 
-        if (post.isHidden() || post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
+        if (post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
 
         var isSplitting = () => {return app.current.splitting};
 

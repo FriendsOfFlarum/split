@@ -24,7 +24,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                 extend(PostControls, 'moderationControls', function (items, post) {
                     var discussion = post.discussion();
 
-                    if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
+                    if (ppost.contentType() !== 'comment' || !discussion.canSplit()) return;
 
                     items.add('splitFrom', [m(Button, {
                         icon: 'code-fork',
@@ -42,7 +42,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                     var post = this.props.post;
                     var discussion = post.discussion();
 
-                    if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
+                    if (post.contentType() !== 'comment' || !discussion.canSplit()) return;
 
                     var isSplitting = function isSplitting() {
                         return app.current.splitting;
