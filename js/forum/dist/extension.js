@@ -24,7 +24,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                 extend(PostControls, 'moderationControls', function (items, post) {
                     var discussion = post.discussion();
 
-                    if (ppost.contentType() !== 'comment' || !discussion.canSplit()) return;
+                    if (post.contentType() !== 'comment' || !discussion.canSplit()) return;
 
                     items.add('splitFrom', [m(Button, {
                         icon: 'code-fork',
@@ -47,11 +47,6 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                     var isSplitting = function isSplitting() {
                         return app.current.splitting;
                     };
-
-                    // even after app.current.splitting is set to true, we never get at this point..
-                    // the m.redraw does not trigger a redraw of this element or change the value of isSplitting, maybe
-                    // because it's a var?
-                    // luceos @ feb 7 2016
 
                     items.add('splitTo', [m(Button, {
                         icon: 'code-fork',

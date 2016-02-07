@@ -12,7 +12,7 @@ export default function() {
     extend(PostControls, 'moderationControls', function(items, post) {
         const discussion = post.discussion();
 
-        if (ppost.contentType() !== 'comment' || !discussion.canSplit()) return;
+        if (post.contentType() !== 'comment' || !discussion.canSplit()) return;
 
         items.add('splitFrom', [
             m(Button, {
@@ -33,11 +33,6 @@ export default function() {
         if (post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
 
         var isSplitting = () => {return app.current.splitting};
-
-        // even after app.current.splitting is set to true, we never get at this point..
-        // the m.redraw does not trigger a redraw of this element or change the value of isSplitting, maybe
-        // because it's a var?
-        // luceos @ feb 7 2016
 
         items.add('splitTo', [
             m(Button, {
