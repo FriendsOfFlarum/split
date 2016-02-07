@@ -17,6 +17,9 @@ export default function() {
         items.add('splitFrom', [
             m(Button, {
                 icon: 'code-fork',
+                // i'm not sure whether setting this attribute on app.current is the correct way,
+                // there is a discussion property on this object though
+                // luceos on feb 7 2016
                 onclick: () => {app.current.splitting = true; m.redraw()},
                 className: 'flagrow-split-startSplitButton',
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button')),

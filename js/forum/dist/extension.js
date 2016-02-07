@@ -28,6 +28,9 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
 
                     items.add('splitFrom', [m(Button, {
                         icon: 'code-fork',
+                        // i'm not sure whether setting this attribute on app.current is the correct way,
+                        // there is a discussion property on this object though
+                        // luceos on feb 7 2016
                         onclick: function onclick() {
                             app.current.splitting = true;m.redraw();
                         },
