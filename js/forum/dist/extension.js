@@ -48,7 +48,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                         return app.current.splitting;
                     };
 
-                    // even after app.current.splitting is set to true, we never get at this point after page load..
+                    // even after app.current.splitting is set to true, we never get at this point..
                     // the m.redraw does not trigger a redraw of this element or change the value of isSplitting, maybe
                     // because it's a var?
                     // luceos @ feb 7 2016
