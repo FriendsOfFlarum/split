@@ -42,8 +42,13 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                     if (post.isHidden() || post.contentType() !== 'comment' || !discussion.canSplit()) return;
 
                     var isSplitting = function isSplitting() {
-                        console.log('hi');return app.current.splitting;
+                        return app.current.splitting;
                     };
+
+                    // even after app.current.splitting is set to true, we never get at this point after page load..
+                    // the m.redraw does not trigger a redraw of this element or change the value of isSplitting, maybe
+                    // because it's a var?
+                    // luceos @ feb 7 2016
 
                     items.add('splitTo', [m(Button, {
                         icon: 'code-fork',
@@ -178,7 +183,6 @@ System.register('flagrow/split/extendDiscussionPage', ['flarum/extend', 'flarum/
         execute: function () {
             _export('default', function () {
                 extend(DiscussionPage.prototype, 'init', function () {
-                    console.log('DiscussionPage extended');
                     this.splitting = false;
                 });
             });

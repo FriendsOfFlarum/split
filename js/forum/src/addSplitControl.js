@@ -29,8 +29,12 @@ export default function() {
 
         if (post.isHidden() || post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
 
-        var isSplitting = () => {console.log('hi'); return app.current.splitting};
+        var isSplitting = () => {return app.current.splitting};
 
+        // even after app.current.splitting is set to true, we never get at this point after page load..
+        // the m.redraw does not trigger a redraw of this element or change the value of isSplitting, maybe
+        // because it's a var?
+        // luceos @ feb 7 2016
 
         items.add('splitTo', [
             m(Button, {
