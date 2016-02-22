@@ -4,13 +4,18 @@ import Discussion from 'flarum/models/Discussion';
 
 import addSplitControl from 'flagrow/split/addSplitControl';
 
-import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
+import SplitController from 'flagrow/split/components/SplitController';
+
+//import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
 
 app.initializers.add('flagrow-split', app => {
 
     app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
 
-    extendDiscussionPage();
+    //extendDiscussionPage();
 
-    addSplitControl();
+    var SC = new SplitController();
+    SC.log();
+
+    addSplitControl(SC);
 });
