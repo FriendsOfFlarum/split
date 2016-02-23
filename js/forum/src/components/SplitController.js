@@ -1,4 +1,4 @@
-class SplitController {
+export default class SplitController {
     constructor () {
         this.isSplitting = false;
     }
@@ -19,9 +19,9 @@ class SplitController {
         return this.endPost;
     }
 
-    static log() {
-        console.log('splitting:'.this.isSplitting);
-        console.log('startPost:'.this.startPost);
-        console.log('endPost:'.this.endPost);
+    log() {
+        console.log('splitting:' + this.isSplitting);
+        console.log('startPost:' + this.startPost);
+        console.log('endPost:' + this.endPost);
     }
 }

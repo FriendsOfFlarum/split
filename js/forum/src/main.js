@@ -14,8 +14,8 @@ app.initializers.add('flagrow-split', app => {
 
     //extendDiscussionPage();
 
-    var SC = new SplitController();
-    SC.log();
+    var splitController = new SplitController();
+    splitController.log();
 
-    addSplitControl(SC);
+    addSplitControl(splitController);
 });

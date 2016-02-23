@@ -1,7 +1,7 @@
-System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app', 'flarum/utils/PostControls', 'flarum/components/Button', 'flarum/components/CommentPost', 'flarum/components/DiscussionPage', 'flagrow/split/components/SplitPostModal'], function (_export) {
+System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app', 'flarum/utils/PostControls', 'flarum/components/Button', 'flarum/components/CommentPost', 'flarum/components/DiscussionPage', 'flagrow/split/components/SplitPostModal', 'flagrow/split/components/SplitController'], function (_export) {
     'use strict';
 
-    var extend, app, PostControls, Button, CommentPost, DiscussionPage, SplitPostModal;
+    var extend, app, PostControls, Button, CommentPost, DiscussionPage, SplitPostModal, SplitController;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
@@ -17,9 +17,11 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
             DiscussionPage = _flarumComponentsDiscussionPage['default'];
         }, function (_flagrowSplitComponentsSplitPostModal) {
             SplitPostModal = _flagrowSplitComponentsSplitPostModal['default'];
+        }, function (_flagrowSplitComponentsSplitController) {
+            SplitController = _flagrowSplitComponentsSplitController['default'];
         }],
         execute: function () {
-            _export('default', function () {
+            _export('default', function (splitCtrl) {
 
                 extend(PostControls, 'moderationControls', function (items, post) {
                     var discussion = post.discussion();
@@ -32,9 +34,10 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                         // there is a discussion property on this object though
                         // luceos on feb 7 2016
                         onclick: function onclick() {
-                            app.current.splitting = true;m.redraw();
-                        },
-                        className: 'flagrow-split-startSplitButton'
+                            $('.flagrow-split-endSplitButton').show();
+                            splitCtrl.log();
+                        }
+                        //className: 'flagrow-split-startSplitButton',
                     }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))]);
                 });
 
@@ -44,22 +47,61 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
 
                     if (post.contentType() !== 'comment' || !discussion.canSplit()) return;
 
-                    var isSplitting = function isSplitting() {
-                        return app.current.splitting;
-                    };
-
                     items.add('splitTo', [m(Button, {
                         icon: 'code-fork',
                         className: 'flagrow-split-endSplitButton Button Button--link',
-                        onclick: function onclick() {
-                            app.current.splitting = false;
-                        },
+                        //onclick: () => {app.current.splitting = false},
                         // @todo the above is a temporary test solution, we need to implement the modal
                         //onclick: () => app.modal.show(new SplitPostModal(post)),
-                        style: { display: isSplitting() ? "block" : "none" }
+                        style: { display: 'none' }
                     }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))]);
                 });
             });
+        }
+    };
+});;
+System.register('flagrow/split/components/SplitController', [], function (_export) {
+    'use strict';
+
+    var SplitController;
+    return {
+        setters: [],
+        execute: function () {
+            SplitController = (function () {
+                function SplitController() {
+                    babelHelpers.classCallCheck(this, SplitController);
+
+                    this.isSplitting = false;
+                }
+
+                babelHelpers.createClass(SplitController, [{
+                    key: 'log',
+                    value: function log() {
+                        console.log('splitting:' + this.isSplitting);
+                        console.log('startPost:' + this.startPost);
+                        console.log('endPost:' + this.endPost);
+                    }
+                }, {
+                    key: 'start',
+                    set: function set(postId) {
+                        this.startPost = postId;
+                    },
+                    get: function get() {
+                        return this.startPost;
+                    }
+                }, {
+                    key: 'end',
+                    set: function set(postId) {
+                        this.endPost = postId;
+                    },
+                    get: function get() {
+                        return this.endPost;
+                    }
+                }]);
+                return SplitController;
+            })();
+
+            _export('default', SplitController);
         }
     };
 });;
@@ -187,10 +229,13 @@ System.register('flagrow/split/extendDiscussionPage', ['flarum/extend', 'flarum/
         }
     };
 });;
-System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'flagrow/split/addSplitControl', 'flagrow/split/extendDiscussionPage'], function (_export) {
+System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'flagrow/split/addSplitControl', 'flagrow/split/components/SplitController'], function (_export) {
+
+    //import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
+
     'use strict';
 
-    var extend, Model, Discussion, addSplitControl, extendDiscussionPage;
+    var extend, Model, Discussion, addSplitControl, SplitController;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
@@ -200,18 +245,20 @@ System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/
             Discussion = _flarumModelsDiscussion['default'];
         }, function (_flagrowSplitAddSplitControl) {
             addSplitControl = _flagrowSplitAddSplitControl['default'];
-        }, function (_flagrowSplitExtendDiscussionPage) {
-            extendDiscussionPage = _flagrowSplitExtendDiscussionPage['default'];
+        }, function (_flagrowSplitComponentsSplitController) {
+            SplitController = _flagrowSplitComponentsSplitController['default'];
         }],
         execute: function () {
-
             app.initializers.add('flagrow-split', function (app) {
 
                 app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
 
-                extendDiscussionPage();
+                //extendDiscussionPage();
 
-                addSplitControl();
+                var splitController = new SplitController();
+                splitController.log();
+
+                addSplitControl(splitController);
             });
         }
     };
