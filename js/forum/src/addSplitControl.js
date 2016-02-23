@@ -8,7 +8,7 @@ import DiscussionPage from 'flarum/components/DiscussionPage';
 import SplitPostModal from 'flagrow/split/components/SplitPostModal';
 import SplitController from 'flagrow/split/components/SplitController';
 
-export default function(splitCtrl) {
+export default function(splitController) {
 
     extend(PostControls, 'moderationControls', function(items, post) {
         const discussion = post.discussion();
@@ -23,7 +23,7 @@ export default function(splitCtrl) {
                 // luceos on feb 7 2016
                 onclick: () => {
                     $('.flagrow-split-endSplitButton').show();
-                    splitCtrl.log();
+                    splitController.log();
                 }
                 //className: 'flagrow-split-startSplitButton',
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))
@@ -42,7 +42,7 @@ export default function(splitCtrl) {
                 className: 'flagrow-split-endSplitButton Button Button--link',
                 //onclick: () => {app.current.splitting = false},
                 // @todo the above is a temporary test solution, we need to implement the modal
-                //onclick: () => app.modal.show(new SplitPostModal(post)),
+                onclick: () => app.modal.show(new SplitPostModal(post)),
                 style: {display: 'none'}
             }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))
         ]);

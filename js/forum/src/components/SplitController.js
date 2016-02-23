@@ -5,6 +5,7 @@ export default class SplitController {
 
     set start(postId) {
         this.startPost = postId;
+        this.isSplitting = true;
     }
 
     set end(postId) {

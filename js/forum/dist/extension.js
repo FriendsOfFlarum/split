@@ -21,7 +21,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
             SplitController = _flagrowSplitComponentsSplitController['default'];
         }],
         execute: function () {
-            _export('default', function (splitCtrl) {
+            _export('default', function (splitController) {
 
                 extend(PostControls, 'moderationControls', function (items, post) {
                     var discussion = post.discussion();
@@ -35,7 +35,7 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                         // luceos on feb 7 2016
                         onclick: function onclick() {
                             $('.flagrow-split-endSplitButton').show();
-                            splitCtrl.log();
+                            splitController.log();
                         }
                         //className: 'flagrow-split-startSplitButton',
                     }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))]);
@@ -52,7 +52,9 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
                         className: 'flagrow-split-endSplitButton Button Button--link',
                         //onclick: () => {app.current.splitting = false},
                         // @todo the above is a temporary test solution, we need to implement the modal
-                        //onclick: () => app.modal.show(new SplitPostModal(post)),
+                        onclick: function onclick() {
+                            return app.modal.show(new SplitPostModal(post));
+                        },
                         style: { display: 'none' }
                     }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))]);
                 });
@@ -85,6 +87,7 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
                     key: 'start',
                     set: function set(postId) {
                         this.startPost = postId;
+                        this.isSplitting = true;
                     },
                     get: function get() {
                         return this.startPost;
