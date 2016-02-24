@@ -1,6 +1,8 @@
 import Modal from 'flarum/components/Modal';
 import Button from 'flarum/components/Button';
 
+import SplitController from 'flagrow/split/components/SplitController';
+
 export default class SplitPostModal extends Modal {
     init() {
         super.init();
@@ -10,6 +12,14 @@ export default class SplitPostModal extends Modal {
         this.gotError = false;
 
         this.newDiscussionTitle = m.prop('');
+
+    }
+
+    setController(ctl) {
+        this.splitController = ctl;
+
+        this.splitController.log();
+
     }
 
     className() {
@@ -17,7 +27,7 @@ export default class SplitPostModal extends Modal {
     }
 
     title() {
-        return app.translator.trans('flagrow-split.forum.split_post.title');
+        return app.translator.trans('flagrow-split.forum.modal.title');
     }
 
     content() {
@@ -25,12 +35,12 @@ export default class SplitPostModal extends Modal {
             return [
                 m('div', {className: 'Modal-body'}, [
                     m('div', {className: 'Form Form--centered'}, [
-                        m('p', {className: 'helpText'}, app.translator.trans('flagrow-split.forum.split_post.confirmation_message')),
+                        m('p', {className: 'helpText'}, app.translator.trans('flagrow-split.forum.modalconfirmation_message')),
                         m('div', {className: 'Form-group'}, [
                             m(Button, {
                                 className: 'Button Button--primary Button--block',
                                 onclick: this.hide.bind(this)
-                            }, app.translator.trans('flagrow-split.forum.split_post.dismiss_button'))
+                            }, app.translator.trans('flagrow-split.forum.modal.dismiss_button'))
                         ])
                     ])
                 ])
@@ -41,7 +51,7 @@ export default class SplitPostModal extends Modal {
             m('div', {className: 'Modal-body'}, [
                 m('div', {className: 'Form Form--centered'}, [
                     m('div', {className: 'Form-group'}, [
-                        m('label', {},  app.translator.trans('flagrow-split.forum.split_post.new_discussion_label')),
+                        m('label', {},  app.translator.trans('flagrow-split.forum.modal.new_discussion_label')),
                         m('input', {
                             name: 'new_discussion_title',
                             value: this.newDiscussionTitle(),
@@ -54,7 +64,7 @@ export default class SplitPostModal extends Modal {
                             type: 'submit',
                             loading: this.loading,
                             disabled: !this.newDiscussionTitle()
-                        }, app.translator.trans('flagrow-split.forum.split_post.submit_button'))
+                        }, app.translator.trans('flagrow-split.forum.modal.submit_button'))
                     ])
                 ])
             ])

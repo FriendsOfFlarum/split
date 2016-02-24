@@ -13,19 +13,19 @@ export default function(splitController) {
     extend(PostControls, 'moderationControls', function(items, post) {
         const discussion = post.discussion();
 
-        if (post.contentType() !== 'comment' || !discussion.canSplit()) return;
+        if (post.contentType() !== 'comment' || !discussion.canSplit() || post.data.attributes.number == 1) return;
 
         items.add('splitFrom', [
             m(Button, {
                 icon: 'code-fork',
+                className: 'flagrow-split-startSplitButton',
                 // i'm not sure whether setting this attribute on app.current is the correct way,
                 // there is a discussion property on this object though
                 // luceos on feb 7 2016
                 onclick: () => {
-                    $('.flagrow-split-endSplitButton').show();
+                    splitController.start(post.data.attributes.number, discussion.data.id);
                     splitController.log();
                 }
-                //className: 'flagrow-split-startSplitButton',
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))
         ]);
     });
@@ -34,7 +34,7 @@ export default function(splitController) {
         const post = this.props.post;
         const discussion = post.discussion();
 
-        if (post.contentType() !== 'comment' ||  !discussion.canSplit()) return;
+        if (post.contentType() !== 'comment' ||  !discussion.canSplit() || post.data.attributes.number == 1) return;
 
         items.add('splitTo', [
             m(Button, {
@@ -42,7 +42,13 @@ export default function(splitController) {
                 className: 'flagrow-split-endSplitButton Button Button--link',
                 //onclick: () => {app.current.splitting = false},
                 // @todo the above is a temporary test solution, we need to implement the modal
-                onclick: () => app.modal.show(new SplitPostModal(post)),
+                onclick: () => {
+                    splitController.end(post.data.attributes.number);
+                    splitController.log();
+                    var splitModal = new SplitPostModal();
+                    splitModal.setController(splitController);
+                    app.modal.show(splitModal);
+                },
                 style: {display: 'none'}
             }, app.translator.trans('flagrow-split.forum.post_footer.split_button'))
         ]);

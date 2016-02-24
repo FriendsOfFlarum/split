@@ -1,28 +1,42 @@
 export default class SplitController {
     constructor () {
-        this.isSplitting = false;
+        this._isSplitting = false;
     }
 
-    set start(postId) {
-        this.startPost = postId;
-        this.isSplitting = true;
+    start(postId, discussionId) {
+        // should not be necessary
+        if (postId == 1) return;
+
+        this._startPost = postId;
+        this._discussion = discussionId;
+        this._isSplitting = true;
+
+        $('.PostStream-item').each(function () {
+            var postIndex = $(this).attr('data-number');
+            if (postIndex > postId) {
+                $('.flagrow-split-endSplitButton', $(this)).show();
+            }
+        });
+        $('.flagrow-split-startSplitButton').hide();
+
     }
 
-    set end(postId) {
-        this.endPost = postId;
+    end(postId) {
+        this._endPost = postId;
     }
 
-    get start() {
-        return this.startPost;
+    startPost() {
+        return this._startPost;
     }
 
-    get end() {
-        return this.endPost;
+    endPost() {
+        return this._endPost;
     }
 
     log() {
-        console.log('splitting:' + this.isSplitting);
-        console.log('startPost:' + this.startPost);
-        console.log('endPost:' + this.endPost);
+        console.log('splitting:' + this._isSplitting);
+        console.log('discussion:' + this._discussion);
+        console.log('startPost:' + this._startPost);
+        console.log('endPost:' + this._endPost);
     }
 }
