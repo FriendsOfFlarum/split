@@ -228,9 +228,12 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
                                 return raw;
                             },
                             data: data
-                        }).then(function () {
-                            return _this.success = true;
-                        })['finally'](this.loaded.bind(this));
+                        }).then(function (discussion) {
+                            app.cache.discussionList.addDiscussion(discussion);
+                            _this.success = true;
+                            _this.hide();
+                            m.route(app.route.discussion(discussion));
+                        }, this.loaded.bind(this));
                     }
                 }]);
                 return SplitPostModal;

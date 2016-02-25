@@ -87,8 +87,14 @@ export default class SplitPostModal extends Modal {
             url: app.forum.attribute('apiUrl') + '/split',
             serialize: raw => raw,
             data
-        })
-        .then(() => this.success = true)
-        .finally(this.loaded.bind(this));
+        }).then(
+            discussion => {
+                app.cache.discussionList.addDiscussion(discussion);
+                this.success = true;
+                this.hide();
+                m.route(app.route.discussion(discussion));
+            },
+            this.loaded.bind(this)
+        );
     }
 }
