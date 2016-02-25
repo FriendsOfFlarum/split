@@ -11,7 +11,9 @@
  */
 namespace Flagrow\Split\Api\Controllers;
 
-use Flagrow\Split\Commands\SplitDiscussion;
+use Flarum\Api\Serializer\DiscussionSerializer;
+use Illuminate\Support\Arr;
+use Flagrow\Split\Api\Commands\SplitDiscussion;
 use Flarum\Api\Controller\AbstractResourceController;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,7 +26,7 @@ class SplitController extends AbstractResourceController
      *
      * @var ImageSerializer
      */
-    public $serializer = SplitSerializer::class;
+    public $serializer = DiscussionSerializer::class;
     /**
      * @var Dispatcher
      */
@@ -45,13 +47,13 @@ class SplitController extends AbstractResourceController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $originalDiscussion = array_get($request->getQueryParams(), 'discussion_id');
-        $title = array_get($request->getQueryParams(), 'title');
-        $posts = array_get($request->getQueryParams(), 'posts');
+        $title = Arr::get($request->getParsedBody(), 'title');
+        $start_post_id = Arr::get($request->getParsedBody(), 'start_post_id');
+        $end_post_id = Arr::get($request->getParsedBody(), 'end_post_id');
         $actor = $request->getAttribute('actor');
 
         return $this->bus->dispatch(
-            new SplitDiscussion($originalDiscussion, $title, $posts, $actor)
+            new SplitDiscussion($title, $start_post_id, $end_post_id, $actor)
         );
     }
 }

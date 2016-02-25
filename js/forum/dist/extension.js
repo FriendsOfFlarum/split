@@ -114,6 +114,13 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
                         return this._endPost;
                     }
                 }, {
+                    key: 'reset',
+                    value: function reset() {
+                        this._isSplitting = false;
+                        this._startPost = null;
+                        this._endPost = null;
+                    }
+                }, {
                     key: 'log',
                     value: function log() {
                         console.log('splitting:' + this._isSplitting);
@@ -163,8 +170,8 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
                     }
                 }, {
                     key: 'setController',
-                    value: function setController(ctl) {
-                        this.splitController = ctl;
+                    value: function setController(splitController) {
+                        this.splitController = splitController;
 
                         this.splitController.log();
                     }
@@ -209,9 +216,10 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
                         this.loading = true;
 
                         var data = new FormData();
-                        data.append('new_discussion_title', this.newDiscussionTitle());
-                        data.append('actor', app.session.user);
-                        data.append('post', this.props.post);
+
+                        data.append('title', this.newDiscussionTitle());
+                        data.append('start_post_id', this.splitController.startPost());
+                        data.append('end_post_id', this.splitController.endPost());
 
                         app.request({
                             method: 'POST',
@@ -223,17 +231,6 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
                         }).then(function () {
                             return _this.success = true;
                         })['finally'](this.loaded.bind(this));
-
-                        // app.store.createRecord('flags').save({
-                        //     reason: this.reason() === 'other' ? null : this.reason(),
-                        //     reasonDetail: this.reasonDetail(),
-                        //     relationships: {
-                        //         user: app.session.user,
-                        //         post: this.props.post
-                        //     }
-                        // })
-                        // .then(() => this.success = true)
-                        // .finally(this.loaded.bind(this));
                     }
                 }]);
                 return SplitPostModal;

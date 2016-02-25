@@ -19,9 +19,9 @@ class DiscussionWasSplit
     public $posts;
 
     /**
-     * @var int
+     * @var Discussion
      */
-    public $originalDiscussionId;
+    public $originalDiscussion;
 
     /**
      * @var Discussion
@@ -32,15 +32,15 @@ class DiscussionWasSplit
      * DiscussionWasSplit constructor.
      *
      * @param User       $actor
-     * @param            $posts
-     * @param            $originalDiscussionId
+     * @param Collection $posts
+     * @param Discussion $originalDiscussion
      * @param Discussion $newDiscussion
      */
-    public function __construct(User $actor, $posts, $originalDiscussionId, Discussion $newDiscussion)
+    public function __construct(User $actor, $posts, Discussion $originalDiscussion, Discussion $newDiscussion)
     {
         $this->actor                = $actor;
         $this->posts                = $posts;
-        $this->originalDiscussionId = $originalDiscussionId;
+        $this->originalDiscussion   = $originalDiscussion;
         $this->newDiscussion        = $newDiscussion;
     }
 }

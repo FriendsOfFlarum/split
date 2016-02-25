@@ -33,6 +33,12 @@ export default class SplitController {
         return this._endPost;
     }
 
+    reset() {
+        this._isSplitting = false;
+        this._startPost = null;
+        this._endPost = null;
+    }
+
     log() {
         console.log('splitting:' + this._isSplitting);
         console.log('discussion:' + this._discussion);

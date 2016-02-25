@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of flagrow/flarum-ext-split.
  *
@@ -10,18 +10,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Commands;
+namespace Flagrow\Split\Api\Commands;
 
 use Flarum\Core\User;
 
 class SplitDiscussion
 {
     /**
-     * The ID of the original discussion.
+     * The post to start splitting from.
      *
      * @var int
      */
-    public $discussionId;
+    public $start_post_id;
+
+    /**
+     * The post to end splitting on.
+     *
+     * @var int
+     */
+    public $end_post_id;
 
     /**
      * The title of the new discussion.
@@ -29,13 +36,6 @@ class SplitDiscussion
      * @var string
      */
     public $title;
-
-    /**
-     * The posts (replies) to move to the new discussion.
-     *
-     * @var array
-     */
-    public $posts;
 
     /**
      * The user performing the action.
@@ -47,16 +47,16 @@ class SplitDiscussion
     /**
      * SplitDiscussion constructor.
      *
-     * @param null  $discussionId
-     * @param       $title
-     * @param array $posts
-     * @param User  $actor
+     * @param string $title
+     * @param int    $start_post_id
+     * @param int    $end_post_id
+     * @param User   $actor
      */
-    public function __construct($discussionId = null, $title, $posts = [], User $actor)
+    public function __construct($title, $start_post_id, $end_post_id, User $actor)
     {
-        $this->discussionId = $discussionId;
-        $this->title = $title;
-        $this->posts = $posts;
-        $this->actor = $actor;
+        $this->title         = $title;
+        $this->start_post_id = $start_post_id;
+        $this->end_post_id   = $end_post_id;
+        $this->actor         = $actor;
     }
 }

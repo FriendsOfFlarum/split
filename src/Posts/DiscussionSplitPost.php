@@ -63,6 +63,6 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      */
     protected static function buildContent(Collection $posts)
     {
-        return $posts->lists('id')->toArray();
+        return implode(', ', $posts->lists('id')->toArray());
     }
 }

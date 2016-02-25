@@ -4,7 +4,6 @@ namespace Flagrow\Split\Listeners;
 
 use Flagrow\Split\Events\DiscussionWasSplit;
 use Flagrow\Split\Posts\DiscussionSplitPost;
-use Flarum\Core\Discussion;
 use Flarum\Event\ConfigurePostTypes;
 use Illuminate\Events\Dispatcher;
 
@@ -32,12 +31,11 @@ class CreatePostWhenSplit
      */
     public function whenDiscussionWasSplit(DiscussionWasSplit $event)
     {
+        // todo instead of replying, add a replacement SplitPost where the discussion was split.
         $post = DiscussionSplitPost::reply(
-            $event->originalDiscussionId,
+            $event->originalDiscussion->id,
             $event->actor->id,
             $event->posts
         );
-
-        Discussion::find($event->originalDiscussionId)->mergePost($post);
     }
 }

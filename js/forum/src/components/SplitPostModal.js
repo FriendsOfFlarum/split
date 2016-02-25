@@ -15,8 +15,8 @@ export default class SplitPostModal extends Modal {
 
     }
 
-    setController(ctl) {
-        this.splitController = ctl;
+    setController(splitController) {
+        this.splitController = splitController;
 
         this.splitController.log();
 
@@ -77,9 +77,10 @@ export default class SplitPostModal extends Modal {
         this.loading = true;
 
         const data = new FormData();
-        data.append('new_discussion_title', this.newDiscussionTitle());
-        data.append('actor', app.session.user);
-        data.append('post', this.props.post);
+
+        data.append('title', this.newDiscussionTitle());
+        data.append('start_post_id', this.splitController.startPost());
+        data.append('end_post_id', this.splitController.endPost());
 
         app.request({
             method: 'POST',
@@ -89,16 +90,5 @@ export default class SplitPostModal extends Modal {
         })
         .then(() => this.success = true)
         .finally(this.loaded.bind(this));
-
-        // app.store.createRecord('flags').save({
-        //     reason: this.reason() === 'other' ? null : this.reason(),
-        //     reasonDetail: this.reasonDetail(),
-        //     relationships: {
-        //         user: app.session.user,
-        //         post: this.props.post
-        //     }
-        // })
-        // .then(() => this.success = true)
-        // .finally(this.loaded.bind(this));
     }
 }

@@ -22,13 +22,13 @@ class SplitDiscussionValidator extends AbstractValidator
     protected function getRules()
     {
         return [
-            'discussion_id' => [
+            'start_post_id' => [
                 'required',
-                'exists:discussions,id'
+                'int'
             ],
-            'posts' => [
+            'end_post_id' => [
                 'required',
-                'array',
+                'int'
             ],
             'title' => [
                 'required',
@@ -36,6 +36,4 @@ class SplitDiscussionValidator extends AbstractValidator
             ],
         ];
     }
-
-
 }

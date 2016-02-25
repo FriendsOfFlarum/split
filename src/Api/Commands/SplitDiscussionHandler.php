@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Commands;
+namespace Flagrow\Split\Api\Commands;
 
 use Flagrow\Split\Events\DiscussionWasSplit;
 use Flagrow\Split\Validators\SplitDiscussionValidator;
@@ -22,11 +22,16 @@ use Flarum\Core\Support\DispatchEventsTrait;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class UploadImageHandler
+class SplitDiscussionHandler
 {
 
     use DispatchEventsTrait;
     use AssertPermissionTrait;
+
+    protected $users;
+    protected $posts;
+    protected $settings;
+    protected $validator;
 
     /**
      * UploadImageHandler constructor.
@@ -60,26 +65,73 @@ class UploadImageHandler
         $this->assertCan($command->actor, 'split');
 
         $this->validator->assertValid([
-            'discussion_id' => $command->discussionId,
-            'posts'         => $command->posts,
+            'start_post_id' => $command->start_post_id,
+            'end_post_id'   => $command->end_post_id,
             'title'         => $command->title
         ]);
 
-        sort($command->posts, SORT_NUMERIC);
-        $firstSplittedPostId = head($command->posts);
+        // load the first selected post to split.
+        $startPost = $this->posts->findOrFail($command->start_post_id, $command->actor);
 
-        $firstSplittedPost = $this->posts->findOrFail($firstSplittedPostId);
-
+        // load the discussion this split action is taking place on.
+        $originalDiscussion = $startPost->discussion;
         // create a new discussion for the user of the first splitted reply.
-        $discussion = Discussion::start($command->title, $firstSplittedPost->user);
-        // now find all splitted posts and assign these to the new discussion.
-        $splittedPosts = $this->posts->findByIds($command->posts);
-        $splittedPosts->update(['discussion_id' => $discussion->id]);
+        $discussion = Discussion::start($command->title, $startPost->user);
+        $discussion->setStartPost($startPost);
+
+        if (!empty($originalDiscussion->tags))
+        {
+            $discussion->tags()->sync($originalDiscussion->tags);
+        }
+
+        // persist the new discussion.
+        $discussion->save();
+
+        // update all posts that are split.
+        $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->id, $command->end_post_id);
+
+        $this->refreshDiscussion($originalDiscussion);
+        $this->refreshDiscussion($discussion);
 
         $this->events->fire(
-            new DiscussionWasSplit($command->actor, $splittedPosts, $command->discussionId, $discussion)
+            new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
         );
 
         return $discussion;
+    }
+
+    /**
+     * Assign the specific range to a new Discussion.
+     *
+     * @param Discussion $originalDiscussion
+     * @param Discussion $discussion
+     * @param            $start_post_id
+     * @param            $end_post_id
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function assignPostsToDiscussion(Discussion $originalDiscussion, Discussion $discussion, $start_post_id, $end_post_id)
+    {
+        $this->posts
+            ->query()
+            ->where('discussion_id', $originalDiscussion->id)
+            ->whereBetween('id', [$start_post_id, $end_post_id])
+            ->update(['discussion_id' => $discussion->id]);
+
+        // update relationship posts on new discussion.
+        $discussion->load('posts');
+
+        return $discussion->posts;
+    }
+
+    /**
+     * Refreshes count and last Post for the discussion.
+     *
+     * @param Discussion $discussion
+     */
+    protected function refreshDiscussion(Discussion $discussion)
+    {
+        $discussion->refreshLastPost();
+        $discussion->refreshCommentsCount();
+        $discussion->refreshParticipantsCount();
     }
 }
