@@ -32,7 +32,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      *     unsuccessful, this should be the current model instance. Otherwise,
      *     it should be the model that was merged into.
      */
-    public function saveAfter(Post $previous)
+    public function saveAfter(Post $previous = null)
     {
         // TODO: Implement saveAfter() method.
     }
