@@ -75,6 +75,7 @@ class SplitDiscussionHandler
 
         // load the discussion this split action is taking place on.
         $originalDiscussion = $startPost->discussion;
+
         // create a new discussion for the user of the first splitted reply.
         $discussion = Discussion::start($command->title, $startPost->user);
         $discussion->setStartPost($startPost);
@@ -117,8 +118,10 @@ class SplitDiscussionHandler
             ->whereBetween('id', [$start_post_id, $end_post_id])
             ->update(['discussion_id' => $discussion->id]);
 
-        // update relationship posts on new discussion.
+        // Update relationship posts on new discussion.
         $discussion->load('posts');
+        // Update the comments relationship too.
+        $discussion->load('comments');
 
         return $discussion->posts;
     }
@@ -133,5 +136,8 @@ class SplitDiscussionHandler
         $discussion->refreshLastPost();
         $discussion->refreshCommentsCount();
         $discussion->refreshParticipantsCount();
+
+        // Persist the new statistics.
+        $discussion->save();
     }
 }
