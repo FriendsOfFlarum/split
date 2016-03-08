@@ -136,15 +136,17 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
         }
     };
 });;
-System.register('flagrow/split/components/SplitPostModal', ['flarum/components/Modal', 'flarum/components/Button', 'flagrow/split/components/SplitController'], function (_export) {
+System.register('flagrow/split/components/SplitPostModal', ['flarum/components/Modal', 'flarum/components/Button', 'flarum/models/Discussion', 'flagrow/split/components/SplitController'], function (_export) {
     'use strict';
 
-    var Modal, Button, SplitController, SplitPostModal;
+    var Modal, Button, Discussion, SplitController, SplitPostModal;
     return {
         setters: [function (_flarumComponentsModal) {
             Modal = _flarumComponentsModal['default'];
         }, function (_flarumComponentsButton) {
             Button = _flarumComponentsButton['default'];
+        }, function (_flarumModelsDiscussion) {
+            Discussion = _flarumModelsDiscussion['default'];
         }, function (_flagrowSplitComponentsSplitController) {
             SplitController = _flagrowSplitComponentsSplitController['default'];
         }],
@@ -228,11 +230,12 @@ System.register('flagrow/split/components/SplitPostModal', ['flarum/components/M
                                 return raw;
                             },
                             data: data
-                        }).then(function (discussion) {
+                        }).then(function (payload) {
+                            var discussion = new Discussion(payload.data, 'discussion');
                             app.cache.discussionList.addDiscussion(discussion);
                             _this.success = true;
                             _this.hide();
-                            m.route(app.route.discussion(discussion));
+                            m.route(app.route.discussion(new discussion()));
                         }, this.loaded.bind(this));
                     }
                 }]);

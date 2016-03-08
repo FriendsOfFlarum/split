@@ -1,5 +1,6 @@
 import Modal from 'flarum/components/Modal';
 import Button from 'flarum/components/Button';
+import Discussion from 'flarum/models/Discussion';
 
 import SplitController from 'flagrow/split/components/SplitController';
 
@@ -88,11 +89,12 @@ export default class SplitPostModal extends Modal {
             serialize: raw => raw,
             data
         }).then(
-            discussion => {
+            payload => {
+                var discussion = new Discussion(payload.data, 'discussion');
                 app.cache.discussionList.addDiscussion(discussion);
                 this.success = true;
                 this.hide();
-                m.route(app.route.discussion(discussion));
+                m.route(app.route.discussion(new discussion));
             },
             this.loaded.bind(this)
         );

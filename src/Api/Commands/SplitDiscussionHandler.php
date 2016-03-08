@@ -91,8 +91,8 @@ class SplitDiscussionHandler
         // update all posts that are split.
         $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->id, $command->end_post_id);
 
-        $this->refreshDiscussion($originalDiscussion);
-        $this->refreshDiscussion($discussion);
+        $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
+        $discussion = $this->refreshDiscussion($discussion);
 
         $this->events->fire(
             new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
@@ -120,8 +120,6 @@ class SplitDiscussionHandler
 
         // Update relationship posts on new discussion.
         $discussion->load('posts');
-        // Update the comments relationship too.
-        $discussion->load('comments');
 
         return $discussion->posts;
     }
@@ -139,5 +137,7 @@ class SplitDiscussionHandler
 
         // Persist the new statistics.
         $discussion->save();
+
+        return Discussion::find($discussion->id);
     }
 }
