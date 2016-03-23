@@ -1,19 +1,19 @@
-System.register('flagrow/split/main', ['flarum/extend', 'flarum/app', 'flarum/components/PermissionGrid'], function (_export) {
+'use strict';
 
-  //import addImageUploadPane from 'flagrow/image-upload/addImageUploadPane'
-
-  'use strict';
-
+System.register('flagrow/split/main', ['flarum/extend', 'flarum/app', 'flarum/components/PermissionGrid'], function (_export, _context) {
   var extend, app, PermissionGrid;
   return {
     setters: [function (_flarumExtend) {
       extend = _flarumExtend.extend;
     }, function (_flarumApp) {
-      app = _flarumApp['default'];
+      app = _flarumApp.default;
     }, function (_flarumComponentsPermissionGrid) {
-      PermissionGrid = _flarumComponentsPermissionGrid['default'];
+      PermissionGrid = _flarumComponentsPermissionGrid.default;
     }],
     execute: function () {
+
+      //import addImageUploadPane from 'flagrow/image-upload/addImageUploadPane'
+
       app.initializers.add('flagrow-split', function (app) {
         //addSplitPane();
 

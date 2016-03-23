@@ -89,11 +89,10 @@ export default class SplitPostModal extends Modal {
             serialize: raw => raw,
             data
         }).then(
-            payload => {
-                var discussion = new Discussion(payload.data, 'discussion');
+            discussion => {
                 app.cache.discussionList.addDiscussion(discussion);
                 this.success = true;
-                this.hide();
+                //this.hide();
                 m.route(app.route.discussion(new discussion));
             },
             this.loaded.bind(this)
