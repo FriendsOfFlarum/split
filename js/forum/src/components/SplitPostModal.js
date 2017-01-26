@@ -1,8 +1,5 @@
-import Modal from 'flarum/components/Modal';
-import Button from 'flarum/components/Button';
-import Discussion from 'flarum/models/Discussion';
-
-import SplitController from 'flagrow/split/components/SplitController';
+import Modal from "flarum/components/Modal";
+import Button from "flarum/components/Button";
 
 export default class SplitPostModal extends Modal {
     init() {
@@ -12,8 +9,8 @@ export default class SplitPostModal extends Modal {
 
     }
 
-    setController(splitController) {
-        this.splitController = splitController;
+    setController(controller) {
+        this.controller = controller;
     }
 
     className() {
@@ -57,8 +54,8 @@ export default class SplitPostModal extends Modal {
         const data = new FormData();
 
         data.append('title', this.newDiscussionTitle());
-        data.append('start_post_id', this.splitController.startPost());
-        data.append('end_post_id', this.splitController.endPost());
+        data.append('start_post_id', this.controller.startPost());
+        data.append('end_post_id', this.controller.endPost());
 
         app.request({
             method: 'POST',
@@ -66,11 +63,14 @@ export default class SplitPostModal extends Modal {
             serialize: raw => raw,
             data
         }).then(
-            discussion => {
-                app.cache.discussionList.addDiscussion(discussion);
-                this.success = true;
-                //this.hide();
-                m.route(app.route.discussion(new discussion));
+            data => {
+                var discussion = {};
+                discussion.id = m.prop(data.data.id);
+                discussion.slug = m.prop(data.data.attributes.slug);
+                discussion.startUser = m.prop(data.data.attributes.startUser);
+                discussion.isUnread = m.prop(data.data.attributes.isUnread);
+                this.hide();
+                m.route(app.route.discussion(discussion));
             },
             this.loaded.bind(this)
         );

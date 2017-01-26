@@ -35,14 +35,14 @@ class CreatePostWhenSplit
         DiscussionSplitPost::reply(
             $event->originalDiscussion,
             $event->newDiscussion,
-            $event->actor->id,
+            $event->actor,
             $event->posts
         );
         // post event on new discussion
         DiscussionSplitPost::reply(
             $event->newDiscussion,
             $event->originalDiscussion,
-            $event->actor->id,
+            $event->actor,
             $event->posts
         );
     }

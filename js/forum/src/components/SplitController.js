@@ -13,7 +13,7 @@ export default class SplitController {
 
         $('.PostStream-item').each(function () {
             var postIndex = $(this).attr('data-number');
-            if (postIndex > postNo) {
+            if (postIndex >= postNo) {
                 $('.flagrow-split-endSplitButton', $(this)).show();
             }
         });
@@ -37,12 +37,5 @@ export default class SplitController {
         this._isSplitting = false;
         this._startPost = null;
         this._endPost = null;
-    }
-
-    log() {
-        console.log('splitting:' + this._isSplitting);
-        console.log('discussion:' + this._discussion);
-        console.log('startPost:' + this._startPost);
-        console.log('endPost:' + this._endPost);
     }
 }

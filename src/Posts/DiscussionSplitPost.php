@@ -15,6 +15,7 @@ use Flarum\Core\Discussion;
 use Flarum\Core\Post;
 use Flarum\Core\Post\AbstractEventPost;
 use Flarum\Core\Post\MergeableInterface;
+use Flarum\Core\User;
 use Flarum\Forum\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -45,16 +46,16 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     /**
      * @param Discussion $one
      * @param Discussion $two
-     * @param $userId
+     * @param User $user
      * @param Collection $posts
      * @return static
      */
-    public static function reply(Discussion $one, Discussion $two, $userId, Collection $posts)
+    public static function reply(Discussion $one, Discussion $two, User $user, Collection $posts)
     {
         $post = new Static;
 
         $post->time = time();
-        $post->user_id = $userId;
+        $post->user_id = $user->id;
         $post->discussion_id = $one->id;
 
         $post->content = static::buildContent($posts, $two);
@@ -74,7 +75,9 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
         return [
             'count' => $posts->count(),
             'relatedDiscussion' => $discussion->id,
-            'url' => $url->toRoute('discussion', $discussion->id),
+            'url' => $url->toRoute('discussion', [
+                'id' => "{$discussion->id}-{$discussion->slug}"
+            ]),
             'isOriginal' => $posts->first()->discussion_id != $discussion->id
         ];
     }

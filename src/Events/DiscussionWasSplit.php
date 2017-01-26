@@ -14,7 +14,7 @@ class DiscussionWasSplit
     public $actor;
 
     /**
-     * @var \Illuminate\Support\Collection
+     * @var \Illuminate\Database\Eloquent\Collection
      */
     public $posts;
 

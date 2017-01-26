@@ -2,7 +2,6 @@ flagrow-split:
     forum:
         post:
             was_split: "{count} posts where split {target}."
-        post_controls:
-            split_button: Split from here
-        post_footer:
-            split_button: Split to here
+        split:
+            from: Split from here
+            to: Split to here
