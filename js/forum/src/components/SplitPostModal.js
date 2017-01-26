@@ -8,19 +8,12 @@ export default class SplitPostModal extends Modal {
     init() {
         super.init();
 
-        this.success = false;
-
-        this.gotError = false;
-
         this.newDiscussionTitle = m.prop('');
 
     }
 
     setController(splitController) {
         this.splitController = splitController;
-
-        this.splitController.log();
-
     }
 
     className() {
@@ -32,22 +25,6 @@ export default class SplitPostModal extends Modal {
     }
 
     content() {
-        if (this.success && ! this.gotError) {
-            return [
-                m('div', {className: 'Modal-body'}, [
-                    m('div', {className: 'Form Form--centered'}, [
-                        m('p', {className: 'helpText'}, app.translator.trans('flagrow-split.forum.modalconfirmation_message')),
-                        m('div', {className: 'Form-group'}, [
-                            m(Button, {
-                                className: 'Button Button--primary Button--block',
-                                onclick: this.hide.bind(this)
-                            }, app.translator.trans('flagrow-split.forum.modal.dismiss_button'))
-                        ])
-                    ])
-                ])
-            ];
-        }
-
         return [
             m('div', {className: 'Modal-body'}, [
                 m('div', {className: 'Form Form--centered'}, [

@@ -3,7 +3,7 @@ export default class SplitController {
         this._isSplitting = false;
     }
 
-    start(postId, discussionId) {
+    start(postId, postNo, discussionId) {
         // should not be necessary
         if (postId == 1) return;
 
@@ -13,7 +13,7 @@ export default class SplitController {
 
         $('.PostStream-item').each(function () {
             var postIndex = $(this).attr('data-number');
-            if (postIndex > postId) {
+            if (postIndex > postNo) {
                 $('.flagrow-split-endSplitButton', $(this)).show();
             }
         });
@@ -21,8 +21,8 @@ export default class SplitController {
 
     }
 
-    end(postId) {
-        this._endPost = postId;
+    end(postNo) {
+        this._endPost = postNo;
     }
 
     startPost() {
