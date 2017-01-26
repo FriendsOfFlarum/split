@@ -11,9 +11,11 @@
  */
 namespace Flagrow\Split\Posts;
 
+use Flarum\Core\Discussion;
 use Flarum\Core\Post;
 use Flarum\Core\Post\AbstractEventPost;
 use Flarum\Core\Post\MergeableInterface;
+use Flarum\Forum\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 
 class DiscussionSplitPost extends AbstractEventPost implements MergeableInterface {
@@ -34,35 +36,46 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      */
     public function saveAfter(Post $previous = null)
     {
-        // TODO: Implement saveAfter() method.
+        $this->save();
+
+        return $this;
     }
 
 
     /**
-     * @param            $discussionId
-     * @param            $userId
+     * @param Discussion $one
+     * @param Discussion $two
+     * @param $userId
      * @param Collection $posts
      * @return static
      */
-    public static function reply($discussionId, $userId, Collection $posts)
+    public static function reply(Discussion $one, Discussion $two, $userId, Collection $posts)
     {
         $post = new Static;
 
         $post->time = time();
         $post->user_id = $userId;
-        $post->discussion_id = $discussionId;
+        $post->discussion_id = $one->id;
 
-        $post->content = static::buildContent($posts);
+        $post->content = static::buildContent($posts, $two);
 
         return $post;
     }
 
     /**
      * @param Collection $posts
+     * @param Discussion $discussion
      * @return array
      */
-    protected static function buildContent(Collection $posts)
+    protected static function buildContent(Collection $posts, Discussion $discussion)
     {
-        return implode(', ', $posts->lists('id')->toArray());
+        /** @var UrlGenerator $url */
+        $url = app(UrlGenerator::class);
+        return [
+            'count' => $posts->count(),
+            'relatedDiscussion' => $discussion->id,
+            'url' => $url->toRoute('discussion', $discussion->id),
+            'isOriginal' => $posts->first()->discussion_id != $discussion->id
+        ];
     }
 }

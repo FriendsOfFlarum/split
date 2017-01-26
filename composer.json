@@ -31,11 +31,11 @@
     },
     "extra": {
         "flarum-extension": {
-            "title": "Split",
+            "title": "Flagrow Split",
             "icon": {
                 "name": "code-fork",
                 "backgroundColor": "#000",
-                "color": "#555"
+                "color": "#87d37c"
             }
         },
         "branch-alias": {

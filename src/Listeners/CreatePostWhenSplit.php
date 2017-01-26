@@ -31,9 +31,17 @@ class CreatePostWhenSplit
      */
     public function whenDiscussionWasSplit(DiscussionWasSplit $event)
     {
-        // todo instead of replying, add a replacement SplitPost where the discussion was split.
-        $post = DiscussionSplitPost::reply(
-            $event->originalDiscussion->id,
+        // post event on original discussion
+        DiscussionSplitPost::reply(
+            $event->originalDiscussion,
+            $event->newDiscussion,
+            $event->actor->id,
+            $event->posts
+        );
+        // post event on new discussion
+        DiscussionSplitPost::reply(
+            $event->newDiscussion,
+            $event->originalDiscussion,
             $event->actor->id,
             $event->posts
         );

@@ -67,6 +67,45 @@ System.register('flagrow/split/addSplitControl', ['flarum/extend', 'flarum/app',
         execute: function () {}
     };
 });;
+"use strict";
+
+System.register("flagrow/split/components/DiscussionSplit", ["flarum/components/EventPost"], function (_export, _context) {
+    "use strict";
+
+    var EventPost, DiscussionSplit;
+    return {
+        setters: [function (_flarumComponentsEventPost) {
+            EventPost = _flarumComponentsEventPost.default;
+        }],
+        execute: function () {
+            DiscussionSplit = function (_EventPost) {
+                babelHelpers.inherits(DiscussionSplit, _EventPost);
+
+                function DiscussionSplit() {
+                    babelHelpers.classCallCheck(this, DiscussionSplit);
+                    return babelHelpers.possibleConstructorReturn(this, (DiscussionSplit.__proto__ || Object.getPrototypeOf(DiscussionSplit)).apply(this, arguments));
+                }
+
+                babelHelpers.createClass(DiscussionSplit, [{
+                    key: "icon",
+                    value: function icon() {
+                        return 'map-o';
+                    }
+                }], [{
+                    key: "initProps",
+                    value: function initProps(props) {
+                        babelHelpers.get(DiscussionSplit.__proto__ || Object.getPrototypeOf(DiscussionSplit), "initProps", this).call(this, props);
+
+                        console.log(props);
+                    }
+                }]);
+                return DiscussionSplit;
+            }(EventPost);
+
+            _export("default", DiscussionSplit);
+        }
+    };
+});;
 'use strict';
 
 System.register('flagrow/split/components/SplitController', [], function (_export, _context) {
@@ -261,34 +300,31 @@ System.register('flagrow/split/extendDiscussionPage', ['flarum/extend', 'flarum/
 });;
 'use strict';
 
-System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'flagrow/split/addSplitControl', 'flagrow/split/components/SplitController'], function (_export, _context) {
+System.register('flagrow/split/main', ['flarum/extend', 'flarum/Model', 'flagrow/split/addSplitControl', 'flagrow/split/components/SplitController', 'flagrow/split/components/DiscussionSplit'], function (_export, _context) {
     "use strict";
 
-    var extend, Model, Discussion, addSplitControl, SplitController;
+    var extend, Model, addSplitControl, SplitController, DiscussionSplit;
     return {
         setters: [function (_flarumExtend) {
             extend = _flarumExtend.extend;
         }, function (_flarumModel) {
             Model = _flarumModel.default;
-        }, function (_flarumModelsDiscussion) {
-            Discussion = _flarumModelsDiscussion.default;
         }, function (_flagrowSplitAddSplitControl) {
             addSplitControl = _flagrowSplitAddSplitControl.default;
         }, function (_flagrowSplitComponentsSplitController) {
             SplitController = _flagrowSplitComponentsSplitController.default;
+        }, function (_flagrowSplitComponentsDiscussionSplit) {
+            DiscussionSplit = _flagrowSplitComponentsDiscussionSplit.default;
         }],
         execute: function () {
-
-            //import extendDiscussionPage from 'flagrow/split/extendDiscussionPage';
 
             app.initializers.add('flagrow-split', function (app) {
 
                 app.store.models.discussions.prototype.canSplit = Model.attribute('canSplit');
 
-                //extendDiscussionPage();
+                app.postComponents.discussionSplit = DiscussionSplit;
 
                 var splitController = new SplitController();
-                console.log(splitController);
 
                 addSplitControl(splitController);
             });

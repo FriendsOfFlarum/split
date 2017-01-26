@@ -1,5 +1,7 @@
 flagrow-split:
     forum:
+        post:
+            was_split: "{count} posts where split {target}."
         post_controls:
             split_button: Split from here
         post_footer:

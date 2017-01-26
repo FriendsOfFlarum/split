@@ -31,16 +31,16 @@ class DiscussionWasSplit
     /**
      * DiscussionWasSplit constructor.
      *
-     * @param User       $actor
+     * @param User $actor
      * @param Collection $posts
      * @param Discussion $originalDiscussion
      * @param Discussion $newDiscussion
      */
     public function __construct(User $actor, $posts, Discussion $originalDiscussion, Discussion $newDiscussion)
     {
-        $this->actor                = $actor;
-        $this->posts                = $posts;
-        $this->originalDiscussion   = $originalDiscussion;
-        $this->newDiscussion        = $newDiscussion;
+        $this->actor = $actor;
+        $this->posts = $posts;
+        $this->originalDiscussion = $originalDiscussion;
+        $this->newDiscussion = $newDiscussion;
     }
 }
