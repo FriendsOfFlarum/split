@@ -89,7 +89,7 @@ class SplitDiscussionHandler
         $discussion->save();
 
         // update all posts that are split.
-        $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->id, $command->end_post_id);
+        $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->number, $command->end_post_id);
 
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
         $discussion = $this->refreshDiscussion($discussion);
@@ -115,8 +115,11 @@ class SplitDiscussionHandler
         $this->posts
             ->query()
             ->where('discussion_id', $originalDiscussion->id)
-            ->whereBetween('id', [$start_post_id, $end_post_id])
+            ->whereBetween('number', [$start_post_id, $end_post_id])
             ->update(['discussion_id' => $discussion->id]);
+
+        $discussion->number_index = ($end_post_id - $start_post_id - 1);
+        $discussion->save();
 
         // Update relationship posts on new discussion.
         $discussion->load('posts');

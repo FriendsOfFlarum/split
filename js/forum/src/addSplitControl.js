@@ -24,7 +24,6 @@ export default function(splitController) {
                 // luceos on feb 7 2016
                 onclick: () => {
                     splitController.start(post.data.attributes.number, discussion.data.id);
-                    splitController.log();
                 }
             }, app.translator.trans('flagrow-split.forum.post_controls.split_button'))
         ]);
@@ -44,7 +43,6 @@ export default function(splitController) {
                 // @todo the above is a temporary test solution, we need to implement the modal
                 onclick: () => {
                     splitController.end(post.data.attributes.number);
-                    splitController.log();
                     var splitModal = new SplitPostModal();
                     splitModal.setController(splitController);
                     app.modal.show(splitModal);
