@@ -16,11 +16,11 @@ use Flagrow\Split\Events\DiscussionWasSplit;
 use Flagrow\Split\Validators\SplitDiscussionValidator;
 use Flarum\Core\Access\AssertPermissionTrait;
 use Flarum\Core\Discussion;
+use Flarum\Core\Post;
 use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;
 use Flarum\Core\Support\DispatchEventsTrait;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
 {
@@ -36,20 +36,17 @@ class SplitDiscussionHandler
     /**
      * UploadImageHandler constructor.
      *
-     * @param Dispatcher                  $events
      * @param UserRepository              $users
      * @param PostRepository              $posts
      * @param SettingsRepositoryInterface $settings
      * @param SplitDiscussionValidator    $validator
      */
     public function __construct(
-        Dispatcher $events,
         UserRepository $users,
         PostRepository $posts,
         SettingsRepositoryInterface $settings,
         SplitDiscussionValidator $validator
     ) {
-        $this->events    = $events;
         $this->users     = $users;
         $this->posts     = $posts;
         $this->settings  = $settings;
@@ -73,7 +70,7 @@ class SplitDiscussionHandler
         // load the first selected post to split.
         $startPost = $this->posts->findOrFail($command->start_post_id, $command->actor);
 
-        // load the discussion this split action is taking place on.
+        /** @var Discussion $originalDiscussion */
         $originalDiscussion = $startPost->discussion;
 
         // create a new discussion for the user of the first splitted reply.
@@ -94,7 +91,7 @@ class SplitDiscussionHandler
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
         $discussion = $this->refreshDiscussion($discussion);
 
-        $this->events->fire(
+        $originalDiscussion->raise(
             new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
         );
 
@@ -134,6 +131,16 @@ class SplitDiscussionHandler
      */
     protected function refreshDiscussion(Discussion $discussion)
     {
+        $discussion->load('posts');
+
+        $number = 1;
+
+        $discussion->posts->sortBy('time')->each(function (Post $post) use (&$number) {
+            $post->number = $number;
+            $post->save();
+            $number++;
+        });
+
         $discussion->refreshLastPost();
         $discussion->refreshCommentsCount();
         $discussion->refreshParticipantsCount();

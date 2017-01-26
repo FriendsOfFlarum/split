@@ -52,7 +52,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      */
     public static function reply(Discussion $one, Discussion $two, User $user, Collection $posts)
     {
-        $post = new Static;
+        $post = new DiscussionSplitPost();
 
         $post->time = time();
         $post->user_id = $user->id;

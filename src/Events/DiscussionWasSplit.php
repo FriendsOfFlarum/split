@@ -4,6 +4,7 @@ namespace Flagrow\Split\Events;
 
 use Flarum\Core\Discussion;
 use Flarum\Core\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class DiscussionWasSplit
 {
@@ -36,7 +37,7 @@ class DiscussionWasSplit
      * @param Discussion $originalDiscussion
      * @param Discussion $newDiscussion
      */
-    public function __construct(User $actor, $posts, Discussion $originalDiscussion, Discussion $newDiscussion)
+    public function __construct(User $actor, Collection $posts, Discussion $originalDiscussion, Discussion $newDiscussion)
     {
         $this->actor = $actor;
         $this->posts = $posts;

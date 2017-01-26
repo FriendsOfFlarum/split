@@ -3,17 +3,17 @@ export default class SplitController {
         this._isSplitting = false;
     }
 
-    start(postId, postNo, discussionId) {
+    start(postId, postNo) {
         // should not be necessary
-        if (postId == 1) return;
+        if (postNo == 1) return;
 
-        this._startPost = postId;
-        this._discussion = discussionId;
-        this._isSplitting = true;
+        this._startId = postId;
+        this._startPost = postNo;
+        this._endPost = null;
 
         $('.PostStream-item').each(function () {
             var postIndex = $(this).attr('data-number');
-            if (postIndex >= postNo) {
+            if (postIndex >= this._startPost) {
                 $('.flagrow-split-endSplitButton', $(this)).show();
             }
         });
