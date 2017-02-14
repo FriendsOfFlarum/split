@@ -16,7 +16,7 @@ System.register("flagrow/split/addSplitControl", ["flarum/extend", "flarum/app",
                 icon: 'code-fork',
                 className: 'flagrow-split-startSplitButton',
                 onclick: function onclick() {
-                    controller.start(post.id(), post.number());
+                    controller.start(post.number());
                 }
             }, app.translator.trans('flagrow-split.forum.split.from'))]);
         });
@@ -58,9 +58,9 @@ System.register("flagrow/split/addSplitControl", ["flarum/extend", "flarum/app",
         execute: function () {}
     };
 });;
-"use strict";
+'use strict';
 
-System.register("flagrow/split/components/DiscussionSplit", ["flarum/components/EventPost"], function (_export, _context) {
+System.register('flagrow/split/components/DiscussionSplit', ['flarum/components/EventPost'], function (_export, _context) {
     "use strict";
 
     var EventPost, DiscussionSplit;
@@ -78,22 +78,33 @@ System.register("flagrow/split/components/DiscussionSplit", ["flarum/components/
                 }
 
                 babelHelpers.createClass(DiscussionSplit, [{
-                    key: "icon",
+                    key: 'icon',
                     value: function icon() {
-                        return 'map-o';
+                        return 'code-fork';
                     }
-                }], [{
-                    key: "initProps",
-                    value: function initProps(props) {
-                        babelHelpers.get(DiscussionSplit.__proto__ || Object.getPrototypeOf(DiscussionSplit), "initProps", this).call(this, props);
-
-                        console.log(props);
+                }, {
+                    key: 'descriptionKey',
+                    value: function descriptionKey() {
+                        return 'flagrow-split.forum.post.was_split';
+                    }
+                }, {
+                    key: 'descriptionData',
+                    value: function descriptionData() {
+                        return {
+                            'count': this.props.post.content()['count'],
+                            'target': m(
+                                'a',
+                                { className: 'EventPost-Split-target', href: this.props.content()['url'],
+                                    config: m.route },
+                                this.props.content()['name']
+                            )
+                        };
                     }
                 }]);
                 return DiscussionSplit;
             }(EventPost);
 
-            _export("default", DiscussionSplit);
+            _export('default', DiscussionSplit);
         }
     };
 });;
@@ -109,49 +120,43 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
             SplitController = function () {
                 function SplitController() {
                     babelHelpers.classCallCheck(this, SplitController);
-
-                    this._isSplitting = false;
                 }
 
                 babelHelpers.createClass(SplitController, [{
                     key: 'start',
-                    value: function start(postId, postNo) {
-                        // should not be necessary
-                        if (postNo == 1) return;
+                    value: function start(postNo) {
+                        this.reset();
 
-                        this._startId = postId;
-                        this._startPost = postNo;
-                        this._endPost = null;
+                        this.startPost = postNo;
 
                         $('.PostStream-item').each(function () {
-                            var postIndex = $(this).attr('data-number');
-                            if (postIndex >= this._startPost) {
+                            if ($(this).attr('data-number') >= postNo) {
                                 $('.flagrow-split-endSplitButton', $(this)).show();
                             }
                         });
+
                         $('.flagrow-split-startSplitButton').hide();
                     }
                 }, {
                     key: 'end',
                     value: function end(postNo) {
-                        this._endPost = postNo;
+                        this.endPost = postNo;
                     }
                 }, {
                     key: 'startPost',
                     value: function startPost() {
-                        return this._startPost;
+                        return this.startPost;
                     }
                 }, {
                     key: 'endPost',
                     value: function endPost() {
-                        return this._endPost;
+                        return this.endPost;
                     }
                 }, {
                     key: 'reset',
                     value: function reset() {
-                        this._isSplitting = false;
-                        this._startPost = null;
-                        this._endPost = null;
+                        this.startPost = null;
+                        this.endPost = null;
                     }
                 }]);
                 return SplitController;
@@ -192,7 +197,7 @@ System.register("flagrow/split/components/SplitPostModal", ["flarum/components/M
                 }, {
                     key: "setController",
                     value: function setController(controller) {
-                        this.controller = controller;
+                        this.split = controller;
                     }
                 }, {
                     key: "className",
@@ -208,6 +213,7 @@ System.register("flagrow/split/components/SplitPostModal", ["flarum/components/M
                     key: "content",
                     value: function content() {
                         return [m('div', { className: 'Modal-body' }, [m('div', { className: 'Form Form--centered' }, [m('div', { className: 'Form-group' }, [m('label', {}, app.translator.trans('flagrow-split.forum.modal.new_discussion_label')), m('input', {
+                            className: 'FormControl',
                             name: 'new_discussion_title',
                             value: this.newDiscussionTitle(),
                             oninput: m.withAttr('value', this.newDiscussionTitle)
@@ -227,11 +233,13 @@ System.register("flagrow/split/components/SplitPostModal", ["flarum/components/M
 
                         this.loading = true;
 
+                        console.log(this, this.split);
+
                         var data = new FormData();
 
                         data.append('title', this.newDiscussionTitle());
-                        data.append('start_post_id', this.controller.startPost());
-                        data.append('end_post_id', this.controller.endPost());
+                        data.append('start_post_id', this.split.startPost());
+                        data.append('end_post_id', this.split.endPost());
 
                         app.request({
                             method: 'POST',

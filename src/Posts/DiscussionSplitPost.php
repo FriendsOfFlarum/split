@@ -75,6 +75,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
         return [
             'count' => $posts->count(),
             'relatedDiscussion' => $discussion->id,
+            'name' => $discussion->title,
             'url' => $url->toRoute('discussion', [
                 'id' => "{$discussion->id}-{$discussion->slug}"
             ]),

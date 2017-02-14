@@ -10,7 +10,7 @@ export default class SplitPostModal extends Modal {
     }
 
     setController(controller) {
-        this.controller = controller;
+        this.split = controller;
     }
 
     className() {
@@ -28,6 +28,7 @@ export default class SplitPostModal extends Modal {
                     m('div', {className: 'Form-group'}, [
                         m('label', {},  app.translator.trans('flagrow-split.forum.modal.new_discussion_label')),
                         m('input', {
+                            className: 'FormControl',
                             name: 'new_discussion_title',
                             value: this.newDiscussionTitle(),
                             oninput: m.withAttr('value', this.newDiscussionTitle)
@@ -51,11 +52,13 @@ export default class SplitPostModal extends Modal {
 
         this.loading = true;
 
+        console.log(this, this.split);
+
         const data = new FormData();
 
         data.append('title', this.newDiscussionTitle());
-        data.append('start_post_id', this.controller.startPost());
-        data.append('end_post_id', this.controller.endPost());
+        data.append('start_post_id', this.split.startPost());
+        data.append('end_post_id', this.split.endPost());
 
         app.request({
             method: 'POST',
