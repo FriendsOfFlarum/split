@@ -31,7 +31,7 @@ class CreatePostWhenSplit
      */
     public function whenDiscussionWasSplit(DiscussionWasSplit $event)
     {
-        foreach (['from', 'to'] as $direction) {
+        foreach (['to', 'from'] as $direction) {
             forward_static_call_array(
                 [
                     DiscussionSplitPost::class,

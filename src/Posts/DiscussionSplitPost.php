@@ -54,7 +54,6 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     public static function to(Discussion $new, Discussion $old, User $user, Collection $posts)
     {
         $post = static::newReply($user, $old);
-        $post->number = $old->last_post_number + 1;
 
         $post->content = static::buildContent($new->title, $posts->count(), $new->id, $new->slug, true);
 
@@ -77,8 +76,6 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     public static function from(Discussion $new, Discussion $old, User $user, Collection $posts)
     {
         $post = static::newReply($user, $new);
-
-        $post->number = $new->last_post_number + 1;
 
         $post->content = static::buildContent($old->title, $posts->count(), $old->id, $old->slug, false);
 

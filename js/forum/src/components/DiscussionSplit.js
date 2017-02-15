@@ -32,8 +32,8 @@ export default class DiscussionSplit extends EventPost {
     descriptionData() {
         return {
             'count': this.props.post.content()['count'],
-            'target': <a className="EventPost-Split-target" href={this.props.content()['url']}
-                         config={m.route}>{this.props.content()['title']}</a>
+            'target': <a className="EventPost-Split-target" href={this.props.post.content()['url']}
+                         config={m.route}>{this.props.post.content()['title']}</a>
         };
     }
 }

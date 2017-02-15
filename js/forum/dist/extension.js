@@ -98,9 +98,10 @@ System.register('flagrow/split/components/DiscussionSplit', ['flarum/components/
                             'count': this.props.post.content()['count'],
                             'target': m(
                                 'a',
-                                { className: 'EventPost-Split-target', href: this.props.content()['url'],
+                                {
+                                    className: 'EventPost-Split-target', href: this.props.post.content()['url'],
                                     config: m.route },
-                                this.props.content()['title']
+                                this.props.post.content()['title']
                             )
                         };
                     }

@@ -166,6 +166,8 @@ class SplitDiscussionHandler
             $number++;
         });
 
+        $discussion->number_index = $number;
+
         $discussion->refreshLastPost();
         $discussion->refreshCommentsCount();
         $discussion->refreshParticipantsCount();
