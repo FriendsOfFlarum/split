@@ -19,37 +19,56 @@ use Flarum\Core\Discussion;
 use Flarum\Core\Post;
 use Flarum\Core\Repository\PostRepository;
 use Flarum\Core\Repository\UserRepository;
-use Flarum\Core\Support\DispatchEventsTrait;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
 {
-
-    use DispatchEventsTrait;
     use AssertPermissionTrait;
 
+    /**
+     * @var UserRepository
+     */
     protected $users;
+
+    /**
+     * @var PostRepository
+     */
     protected $posts;
+
+    /**
+     * @var SettingsRepositoryInterface
+     */
     protected $settings;
+
+    /**
+     * @var SplitDiscussionValidator
+     */
     protected $validator;
 
     /**
-     * UploadImageHandler constructor.
-     *
-     * @param UserRepository              $users
-     * @param PostRepository              $posts
+     * @var Dispatcher
+     */
+    protected $events;
+
+    /**
+     * @param UserRepository $users
+     * @param PostRepository $posts
      * @param SettingsRepositoryInterface $settings
-     * @param SplitDiscussionValidator    $validator
+     * @param Dispatcher $events
+     * @param SplitDiscussionValidator $validator
      */
     public function __construct(
         UserRepository $users,
         PostRepository $posts,
         SettingsRepositoryInterface $settings,
+        Dispatcher $events,
         SplitDiscussionValidator $validator
     ) {
-        $this->users     = $users;
-        $this->posts     = $posts;
-        $this->settings  = $settings;
+        $this->users = $users;
+        $this->posts = $posts;
+        $this->settings = $settings;
+        $this->events = $events;
         $this->validator = $validator;
     }
 
@@ -63,8 +82,8 @@ class SplitDiscussionHandler
 
         $this->validator->assertValid([
             'start_post_id' => $command->start_post_id,
-            'end_post_id'   => $command->end_post_id,
-            'title'         => $command->title
+            'end_post_id' => $command->end_post_id,
+            'title' => $command->title
         ]);
 
         // load the first selected post to split.
@@ -80,18 +99,20 @@ class SplitDiscussionHandler
         // persist the new discussion.
         $discussion->save();
 
-        // sets the tags for the new discussion based on the old one
-        if ($originalDiscussion->tags) {
-            $discussion->tags()->sync($originalDiscussion->tags);
-        }
+        $this->assignTagsToDiscussion($originalDiscussion, $discussion);
 
         // update all posts that are split.
-        $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->number, $command->end_post_id);
+        $affectedPosts = $this->assignPostsToDiscussion(
+            $originalDiscussion,
+            $discussion,
+            $startPost->number,
+            $command->end_post_id
+        );
 
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
         $discussion = $this->refreshDiscussion($discussion);
 
-        $originalDiscussion->raise(
+        $this->events->fire(
             new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
         );
 
@@ -107,8 +128,12 @@ class SplitDiscussionHandler
      * @param            $end_post_id
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function assignPostsToDiscussion(Discussion $originalDiscussion, Discussion $discussion, $start_post_id, $end_post_id)
-    {
+    protected function assignPostsToDiscussion(
+        Discussion $originalDiscussion,
+        Discussion $discussion,
+        $start_post_id,
+        $end_post_id
+    ) {
         $this->posts
             ->query()
             ->where('discussion_id', $originalDiscussion->id)
@@ -149,5 +174,18 @@ class SplitDiscussionHandler
         $discussion->save();
 
         return Discussion::find($discussion->id);
+    }
+
+    /**
+     * Sets the tags for the new discussion based on the old one.
+     *
+     * @param $originalDiscussion
+     * @param $discussion
+     */
+    protected function assignTagsToDiscussion($originalDiscussion, $discussion)
+    {
+        if ($originalDiscussion->tags) {
+            $discussion->tags()->sync($originalDiscussion->tags);
+        }
     }
 }

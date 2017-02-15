@@ -85,7 +85,11 @@ System.register('flagrow/split/components/DiscussionSplit', ['flarum/components/
                 }, {
                     key: 'descriptionKey',
                     value: function descriptionKey() {
-                        return 'flagrow-split.forum.post.was_split';
+                        if (this.props.post.content()['toNew']) {
+                            return 'flagrow-split.forum.post.was_split_to';
+                        }
+
+                        return 'flagrow-split.forum.post.was_split_from';
                     }
                 }, {
                     key: 'descriptionData',
@@ -96,7 +100,7 @@ System.register('flagrow/split/components/DiscussionSplit', ['flarum/components/
                                 'a',
                                 { className: 'EventPost-Split-target', href: this.props.content()['url'],
                                     config: m.route },
-                                this.props.content()['name']
+                                this.props.content()['title']
                             )
                         };
                     }

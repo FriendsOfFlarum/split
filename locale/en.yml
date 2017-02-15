@@ -1,7 +1,8 @@
 flagrow-split:
     forum:
         post:
-            was_split: "{count} post was split to {target}.|{count} posts were split to {target}."
+            was_split_to: "{count} post was split to {target}.|{count} posts were split to {target}."
+            was_split_from: "{count} post was split from {target}.|{count} posts were split from {target}."
         split:
             from: Split from here
             to: Split to here

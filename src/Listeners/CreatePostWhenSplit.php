@@ -31,19 +31,19 @@ class CreatePostWhenSplit
      */
     public function whenDiscussionWasSplit(DiscussionWasSplit $event)
     {
-        // post event on original discussion
-        DiscussionSplitPost::reply(
-            $event->originalDiscussion,
-            $event->newDiscussion,
-            $event->actor,
-            $event->posts
-        );
-        // post event on new discussion
-        DiscussionSplitPost::reply(
-            $event->newDiscussion,
-            $event->originalDiscussion,
-            $event->actor,
-            $event->posts
-        );
+        foreach (['from', 'to'] as $direction) {
+            forward_static_call_array(
+                [
+                    DiscussionSplitPost::class,
+                    $direction
+                ],
+                [
+                    $event->newDiscussion,
+                    $event->originalDiscussion,
+                    $event->actor,
+                    $event->posts
+                ]
+            );
+        }
     }
 }

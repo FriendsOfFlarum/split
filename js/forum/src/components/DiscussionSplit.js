@@ -17,7 +17,11 @@ export default class DiscussionSplit extends EventPost {
      * @return {String}
      */
     descriptionKey() {
-        return 'flagrow-split.forum.post.was_split';
+        if (this.props.post.content()['toNew']) {
+            return 'flagrow-split.forum.post.was_split_to';
+        }
+
+        return 'flagrow-split.forum.post.was_split_from';
     }
 
     /**
@@ -29,7 +33,7 @@ export default class DiscussionSplit extends EventPost {
         return {
             'count': this.props.post.content()['count'],
             'target': <a className="EventPost-Split-target" href={this.props.content()['url']}
-                         config={m.route}>{this.props.content()['name']}</a>
+                         config={m.route}>{this.props.content()['title']}</a>
         };
     }
 }

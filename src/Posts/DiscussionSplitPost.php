@@ -42,44 +42,91 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
         return $this;
     }
 
-
     /**
-     * @param Discussion $one
-     * @param Discussion $two
+     * Saves a post in the OLD Discussion referring to the new Discussion.
+     *
+     * @param Discussion $new
+     * @param Discussion $old
      * @param User $user
      * @param Collection $posts
      * @return static
      */
-    public static function reply(Discussion $one, Discussion $two, User $user, Collection $posts)
+    public static function to(Discussion $new, Discussion $old, User $user, Collection $posts)
     {
-        $post = new DiscussionSplitPost();
+        $post = static::newReply($user, $old);
+        $post->number = $old->last_post_number + 1;
 
-        $post->time = time();
-        $post->user_id = $user->id;
-        $post->discussion_id = $one->id;
+        $post->content = static::buildContent($new->title, $posts->count(), $new->id, $new->slug, true);
 
-        $post->content = static::buildContent($posts, $two);
+        $post->save();
+
+        $old->setLastPost($post);
 
         return $post;
     }
 
     /**
+     * Saves post in the NEW Discussion referring to the old Discussion.
+     *
+     * @param Discussion $new
+     * @param Discussion $old
+     * @param User $user
      * @param Collection $posts
-     * @param Discussion $discussion
-     * @return array
+     * @return DiscussionSplitPost
      */
-    protected static function buildContent(Collection $posts, Discussion $discussion)
+    public static function from(Discussion $new, Discussion $old, User $user, Collection $posts)
+    {
+        $post = static::newReply($user, $new);
+
+        $post->number = $new->last_post_number + 1;
+
+        $post->content = static::buildContent($old->title, $posts->count(), $old->id, $old->slug, false);
+
+        $post->save();
+
+        $new->setLastPost($post);
+
+        return $post;
+    }
+
+    /**
+     * @param User $user
+     * @param Discussion $discussion
+     * @return static
+     */
+    protected static function newReply(User $user, Discussion $discussion)
+    {
+        $post = new Static;
+        $post->time = time();
+        $post->user_id = $user->id;
+        $post->discussion_id = $discussion->id;
+
+        return $post;
+    }
+
+    /**
+     *
+     *
+     * @param string $title
+     * @param int $postCount
+     * @param int $discussionId
+     * @param string $slug
+     * @param bool $toNew
+     * @return array
+     * @internal param Discussion $discussion
+     */
+    protected static function buildContent(string $title, int $postCount, int $discussionId, string $slug, bool $toNew)
     {
         /** @var UrlGenerator $url */
         $url = app(UrlGenerator::class);
+
         return [
-            'count' => $posts->count(),
-            'relatedDiscussion' => $discussion->id,
-            'name' => $discussion->title,
+            'title' => $title,
+            'count' => $postCount,
             'url' => $url->toRoute('discussion', [
-                'id' => "{$discussion->id}-{$discussion->slug}"
+                'id' => "{$discussionId}-{$slug}"
             ]),
-            'isOriginal' => $posts->first()->discussion_id != $discussion->id
+            'toNew' => $toNew
         ];
     }
 }
