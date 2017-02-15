@@ -77,13 +77,13 @@ class SplitDiscussionHandler
         $discussion = Discussion::start($command->title, $startPost->user);
         $discussion->setStartPost($startPost);
 
-        if (!empty($originalDiscussion->tags))
-        {
-            $discussion->tags()->sync($originalDiscussion->tags);
-        }
-
         // persist the new discussion.
         $discussion->save();
+
+        // sets the tags for the new discussion based on the old one
+        if ($originalDiscussion->tags) {
+            $discussion->tags()->sync($originalDiscussion->tags);
+        }
 
         // update all posts that are split.
         $affectedPosts = $this->assignPostsToDiscussion($originalDiscussion, $discussion, $startPost->number, $command->end_post_id);

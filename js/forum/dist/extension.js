@@ -120,6 +120,9 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
             SplitController = function () {
                 function SplitController() {
                     babelHelpers.classCallCheck(this, SplitController);
+
+                    this.startPost = null;
+                    this.endPost = null;
                 }
 
                 babelHelpers.createClass(SplitController, [{
@@ -141,16 +144,6 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
                     key: 'end',
                     value: function end(postNo) {
                         this.endPost = postNo;
-                    }
-                }, {
-                    key: 'startPost',
-                    value: function startPost() {
-                        return this.startPost;
-                    }
-                }, {
-                    key: 'endPost',
-                    value: function endPost() {
-                        return this.endPost;
                     }
                 }, {
                     key: 'reset',
@@ -233,13 +226,11 @@ System.register("flagrow/split/components/SplitPostModal", ["flarum/components/M
 
                         this.loading = true;
 
-                        console.log(this, this.split);
-
                         var data = new FormData();
 
                         data.append('title', this.newDiscussionTitle());
-                        data.append('start_post_id', this.split.startPost());
-                        data.append('end_post_id', this.split.endPost());
+                        data.append('start_post_id', this.split.startPost);
+                        data.append('end_post_id', this.split.endPost);
 
                         app.request({
                             method: 'POST',

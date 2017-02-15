@@ -1,4 +1,9 @@
 export default class SplitController {
+    constructor() {
+        this.startPost = null;
+        this.endPost = null;
+    }
+
     start(postNo) {
         this.reset();
 
@@ -15,14 +20,6 @@ export default class SplitController {
 
     end(postNo) {
         this.endPost = postNo;
-    }
-
-    startPost() {
-        return this.startPost;
-    }
-
-    endPost() {
-        return this.endPost;
     }
 
     reset() {
