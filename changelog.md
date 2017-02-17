@@ -1,4 +1,8 @@
-# 0.1.0 [tba]
+- 0.2.0
+  - Cleaned the code after picking up the code from @dav-is, thanks for the first release!
+  - New discussion with split posts now has the tags of the old discussion, without those it would disappear.
+  - Old and new discussion receive an EventPost to refer to each other.
 
-- ability to split a discussion from a post to the last one
-- add permission option to the split function
+- 0.1.0
+  - Ability to split a discussion from a post to the last one.
+  - Add permission option to the split function.
