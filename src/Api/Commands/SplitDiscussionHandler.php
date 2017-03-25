@@ -110,6 +110,7 @@ class SplitDiscussionHandler
         );
 
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
+        $this->renumberDiscussion($discussion);
         $discussion = $this->refreshDiscussion($discussion);
 
         $this->events->fire(
@@ -150,24 +151,33 @@ class SplitDiscussionHandler
     }
 
     /**
+     * Re-assign numbers starting from one to a discussion.
+     *
+     * @param Discussion $discussion
+     */
+    protected function renumberDiscussion(Discussion $discussion)
+    {
+        $discussion->load('posts');
+
+        $number = 0;
+
+        $discussion->posts->sortBy('time')->each(function (Post $post) use (&$number) {
+            $number++;
+            $post->number = $number;
+            $post->save();
+        });
+
+        $discussion->number_index = $number;
+        $discussion->save();
+    }
+
+    /**
      * Refreshes count and last Post for the discussion.
      *
      * @param Discussion $discussion
      */
     protected function refreshDiscussion(Discussion $discussion)
     {
-        $discussion->load('posts');
-
-        $number = 1;
-
-        $discussion->posts->sortBy('time')->each(function (Post $post) use (&$number) {
-            $post->number = $number;
-            $post->save();
-            $number++;
-        });
-
-        $discussion->number_index = $number;
-
         $discussion->refreshLastPost();
         $discussion->refreshCommentsCount();
         $discussion->refreshParticipantsCount();
