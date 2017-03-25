@@ -49,11 +49,11 @@ class SplitController extends AbstractResourceController
     {
         $title = Arr::get($request->getParsedBody(), 'title');
         $start_post_id = Arr::get($request->getParsedBody(), 'start_post_id');
-        $end_post_id = Arr::get($request->getParsedBody(), 'end_post_id');
+        $end_post_number = Arr::get($request->getParsedBody(), 'end_post_number');
         $actor = $request->getAttribute('actor');
 
         return $this->bus->dispatch(
-            new SplitDiscussion($title, $start_post_id, $end_post_id, $actor)
+            new SplitDiscussion($title, $start_post_id, $end_post_number, $actor)
         );
     }
 }

@@ -1,16 +1,15 @@
 export default class SplitController {
     constructor() {
-        this.startPost = null;
-        this.endPost = null;
+        this.reset();
     }
 
-    start(postNo) {
+    start(postId, postNumber) {
         this.reset();
 
-        this.startPost = postNo;
+        this.startPostId = postId;
 
         $('.PostStream-item').each(function () {
-            if ($(this).attr('data-number') >= postNo) {
+            if ($(this).attr('data-number') >= postNumber) {
                 $('.flagrow-split-endSplitButton', $(this)).show();
             }
         });
@@ -18,12 +17,12 @@ export default class SplitController {
         $('.flagrow-split-startSplitButton').hide();
     }
 
-    end(postNo) {
-        this.endPost = postNo;
+    end(postNumber) {
+        this.endPostNumber = postNumber;
     }
 
     reset() {
-        this.startPost = null;
-        this.endPost = null;
+        this.startPostId = null;
+        this.endPostNumber = null;
     }
 }

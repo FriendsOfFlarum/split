@@ -55,8 +55,8 @@ export default class SplitPostModal extends Modal {
         const data = new FormData();
 
         data.append('title', this.newDiscussionTitle());
-        data.append('start_post_id', this.split.startPost);
-        data.append('end_post_id', this.split.endPost);
+        data.append('start_post_id', this.split.startPostId);
+        data.append('end_post_number', this.split.endPostNumber);
 
         app.request({
             method: 'POST',

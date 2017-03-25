@@ -16,7 +16,7 @@ System.register("flagrow/split/addSplitControl", ["flarum/extend", "flarum/app",
                 icon: 'code-fork',
                 className: 'flagrow-split-startSplitButton',
                 onclick: function onclick() {
-                    controller.start(post.number());
+                    controller.start(post.id(), post.number());
                 }
             }, app.translator.trans('flagrow-split.forum.split.from'))]);
         });
@@ -98,8 +98,7 @@ System.register('flagrow/split/components/DiscussionSplit', ['flarum/components/
                             'count': this.props.post.content()['count'],
                             'target': m(
                                 'a',
-                                {
-                                    className: 'EventPost-Split-target', href: this.props.post.content()['url'],
+                                { className: 'EventPost-Split-target', href: this.props.post.content()['url'],
                                     config: m.route },
                                 this.props.post.content()['title']
                             )
@@ -126,19 +125,18 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
                 function SplitController() {
                     babelHelpers.classCallCheck(this, SplitController);
 
-                    this.startPost = null;
-                    this.endPost = null;
+                    this.reset();
                 }
 
                 babelHelpers.createClass(SplitController, [{
                     key: 'start',
-                    value: function start(postNo) {
+                    value: function start(postId, postNumber) {
                         this.reset();
 
-                        this.startPost = postNo;
+                        this.startPostId = postId;
 
                         $('.PostStream-item').each(function () {
-                            if ($(this).attr('data-number') >= postNo) {
+                            if ($(this).attr('data-number') >= postNumber) {
                                 $('.flagrow-split-endSplitButton', $(this)).show();
                             }
                         });
@@ -147,14 +145,14 @@ System.register('flagrow/split/components/SplitController', [], function (_expor
                     }
                 }, {
                     key: 'end',
-                    value: function end(postNo) {
-                        this.endPost = postNo;
+                    value: function end(postNumber) {
+                        this.endPostNumber = postNumber;
                     }
                 }, {
                     key: 'reset',
                     value: function reset() {
-                        this.startPost = null;
-                        this.endPost = null;
+                        this.startPostId = null;
+                        this.endPostNumber = null;
                     }
                 }]);
                 return SplitController;
@@ -234,8 +232,8 @@ System.register("flagrow/split/components/SplitPostModal", ["flarum/components/M
                         var data = new FormData();
 
                         data.append('title', this.newDiscussionTitle());
-                        data.append('start_post_id', this.split.startPost);
-                        data.append('end_post_id', this.split.endPost);
+                        data.append('start_post_id', this.split.startPostId);
+                        data.append('end_post_number', this.split.endPostNumber);
 
                         app.request({
                             method: 'POST',
