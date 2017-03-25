@@ -17,7 +17,7 @@ export default function (controller) {
                 icon: 'code-fork',
                 className: 'flagrow-split-startSplitButton',
                 onclick: () => {
-                    controller.start(post.number());
+                    controller.start(post.id(), post.number());
                 }
             }, app.translator.trans('flagrow-split.forum.split.from'))
         ]);

@@ -28,7 +28,7 @@ class SplitDiscussion
      *
      * @var int
      */
-    public $end_post_id;
+    public $end_post_number;
 
     /**
      * The title of the new discussion.
@@ -49,14 +49,14 @@ class SplitDiscussion
      *
      * @param string $title
      * @param int    $start_post_id
-     * @param int    $end_post_id
+     * @param int    $end_post_number
      * @param User   $actor
      */
-    public function __construct($title, $start_post_id, $end_post_id, User $actor)
+    public function __construct($title, $start_post_id, $end_post_number, User $actor)
     {
-        $this->title         = $title;
-        $this->start_post_id = $start_post_id;
-        $this->end_post_id   = $end_post_id;
-        $this->actor         = $actor;
+        $this->title           = $title;
+        $this->start_post_id   = $start_post_id;
+        $this->end_post_number = $end_post_number;
+        $this->actor           = $actor;
     }
 }

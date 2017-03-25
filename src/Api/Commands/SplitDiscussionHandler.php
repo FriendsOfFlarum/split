@@ -82,7 +82,7 @@ class SplitDiscussionHandler
 
         $this->validator->assertValid([
             'start_post_id' => $command->start_post_id,
-            'end_post_id' => $command->end_post_id,
+            'end_post_number' => $command->end_post_number,
             'title' => $command->title
         ]);
 
@@ -106,7 +106,7 @@ class SplitDiscussionHandler
             $originalDiscussion,
             $discussion,
             $startPost->number,
-            $command->end_post_id
+            $command->end_post_number
         );
 
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
@@ -120,27 +120,27 @@ class SplitDiscussionHandler
     }
 
     /**
-     * Assign the specific range to a new Discussion.
+     * Assign the specific range to a new Discussion without resetting post numbers.
      *
      * @param Discussion $originalDiscussion
      * @param Discussion $discussion
-     * @param            $start_post_id
-     * @param            $end_post_id
+     * @param            $start_post_number
+     * @param            $end_post_number
      * @return \Illuminate\Database\Eloquent\Collection
      */
     protected function assignPostsToDiscussion(
         Discussion $originalDiscussion,
         Discussion $discussion,
-        $start_post_id,
-        $end_post_id
+        $start_post_number,
+        $end_post_number
     ) {
         $this->posts
             ->query()
             ->where('discussion_id', $originalDiscussion->id)
-            ->whereBetween('number', [$start_post_id, $end_post_id])
+            ->whereBetween('number', [$start_post_number, $end_post_number])
             ->update(['discussion_id' => $discussion->id]);
 
-        $discussion->number_index = ($end_post_id - $start_post_id - 1);
+        $discussion->number_index = $end_post_number;
         $discussion->save();
 
         // Update relationship posts on new discussion.
