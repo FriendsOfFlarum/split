@@ -13,8 +13,8 @@
 namespace Flagrow\Split\Listeners;
 
 use DirectoryIterator;
-use Flarum\Event\ConfigureClientView;
 use Flarum\Event\ConfigureLocales;
+use Flarum\Event\ConfigureWebApp;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddClientAssets
@@ -26,16 +26,16 @@ class AddClientAssets
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureClientView::class, [$this, 'addForumAssets']);
+        $events->listen(ConfigureWebApp::class, [$this, 'addForumAssets']);
         $events->listen(ConfigureLocales::class, [$this, 'addLocales']);
     }
 
     /**
      * Modifies the client view for the Forum.
      *
-     * @param ConfigureClientView $event
+     * @param ConfigureWebApp $event
      */
-    public function addForumAssets(ConfigureClientView $event)
+    public function addForumAssets(ConfigureWebApp $event)
     {
         if ($event->isForum()) {
             $event->addAssets([
