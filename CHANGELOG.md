@@ -4,6 +4,6 @@
   - Old and new discussion receive an EventPost to refer to each other.
   - Allow splitting only one post.
 
-- 0.1.0
+- 0.1.0 (released by @dav-is)
   - Ability to split a discussion from a post to the last one.
   - Add permission option to the split function.
