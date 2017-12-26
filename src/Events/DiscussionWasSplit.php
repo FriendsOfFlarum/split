@@ -2,8 +2,8 @@
 
 namespace Flagrow\Split\Events;
 
-use Flarum\Core\Discussion;
-use Flarum\Core\User;
+use Flarum\Discussion\Discussion;
+use Flarum\User\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class DiscussionWasSplit

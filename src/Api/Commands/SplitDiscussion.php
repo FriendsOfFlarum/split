@@ -12,7 +12,7 @@
 
 namespace Flagrow\Split\Api\Commands;
 
-use Flarum\Core\User;
+use Flarum\User\User;
 
 class SplitDiscussion
 {

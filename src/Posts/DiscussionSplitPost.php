@@ -11,11 +11,11 @@
  */
 namespace Flagrow\Split\Posts;
 
-use Flarum\Core\Discussion;
-use Flarum\Core\Post;
-use Flarum\Core\Post\AbstractEventPost;
-use Flarum\Core\Post\MergeableInterface;
-use Flarum\Core\User;
+use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
+use Flarum\Post\Post\AbstractEventPost;
+use Flarum\Post\Post\MergeableInterface;
+use Flarum\User\User;
 use Flarum\Forum\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 

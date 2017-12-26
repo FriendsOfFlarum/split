@@ -14,11 +14,11 @@ namespace Flagrow\Split\Api\Commands;
 
 use Flagrow\Split\Events\DiscussionWasSplit;
 use Flagrow\Split\Validators\SplitDiscussionValidator;
-use Flarum\Core\Access\AssertPermissionTrait;
-use Flarum\Core\Discussion;
-use Flarum\Core\Post;
-use Flarum\Core\Repository\PostRepository;
-use Flarum\Core\Repository\UserRepository;
+use Flarum\User\AssertPermissionTrait;
+use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
+use Flarum\Post\PostRepository;
+use Flarum\User\UserRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -74,7 +74,7 @@ class SplitDiscussionHandler
 
     /**
      * @param SplitDiscussion $command
-     * @return \Flarum\Core\Discussion
+     * @return \Flarum\Discussion\Discussion
      */
     public function handle(SplitDiscussion $command)
     {
