@@ -11,12 +11,12 @@
  */
 namespace Flagrow\Split\Posts;
 
-use Flarum\Core\Discussion;
-use Flarum\Core\Post;
-use Flarum\Core\Post\AbstractEventPost;
-use Flarum\Core\Post\MergeableInterface;
-use Flarum\Core\User;
-use Flarum\Forum\UrlGenerator;
+use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
+use Flarum\Post\AbstractEventPost;
+use Flarum\Post\MergeableInterface;
+use Flarum\User\User;
+use Flarum\Http\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 
 class DiscussionSplitPost extends AbstractEventPost implements MergeableInterface {
@@ -93,7 +93,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      */
     protected static function newReply(User $user, Discussion $discussion)
     {
-        $post = new Static;
+        $post = new static;
         $post->time = time();
         $post->user_id = $user->id;
         $post->discussion_id = $discussion->id;
@@ -120,7 +120,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
         return [
             'title' => $title,
             'count' => $postCount,
-            'url' => $url->toRoute('discussion', [
+            'url' => $url->to('forum')->route('discussion', [
                 'id' => "{$discussionId}-{$slug}"
             ]),
             'toNew' => $toNew
