@@ -1,0 +1,15 @@
+flagrow-split:
+    admin:
+        permissions:
+            split_discussion_label: Séparez les messages des discussions
+    forum:
+        post:
+            was_split_to: "{count} message a été séparé vers {target}.|{count} messages ont été séparés vers {target}."
+            was_split_from: "{count} message a été séparé de {target}.|{count} messages ont été séparés de {target}."
+        split:
+            from: Séparer à partir d'ici
+            to: Séparer jusqu'ici
+        modal:
+            title: Séparer la discussion
+            new_discussion_label: Précisez le titre de la nouvelle discussion
+            submit_button: Séparer
