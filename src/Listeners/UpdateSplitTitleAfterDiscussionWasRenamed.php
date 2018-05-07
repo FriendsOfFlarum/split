@@ -14,10 +14,12 @@ namespace Flagrow\Split\Listeners;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Flarum\Event\DiscussionWasRenamed;
-
 use Flarum\Core\Repository\PostRepository;
+use Flarum\Forum\UrlGenerator;
 
 class UpdateSplitTitleAfterDiscussionWasRenamed {
+
+    const CHUNK_LIMIT = 10;
     /**
      * @param Dispatcher $events
      */
@@ -31,19 +33,37 @@ class UpdateSplitTitleAfterDiscussionWasRenamed {
      */
     public function whenDiscussionWasRenamed(DiscussionWasRenamed $event) {
             
+	$url = app(UrlGenerator::class);
+	// get the url of the discussion that was just renamed (without slug)
+        $modifiedPostUrlPretty = $url->toRoute('discussion', [
+                'id' => "{$event->discussion->id}"
+        ]);
+	// escape the strings for mysql search
+        $modifiedPostUrlEscaped = str_replace("/","\\\\/",$modifiedPostUrlPretty);
+	// generate the new url to be used for the split posts that are connected to
+	// the renamed discussion
+        $newPostUrl = $url->toRoute('discussion', [
+                'id' => "{$event->discussion->id}-{$event->discussion->slug}"
+        ]);
+        $scopeArr = [
+            'newPostUrl' => $newPostUrl,
+            'event' => $event
+        ];
         $this->posts = app(PostRepository::class);
-        $allPosts = $this->posts->
-                query()->
-                where('type',"=","discussionSplit")->
-                where('content',"like","%".$event->discussion->id."-%")->
-                take(10)->
-                get(); 
-        if(count($allPosts) == 1){
-            $thisPost = $allPosts[0];
-            $oldContent = $thisPost->getContent();
-            $oldContent['title'] = $event->discussion->title;
-            $thisPost->setContent($oldContent);
-            $thisPost->save();
-        }
+	// find all the posts that have been split from the renamed discussion
+	$this->posts->
+            query()->
+            where('type',"=","discussionSplit")->
+            where('content',"like","%".$modifiedPostUrlEscaped."%")->
+            chunk(self::CHUNK_LIMIT, function($allPosts) use (&$scopeArr) {
+                foreach($allPosts as $thisPost){
+		    // update their relative discussion's title and url
+                    $oldContent = $thisPost->getContent();
+                    $oldContent['title'] = $scopeArr['event']->discussion->title;
+                    $oldContent['url'] = $scopeArr['newPostUrl'];
+                    $thisPost->setContent($oldContent);
+                    $thisPost->save();
+                }
+            });
     }
 }
