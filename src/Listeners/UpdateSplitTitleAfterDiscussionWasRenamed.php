@@ -14,8 +14,8 @@ namespace Flagrow\Split\Listeners;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Flarum\Event\DiscussionWasRenamed;
-use Flarum\Core\Repository\PostRepository;
-use Flarum\Forum\UrlGenerator;
+use Flarum\Post\PostRepository;
+use Flarum\Http\UrlGenerator;
 
 class UpdateSplitTitleAfterDiscussionWasRenamed {
 
