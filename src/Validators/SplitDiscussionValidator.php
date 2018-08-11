@@ -24,15 +24,15 @@ class SplitDiscussionValidator extends AbstractValidator
         return [
             'start_post_id' => [
                 'required',
-                'int'
+                'int',
             ],
             'end_post_id' => [
                 'required',
-                'int'
+                'int',
             ],
             'title' => [
                 'required',
-                'string'
+                'string',
             ],
         ];
     }

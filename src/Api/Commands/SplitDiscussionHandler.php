@@ -14,12 +14,12 @@ namespace Flagrow\Split\Api\Commands;
 
 use Flagrow\Split\Events\DiscussionWasSplit;
 use Flagrow\Split\Validators\SplitDiscussionValidator;
-use Flarum\User\AssertPermissionTrait;
 use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
-use Flarum\User\UserRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
+use Flarum\User\AssertPermissionTrait;
+use Flarum\User\UserRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
@@ -52,11 +52,11 @@ class SplitDiscussionHandler
     protected $events;
 
     /**
-     * @param UserRepository $users
-     * @param PostRepository $posts
+     * @param UserRepository              $users
+     * @param PostRepository              $posts
      * @param SettingsRepositoryInterface $settings
-     * @param Dispatcher $events
-     * @param SplitDiscussionValidator $validator
+     * @param Dispatcher                  $events
+     * @param SplitDiscussionValidator    $validator
      */
     public function __construct(
         UserRepository $users,
@@ -74,18 +74,20 @@ class SplitDiscussionHandler
 
     /**
      * @param \Flagrow\Split\Api\Commands\SplitDiscussion $command
-     * @return \Flarum\Discussion\Discussion
+     *
      * @throws \Flarum\User\Exception\PermissionDeniedException
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Flarum\Discussion\Discussion
      */
     public function handle(SplitDiscussion $command)
     {
         $this->assertCan($command->actor, 'split');
 
         $this->validator->assertValid([
-            'start_post_id' => $command->start_post_id,
+            'start_post_id'   => $command->start_post_id,
             'end_post_number' => $command->end_post_number,
-            'title' => $command->title
+            'title'           => $command->title,
         ]);
 
         // load the first selected post to split.
@@ -129,6 +131,7 @@ class SplitDiscussionHandler
      * @param Discussion $discussion
      * @param            $start_post_number
      * @param            $end_post_number
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     protected function assignPostsToDiscussion(
@@ -177,6 +180,7 @@ class SplitDiscussionHandler
      * Refreshes count and last Post for the discussion.
      *
      * @param \Flarum\Discussion\Discussion $discussion
+     *
      * @return mixed
      */
     protected function refreshDiscussion(Discussion $discussion)

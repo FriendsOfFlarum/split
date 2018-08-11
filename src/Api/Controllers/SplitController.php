@@ -9,13 +9,14 @@
  * For the full copyright and license information, please view the license.md
  * file that was distributed with this source code.
  */
+
 namespace Flagrow\Split\Api\Controllers;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
-use Illuminate\Support\Arr;
 use Flagrow\Split\Api\Commands\SplitDiscussion;
 use Flarum\Api\Controller\AbstractShowController;
+use Flarum\Api\Serializer\DiscussionSerializer;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -46,6 +47,7 @@ class SplitController extends AbstractShowController
      *
      * @param ServerRequestInterface $request
      * @param Document               $document
+     *
      * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)
