@@ -34,7 +34,7 @@
         "flarum-extension": {
             "title": "Flagrow Split",
             "icon": {
-                "name": "code-fork",
+                "name": "fas fa-code-branch",
                 "backgroundColor": "#f4f4f4",
                 "color": "#5f4bb6"
             }

@@ -94,7 +94,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     protected static function newReply(User $user, Discussion $discussion)
     {
         $post = new static;
-        $post->time = time();
+        $post->created_at = time();
         $post->user_id = $user->id;
         $post->discussion_id = $discussion->id;
 

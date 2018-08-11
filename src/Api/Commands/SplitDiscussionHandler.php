@@ -73,8 +73,10 @@ class SplitDiscussionHandler
     }
 
     /**
-     * @param SplitDiscussion $command
+     * @param \Flagrow\Split\Api\Commands\SplitDiscussion $command
      * @return \Flarum\Discussion\Discussion
+     * @throws \Flarum\User\Exception\PermissionDeniedException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function handle(SplitDiscussion $command)
     {
@@ -141,7 +143,7 @@ class SplitDiscussionHandler
             ->whereBetween('number', [$start_post_number, $end_post_number])
             ->update(['discussion_id' => $discussion->id]);
 
-        $discussion->number_index = $end_post_number;
+        $discussion->post_number_index = $end_post_number;
         $discussion->save();
 
         // Update relationship posts on new discussion.
@@ -161,20 +163,21 @@ class SplitDiscussionHandler
 
         $number = 0;
 
-        $discussion->posts->sortBy('time')->each(function (Post $post) use (&$number) {
+        $discussion->posts->sortBy('created_at')->each(function (Post $post) use (&$number) {
             $number++;
             $post->number = $number;
             $post->save();
         });
 
-        $discussion->number_index = $number;
+        $discussion->post_number_index = $number;
         $discussion->save();
     }
 
     /**
      * Refreshes count and last Post for the discussion.
      *
-     * @param Discussion $discussion
+     * @param \Flarum\Discussion\Discussion $discussion
+     * @return mixed
      */
     protected function refreshDiscussion(Discussion $discussion)
     {

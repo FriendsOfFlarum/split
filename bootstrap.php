@@ -12,11 +12,21 @@
 
 namespace Flagrow\Split;
 
+use Flagrow\Split\Api\Controllers\SplitController;
+use Flarum\Extend;
 use Illuminate\Contracts\Events\Dispatcher;
 
-return function (Dispatcher $events) {
-    $events->subscribe(Listeners\AddClientAssets::class);
-    $events->subscribe(Listeners\AddSplitApi::class);
-    $events->subscribe(Listeners\CreatePostWhenSplit::class);
-    $events->subscribe(Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class);
-};
+return [
+    (new Extend\Frontend('admin'))
+        ->js(__DIR__.'/js/dist/admin.js'),
+    (new Extend\Frontend('forum'))
+        ->js(__DIR__.'/js/dist/forum.js'),
+    (new Extend\Locales(__DIR__.'/locale')),
+    (new Extend\Routes('api'))
+        ->post('/split', 'flagrow.split.run', SplitController::class),
+    function (Dispatcher $events) {
+        $events->subscribe(Listeners\AddSplitApi::class);
+        $events->subscribe(Listeners\CreatePostWhenSplit::class);
+        $events->subscribe(Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class);
+    },
+];
