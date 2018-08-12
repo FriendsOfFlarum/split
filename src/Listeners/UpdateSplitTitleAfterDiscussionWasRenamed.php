@@ -44,18 +44,14 @@ class UpdateSplitTitleAfterDiscussionWasRenamed {
     public function whenRenamed(Renamed $event) 
     {
 	    // get the url of the discussion that was just renamed (without slug)
-        $shortUrl = $this->url->toRoute('discussion', [
-                'id' => "{$event->discussion->id}"
-        ]);
+        $shortUrl = $this->url->to('forum')->route('discussion', ['id' => $event->discussion->id]);
         
 	    // escape the strings for mysql search
         $escaped = str_replace("/","\\\\/",$shortUrl);
         
 	    // generate the new url to be used for the split posts that are connected to
 	    // the renamed discussion
-        $url = $this->url->toRoute('discussion', [
-                'id' => "{$event->discussion->id}-{$event->discussion->slug}"
-        ]);
+        $url = $this->url->to('forum')->route('discussion', ['id' => "{$event->discussion->id}-{$event->discussion->slug}"]);
         
 	    // find all the posts that have been split from the renamed discussion
 	    $this->posts
