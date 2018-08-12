@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DiscussionWasSplit
 {
-
     /**
      * @var User
      */
@@ -32,7 +31,7 @@ class DiscussionWasSplit
     /**
      * DiscussionWasSplit constructor.
      *
-     * @param User $actor
+     * @param User       $actor
      * @param Collection $posts
      * @param Discussion $originalDiscussion
      * @param Discussion $newDiscussion

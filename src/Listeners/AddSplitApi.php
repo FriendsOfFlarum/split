@@ -12,8 +12,8 @@
 
 namespace Flagrow\Split\Listeners;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Event\Serializing;
+use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 

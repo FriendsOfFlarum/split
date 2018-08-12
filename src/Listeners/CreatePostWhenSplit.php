@@ -35,13 +35,13 @@ class CreatePostWhenSplit
             forward_static_call_array(
                 [
                     DiscussionSplitPost::class,
-                    $direction
+                    $direction,
                 ],
                 [
                     $event->newDiscussion,
                     $event->originalDiscussion,
                     $event->actor,
-                    $event->posts
+                    $event->posts,
                 ]
             );
         }
