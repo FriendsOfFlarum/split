@@ -1,0 +1,15 @@
+flagrow-split:
+    admin:
+        permissions:
+            split_discussion_label: Yazıları konulardan ayır
+    forum:
+        post:
+            was_split_to: "{count} yazı {target}'na ayrıldı.|{count} yazı {target}'na ayrıldı."
+            was_split_from: "{count} yazı {target}'dan ayrıldı.|{count} yazı {target}'dan ayrıldı."
+        split:
+            from: Buradan ayrıldı
+            to: Buraya ayrıldı
+        modal:
+            title: Konuyu ayır
+            new_discussion_label: Yeni konu için bir başlık belirtin
+submit_button: Ayır
