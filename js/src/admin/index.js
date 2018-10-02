@@ -9,7 +9,7 @@ app.initializers.add('flagrow-split', app => {
 
     extend(PermissionGrid.prototype, 'moderateItems', items => {
     items.add('splitDiscussion', {
-      icon: 'code-fork',
+      icon: 'fas fa-code-branch',
       label: app.translator.trans('flagrow-split.admin.permissions.split_discussion_label'),
       permission: 'discussion.split'
     }, 65);

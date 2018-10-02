@@ -12,63 +12,59 @@
 
 namespace Flagrow\Split\Listeners;
 
-use Illuminate\Contracts\Events\Dispatcher;
-use Flarum\Event\DiscussionWasRenamed;
-use Flarum\Post\PostRepository;
+use Flarum\Discussion\Event\Renamed;
 use Flarum\Http\UrlGenerator;
+use Flarum\Post\PostRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 
-class UpdateSplitTitleAfterDiscussionWasRenamed {
-
+class UpdateSplitTitleAfterDiscussionWasRenamed
+{
     const CHUNK_LIMIT = 10;
-    
+
     protected $posts;
     protected $url;
-    
+
     public function __construct(UrlGenerator $url, PostRepository $posts)
     {
         $this->url = $url;
         $this->posts = $posts;
     }
-    
+
     /**
      * @param Dispatcher $events
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(DiscussionWasRenamed::class, [$this, 'whenDiscussionWasRenamed']);
+        $events->listen(Renamed::class, [$this, 'whenRenamed']);
     }
 
     /**
-     * @param DiscussionWasRenamed $event
+     * @param Renamed $event
      */
-    public function whenDiscussionWasRenamed(DiscussionWasRenamed $event) 
+    public function whenRenamed(Renamed $event)
     {
-	    // get the url of the discussion that was just renamed (without slug)
-        $shortUrl = $this->url->toRoute('discussion', [
-                'id' => "{$event->discussion->id}"
-        ]);
-        
-	    // escape the strings for mysql search
-        $escaped = str_replace("/","\\\\/",$shortUrl);
-        
-	    // generate the new url to be used for the split posts that are connected to
-	    // the renamed discussion
-        $url = $this->url->toRoute('discussion', [
-                'id' => "{$event->discussion->id}-{$event->discussion->slug}"
-        ]);
-        
-	    // find all the posts that have been split from the renamed discussion
-	    $this->posts
+        // get the url of the discussion that was just renamed (without slug)
+        $shortUrl = $this->url->to('forum')->route('discussion', ['id' => $event->discussion->id]);
+
+        // escape the strings for mysql search
+        $escaped = str_replace('/', '\\\\/', $shortUrl);
+
+        // generate the new url to be used for the split posts that are connected to
+        // the renamed discussion
+        $url = $this->url->to('forum')->route('discussion', ['id' => "{$event->discussion->id}-{$event->discussion->slug}"]);
+
+        // find all the posts that have been split from the renamed discussion
+        $this->posts
             ->query()
-            ->where('type', "=", "discussionSplit")
-            ->where('content', "like","%$escaped%")
-            ->chunk(self::CHUNK_LIMIT, function($collection) use ($event, $url) {
-                $collection->each(function ($post) use ($event, $url) {   
+            ->where('type', '=', 'discussionSplit')
+            ->where('content', 'like', "%$escaped%")
+            ->chunk(self::CHUNK_LIMIT, function ($collection) use ($event, $url) {
+                $collection->each(function ($post) use ($event, $url) {
                     $post->setContent(array_merge($post->getContent(), [
                         'title' => $event->discussion->title,
-                        'url' => $url
+                        'url'   => $url,
                     ]));
-                    
+
                     $post->save();
                 });
             });

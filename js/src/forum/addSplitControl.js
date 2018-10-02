@@ -3,7 +3,7 @@ import app from "flarum/app";
 import PostControls from "flarum/utils/PostControls";
 import Button from "flarum/components/Button";
 import CommentPost from "flarum/components/CommentPost";
-import SplitPostModal from "flagrow/split/components/SplitPostModal";
+import SplitPostModal from "./components/SplitPostModal";
 
 export default function (controller) {
 
@@ -14,7 +14,7 @@ export default function (controller) {
 
         items.add('splitFrom', [
             m(Button, {
-                icon: 'code-fork',
+                icon: 'fas fa-code-branch',
                 className: 'flagrow-split-startSplitButton',
                 onclick: () => {
                     controller.start(post.id(), post.number());
@@ -31,7 +31,7 @@ export default function (controller) {
 
         items.add('splitTo', [
             m(Button, {
-                icon: 'code-fork',
+                icon: 'fas fa-code-branch',
                 className: 'flagrow-split-endSplitButton Button Button--link',
                 onclick: () => {
                     controller.end(post.number());

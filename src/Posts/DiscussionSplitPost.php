@@ -9,18 +9,19 @@
  * For the full copyright and license information, please view the license.md
  * file that was distributed with this source code.
  */
+
 namespace Flagrow\Split\Posts;
 
 use Flarum\Discussion\Discussion;
-use Flarum\Post\Post;
+use Flarum\Http\UrlGenerator;
 use Flarum\Post\AbstractEventPost;
 use Flarum\Post\MergeableInterface;
+use Flarum\Post\Post;
 use Flarum\User\User;
-use Flarum\Http\UrlGenerator;
 use Illuminate\Database\Eloquent\Collection;
 
-class DiscussionSplitPost extends AbstractEventPost implements MergeableInterface {
-
+class DiscussionSplitPost extends AbstractEventPost implements MergeableInterface
+{
     /**
      * @var string
      */
@@ -31,9 +32,10 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      * passed model.
      *
      * @param Post $previous
+     *
      * @return Post The model resulting after the merge. If the merge is
-     *     unsuccessful, this should be the current model instance. Otherwise,
-     *     it should be the model that was merged into.
+     *              unsuccessful, this should be the current model instance. Otherwise,
+     *              it should be the model that was merged into.
      */
     public function saveAfter(Post $previous = null)
     {
@@ -47,8 +49,9 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      *
      * @param Discussion $new
      * @param Discussion $old
-     * @param User $user
+     * @param User       $user
      * @param Collection $posts
+     *
      * @return static
      */
     public static function to(Discussion $new, Discussion $old, User $user, Collection $posts)
@@ -69,8 +72,9 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      *
      * @param Discussion $new
      * @param Discussion $old
-     * @param User $user
+     * @param User       $user
      * @param Collection $posts
+     *
      * @return DiscussionSplitPost
      */
     public static function from(Discussion $new, Discussion $old, User $user, Collection $posts)
@@ -87,14 +91,15 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     }
 
     /**
-     * @param User $user
+     * @param User       $user
      * @param Discussion $discussion
+     *
      * @return static
      */
     protected static function newReply(User $user, Discussion $discussion)
     {
-        $post = new static;
-        $post->time = time();
+        $post = new static();
+        $post->created_at = time();
         $post->user_id = $user->id;
         $post->discussion_id = $discussion->id;
 
@@ -102,14 +107,14 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     }
 
     /**
-     *
-     *
      * @param string $title
-     * @param int $postCount
-     * @param int $discussionId
+     * @param int    $postCount
+     * @param int    $discussionId
      * @param string $slug
-     * @param bool $toNew
+     * @param bool   $toNew
+     *
      * @return array
+     *
      * @internal param Discussion $discussion
      */
     protected static function buildContent(string $title, int $postCount, int $discussionId, string $slug, bool $toNew)
@@ -120,10 +125,10 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
         return [
             'title' => $title,
             'count' => $postCount,
-            'url' => $url->to('forum')->route('discussion', [
-                'id' => "{$discussionId}-{$slug}"
+            'url'   => $url->to('forum')->route('discussion', [
+                'id' => "{$discussionId}-{$slug}",
             ]),
-            'toNew' => $toNew
+            'toNew' => $toNew,
         ];
     }
 }

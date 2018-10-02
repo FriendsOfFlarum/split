@@ -8,7 +8,7 @@ export default class DiscussionSplit extends EventPost {
      * @return {String}
      */
     icon() {
-        return 'code-fork';
+        return 'fas fa-code-branch';
     }
 
     /**

@@ -1,9 +1,9 @@
 import { extend } from 'flarum/extend';
 import Model from 'flarum/Model';
 
-import addSplitControl from 'flagrow/split/addSplitControl';
-import SplitController from 'flagrow/split/components/SplitController';
-import DiscussionSplit from 'flagrow/split/components/DiscussionSplit';
+import addSplitControl from './addSplitControl';
+import SplitController from './components/SplitController';
+import DiscussionSplit from './components/DiscussionSplit';
 
 app.initializers.add('flagrow-split', app => {
 
