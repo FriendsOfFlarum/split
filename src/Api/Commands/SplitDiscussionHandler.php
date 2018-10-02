@@ -98,7 +98,7 @@ class SplitDiscussionHandler
 
         // create a new discussion for the user of the first splitted reply.
         $discussion = Discussion::start($command->title, $startPost->user);
-        $discussion->setStartPost($startPost);
+        $discussion->setFirstPost($startPost);
 
         // persist the new discussion.
         $discussion->save();
@@ -117,7 +117,7 @@ class SplitDiscussionHandler
         $this->renumberDiscussion($discussion);
         $discussion = $this->refreshDiscussion($discussion);
 
-        $this->events->fire(
+        $this->events->dispatch(
             new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
         );
 
@@ -186,8 +186,8 @@ class SplitDiscussionHandler
     protected function refreshDiscussion(Discussion $discussion)
     {
         $discussion->refreshLastPost();
-        $discussion->refreshCommentsCount();
-        $discussion->refreshParticipantsCount();
+        $discussion->refreshCommentCount();
+        $discussion->refreshParticipantCount();
 
         // Persist the new statistics.
         $discussion->save();
