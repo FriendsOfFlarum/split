@@ -32,7 +32,7 @@
     },
     "extra": {
         "flarum-extension": {
-            "title": "Flagrow Split",
+            "title": "Split",
             "icon": {
                 "name": "fas fa-code-branch",
                 "backgroundColor": "#f4f4f4",

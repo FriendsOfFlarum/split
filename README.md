@@ -11,11 +11,13 @@ Allows splitting posts from discussions.
 
 Use [Bazaar](https://discuss.flarum.org/d/5151) or install manually:
 
-    composer require "flagrow/split:*"
+```bash
+composer require "flagrow/split:*"
+```
 
 ## Security
 
-If you discover a security vulnerability within Split, please send an email to the Gravure team at security@gravure.io. All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability within Split, please send an email to the Flagrow team at security@flagrow.io. All security vulnerabilities will be promptly addressed.
 
 Please include as many details as possible. You can use `php flarum info` to get the PHP, Flarum and extension versions installed.
 
