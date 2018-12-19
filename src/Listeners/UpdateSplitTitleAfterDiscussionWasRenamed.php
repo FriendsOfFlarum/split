@@ -15,7 +15,6 @@ namespace Flagrow\Split\Listeners;
 use Flarum\Discussion\Event\Renamed;
 use Flarum\Http\UrlGenerator;
 use Flarum\Post\PostRepository;
-use Illuminate\Contracts\Events\Dispatcher;
 
 class UpdateSplitTitleAfterDiscussionWasRenamed
 {
@@ -31,17 +30,9 @@ class UpdateSplitTitleAfterDiscussionWasRenamed
     }
 
     /**
-     * @param Dispatcher $events
-     */
-    public function subscribe(Dispatcher $events)
-    {
-        $events->listen(Renamed::class, [$this, 'whenRenamed']);
-    }
-
-    /**
      * @param Renamed $event
      */
-    public function whenRenamed(Renamed $event)
+    public function handle(Renamed $event)
     {
         // get the url of the discussion that was just renamed (without slug)
         $shortUrl = $this->url->to('forum')->route('discussion', ['id' => $event->discussion->id]);
