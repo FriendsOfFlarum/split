@@ -13,6 +13,7 @@
 namespace Flagrow\Split;
 
 use Flagrow\Split\Api\Controllers\SplitController;
+use Flarum\Discussion\Event\Renamed;
 use Flarum\Extend;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -27,6 +28,6 @@ return [
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddSplitApi::class);
         $events->subscribe(Listeners\CreatePostWhenSplit::class);
-        $events->subscribe(Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class);
+        $events->listen(Renamed::class, Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class);
     },
 ];
