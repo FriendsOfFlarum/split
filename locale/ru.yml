@@ -1,0 +1,15 @@
+flagrow-split:
+    admin:
+        permissions:
+            split_discussion_label: Отделять посты от дискуссий
+    forum:
+        post:
+            was_split_to: "{count} пост был отделён в {target}.|{count} поcтов было отделено в {target}."
+            was_split_from: "{count} пост был отделён из {target}.|{count} постов было отделено из {target}."
+        split:
+            from: Разделить отсюда
+            to: Разделить досюда
+        modal:
+            title: Разделить дискуссию
+            new_discussion_label: Выберите название новой дискуссии
+            submit_button: Разделить
