@@ -1,0 +1,15 @@
+flagrow-split:
+    admin:
+        permissions:
+            split_discussion_label: Posts von Diskussionen aufteilen
+    forum:
+        post:
+            was_split_to: "{count} Post wurde aufgeteilt zu {target}.|{count} Posts wurden aufgeteilt zu {target}."
+            was_split_from: "{count} Post wurde aufgeteilt von {target}.|{count} Posts wurden aufgeteilt von {target}."
+        split:
+            from: Aufteilen von hier
+            to: Aufteilen zu hier
+        modal:
+            title: Diskussionen aufteilen
+            new_discussion_label: Spezifiziere den Titel für die neue Diskussion
+            submit_button: Aufteilen
