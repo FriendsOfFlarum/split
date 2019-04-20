@@ -1,0 +1,15 @@
+flagrow-split:
+    admin:
+        permissions:
+            split_discussion_label: Dividere post nelle discussioni
+    forum:
+        post:
+            was_split_to: "{count} messaggio è stato spostato in {target}.|{count} messaggi sono stati spostati in {target}."
+            was_split_from: "{count} messaggio è stato spostato da {target}.|{count} messaggi sono stati spostati da {target}."
+        split:
+            from: Dividi da qui
+            to: Dividi fino a qui
+        modal:
+            title: Dividi discussione
+            new_discussion_label: Inserisci il titolo della nuova discussione
+            submit_button: Dividi
