@@ -31,11 +31,11 @@
     },
     "extra": {
         "flarum-extension": {
-            "title": "Split",
+            "title": "FoF Split",
             "icon": {
                 "name": "fas fa-code-branch",
-                "backgroundColor": "#f4f4f4",
-                "color": "#5f4bb6"
+                "backgroundColor": "#e74c3c",
+                "color": "#fff"
             },
             "flagrow": {
                 "discuss": "https://discuss.flarum.org/d/1903"
