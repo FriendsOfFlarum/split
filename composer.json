@@ -1,10 +1,9 @@
 {
-    "name": "flagrow/split",
+    "name": "fof/split",
     "description": "Separate posts from one discussion into its own, splits discussions.",
     "keywords": [
         "split",
         "flarum",
-        "flagrow"
     ],
     "type": "flarum-extension",
     "license": "MIT",
@@ -24,8 +23,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/flagrow/split/issues",
-        "source": "https://github.com/flagrow/split"
+        "issues": "https://github.com/FriendsOfFlarum/split/issues",
+        "source": "https://github.com/FriendsOfFlarum/split"
     },
     "require": {
         "flarum/core": "^0.1.0-beta.8"
@@ -48,7 +47,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Flagrow\\Split\\": "src/"
+            "FoF\\Split\\": "src/"
         }
     }
 }

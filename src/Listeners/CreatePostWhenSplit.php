@@ -1,9 +1,9 @@
 <?php
 
-namespace Flagrow\Split\Listeners;
+namespace FoF\Split\Listeners;
 
-use Flagrow\Split\Events\DiscussionWasSplit;
-use Flagrow\Split\Posts\DiscussionSplitPost;
+use FoF\Split\Events\DiscussionWasSplit;
+use FoF\Split\Posts\DiscussionSplitPost;
 use Flarum\Event\ConfigurePostTypes;
 use Illuminate\Events\Dispatcher;
 

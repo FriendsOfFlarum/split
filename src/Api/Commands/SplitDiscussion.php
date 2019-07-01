@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Api\Commands;
+namespace FoF\Split\Api\Commands;
 
 use Flarum\User\User;
 

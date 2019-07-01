@@ -10,7 +10,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Flagrow\Split\Listeners;
+namespace FoF\Split\Listeners;
 
 use Flarum\Discussion\Event\Renamed;
 use Flarum\Http\UrlGenerator;

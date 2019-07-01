@@ -10,9 +10,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split;
+namespace FoF\Split;
 
-use Flagrow\Split\Api\Controllers\SplitController;
 use Flarum\Discussion\Event\Renamed;
 use Flarum\Extend;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -24,7 +23,7 @@ return [
         ->js(__DIR__.'/js/dist/forum.js'),
     (new Extend\Locales(__DIR__.'/locale')),
     (new Extend\Routes('api'))
-        ->post('/split', 'flagrow.split.run', SplitController::class),
+        ->post('/split', 'fof.split.run', Api\Controllers\SplitController::class),
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddSplitApi::class);
         $events->subscribe(Listeners\CreatePostWhenSplit::class);

@@ -10,9 +10,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Api\Controllers;
+namespace FoF\Split\Api\Controllers;
 
-use Flagrow\Split\Api\Commands\SplitDiscussion;
+use FoF\Split\Api\Commands\SplitDiscussion;
 use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Illuminate\Contracts\Bus\Dispatcher;

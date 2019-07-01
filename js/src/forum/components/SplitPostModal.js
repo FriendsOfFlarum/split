@@ -65,7 +65,7 @@ export default class SplitPostModal extends Modal {
             data
         }).then(
             data => {
-                var discussion = {};
+                let discussion = {};
                 discussion.id = m.prop(data.data.id);
                 discussion.slug = m.prop(data.data.attributes.slug);
                 discussion.startUser = m.prop(data.data.attributes.startUser);

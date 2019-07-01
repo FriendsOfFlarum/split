@@ -10,7 +10,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Flagrow\Split\Listeners;
+namespace FoF\Split\Listeners;
 
 use Flarum\Api\Event\Serializing;
 use Flarum\Api\Serializer\DiscussionSerializer;

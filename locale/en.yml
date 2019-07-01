@@ -1,4 +1,4 @@
-flagrow-split:
+fof-split:
     admin:
         permissions:
             split_discussion_label: Split posts from discussions

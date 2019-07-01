@@ -10,10 +10,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Api\Commands;
+namespace FoF\Split\Api\Commands;
 
-use Flagrow\Split\Events\DiscussionWasSplit;
-use Flagrow\Split\Validators\SplitDiscussionValidator;
+use FoF\Split\Events\DiscussionWasSplit;
+use FoF\Split\Validators\SplitDiscussionValidator;
 use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
@@ -73,7 +73,7 @@ class SplitDiscussionHandler
     }
 
     /**
-     * @param \Flagrow\Split\Api\Commands\SplitDiscussion $command
+     * @param \FoF\Split\Api\Commands\SplitDiscussion $command
      *
      * @throws \Flarum\User\Exception\PermissionDeniedException
      * @throws \Illuminate\Validation\ValidationException

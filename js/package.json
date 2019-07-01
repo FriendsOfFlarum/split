@@ -1,5 +1,5 @@
 {
-  "name": "@flagrow/split",
+  "name": "@fof/split",
   "version": "0.0.0",
   "dependencies": {
     "flarum-webpack-config": "^0.1.0-beta.8",

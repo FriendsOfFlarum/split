@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Flagrow\Split\Posts;
+namespace FoF\Split\Posts;
 
 use Flarum\Discussion\Discussion;
 use Flarum\Http\UrlGenerator;
