@@ -3,7 +3,7 @@
     "description": "Separate posts from one discussion into its own, splits discussions.",
     "keywords": [
         "split",
-        "flarum",
+        "flarum"
     ],
     "type": "flarum-extension",
     "license": "MIT",

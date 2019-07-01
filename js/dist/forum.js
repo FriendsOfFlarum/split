@@ -155,7 +155,7 @@ __webpack_require__.r(__webpack_exports__);
       onclick: function onclick() {
         controller.start(post.id(), post.number());
       }
-    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-split.forum.split.from'))]);
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('fof-split.forum.split.from'))]);
   });
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_CommentPost__WEBPACK_IMPORTED_MODULE_4___default.a.prototype, 'footerItems', function (items) {
     var post = this.props.post;
@@ -173,7 +173,7 @@ __webpack_require__.r(__webpack_exports__);
       style: {
         display: 'none'
       }
-    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('flagrow-split.forum.split.to'))]);
+    }, flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.translator.trans('fof-split.forum.split.to'))]);
   });
 });
 
@@ -223,10 +223,10 @@ function (_EventPost) {
 
   _proto.descriptionKey = function descriptionKey() {
     if (this.props.post.content()['toNew']) {
-      return 'flagrow-split.forum.post.was_split_to';
+      return 'fof-split.forum.post.was_split_to';
     }
 
-    return 'flagrow-split.forum.post.was_split_from';
+    return 'fof-split.forum.post.was_split_from';
   };
   /**
    * Get the translation data for the description of the event.
@@ -344,7 +344,7 @@ function (_Modal) {
   };
 
   _proto.title = function title() {
-    return app.translator.trans('flagrow-split.forum.modal.title');
+    return app.translator.trans('fof-split.forum.modal.title');
   };
 
   _proto.content = function content() {
@@ -354,7 +354,7 @@ function (_Modal) {
       className: 'Form Form--centered'
     }, [m('div', {
       className: 'Form-group'
-    }, [m('label', {}, app.translator.trans('flagrow-split.forum.modal.new_discussion_label')), m('input', {
+    }, [m('label', {}, app.translator.trans('fof-split.forum.modal.new_discussion_label')), m('input', {
       className: 'FormControl',
       name: 'new_discussion_title',
       value: this.newDiscussionTitle(),
@@ -366,7 +366,7 @@ function (_Modal) {
       type: 'submit',
       loading: this.loading,
       disabled: !this.newDiscussionTitle()
-    }, app.translator.trans('flagrow-split.forum.modal.submit_button'))])])])];
+    }, app.translator.trans('fof-split.forum.modal.submit_button'))])])])];
   };
 
   _proto.onsubmit = function onsubmit(e) {

@@ -19,7 +19,7 @@ export default function (controller) {
                 onclick: () => {
                     controller.start(post.id(), post.number());
                 }
-            }, app.translator.trans('flagrow-split.forum.split.from'))
+            }, app.translator.trans('fof-split.forum.split.from'))
         ]);
     });
 
@@ -40,7 +40,7 @@ export default function (controller) {
                     app.modal.show(splitModal);
                 },
                 style: {display: 'none'}
-            }, app.translator.trans('flagrow-split.forum.split.to'))
+            }, app.translator.trans('fof-split.forum.split.to'))
         ]);
     });
 }

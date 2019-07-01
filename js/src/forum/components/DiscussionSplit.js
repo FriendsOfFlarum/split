@@ -18,10 +18,10 @@ export default class DiscussionSplit extends EventPost {
      */
     descriptionKey() {
         if (this.props.post.content()['toNew']) {
-            return 'flagrow-split.forum.post.was_split_to';
+            return 'fof-split.forum.post.was_split_to';
         }
 
-        return 'flagrow-split.forum.post.was_split_from';
+        return 'fof-split.forum.post.was_split_from';
     }
 
     /**

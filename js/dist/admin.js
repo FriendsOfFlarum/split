@@ -123,7 +123,7 @@ flarum_app__WEBPACK_IMPORTED_MODULE_1___default.a.initializers.add('flagrow-spli
   Object(flarum_extend__WEBPACK_IMPORTED_MODULE_0__["extend"])(flarum_components_PermissionGrid__WEBPACK_IMPORTED_MODULE_2___default.a.prototype, 'moderateItems', function (items) {
     items.add('split', {
       icon: 'fas fa-code-branch',
-      label: app.translator.trans('flagrow-split.admin.permissions.split_discussion_label'),
+      label: app.translator.trans('fof-split.admin.permissions.split_discussion_label'),
       permission: 'discussion.split'
     }, 65);
   });

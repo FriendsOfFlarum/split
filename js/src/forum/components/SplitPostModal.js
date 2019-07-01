@@ -18,7 +18,7 @@ export default class SplitPostModal extends Modal {
     }
 
     title() {
-        return app.translator.trans('flagrow-split.forum.modal.title');
+        return app.translator.trans('fof-split.forum.modal.title');
     }
 
     content() {
@@ -26,7 +26,7 @@ export default class SplitPostModal extends Modal {
             m('div', {className: 'Modal-body'}, [
                 m('div', {className: 'Form Form--centered'}, [
                     m('div', {className: 'Form-group'}, [
-                        m('label', {},  app.translator.trans('flagrow-split.forum.modal.new_discussion_label')),
+                        m('label', {},  app.translator.trans('fof-split.forum.modal.new_discussion_label')),
                         m('input', {
                             className: 'FormControl',
                             name: 'new_discussion_title',
@@ -40,7 +40,7 @@ export default class SplitPostModal extends Modal {
                             type: 'submit',
                             loading: this.loading,
                             disabled: !this.newDiscussionTitle()
-                        }, app.translator.trans('flagrow-split.forum.modal.submit_button'))
+                        }, app.translator.trans('fof-split.forum.modal.submit_button'))
                     ])
                 ])
             ])
