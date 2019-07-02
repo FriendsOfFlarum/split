@@ -15,6 +15,7 @@ namespace FoF\Split\Listeners;
 use Flarum\Discussion\Event\Renamed;
 use Flarum\Http\UrlGenerator;
 use Flarum\Post\PostRepository;
+use FoF\Split\Posts\DiscussionSplitPost;
 
 class UpdateSplitTitleAfterDiscussionWasRenamed
 {
@@ -45,12 +46,11 @@ class UpdateSplitTitleAfterDiscussionWasRenamed
         $url = $this->url->to('forum')->route('discussion', ['id' => "{$event->discussion->id}-{$event->discussion->slug}"]);
 
         // find all the posts that have been split from the renamed discussion
-        $this->posts
-            ->query()
+        DiscussionSplitPost::query()
             ->where('type', '=', 'discussionSplit')
             ->where('content', 'like', "%$escaped%")
             ->chunk(self::CHUNK_LIMIT, function ($collection) use ($event, $url) {
-                $collection->each(function ($post) use ($event, $url) {
+                $collection->each(function (DiscussionSplitPost $post) use ($event, $url) {
                     $post->setContent(array_merge($post->getContent(), [
                         'title' => $event->discussion->title,
                         'url'   => $url,
