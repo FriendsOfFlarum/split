@@ -1,6 +1,6 @@
 # Split
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/FriendsOfFlarum/split/blob/master/LICENSE.md) [![Latest Stable Version](https://img.shields.io/packagist/v/FriendsOfFlarum/split.svg)](https://packagist.org/packages/FriendsOfFlarum/split) [![Total Downloads](https://img.shields.io/packagist/dt/FriendsOfFlarum/split.svg)](https://packagist.org/packages/FriendsOfFlarum/split)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/fof/split/blob/master/LICENSE.md) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/split.svg)](https://packagist.org/packages/fof/split) [![Total Downloads](https://img.shields.io/packagist/dt/fof/split.svg)](https://packagist.org/packages/fof/split)
 
 Allows splitting posts from discussions. 
 
@@ -26,4 +26,4 @@ Without that last burst of effort this extension would have most likely been del
 - [Source code on GitHub](https://github.com/FriendsOfFlarum/split)
 - [Changelog](https://github.com/FriendsOfFlarum/split/blob/master/CHANGELOG.md)
 - [Report an issue](https://github.com/FriendsOfFlarum/split/issues)
-- [Download via Packagist](https://packagist.org/packages/FriendsOfFlarum/split)
+- [Download via Packagist](https://packagist.org/packages/fof/split)
