@@ -51,10 +51,10 @@ class UpdateSplitTitleAfterDiscussionWasRenamed
             ->where('content', 'like', "%$escaped%")
             ->chunk(self::CHUNK_LIMIT, function ($collection) use ($event, $url) {
                 $collection->each(function (DiscussionSplitPost $post) use ($event, $url) {
-                    $post->setContent(array_merge($post->content, [
+                    $post->content = array_merge($post->content, [
                         'title' => $event->discussion->title,
                         'url'   => $url,
-                    ]));
+                    ]);
 
                     $post->save();
                 });
