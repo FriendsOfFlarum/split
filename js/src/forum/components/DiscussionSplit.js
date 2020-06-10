@@ -1,7 +1,6 @@
-import EventPost from "flarum/components/EventPost";
+import EventPost from 'flarum/components/EventPost';
 
 export default class DiscussionSplit extends EventPost {
-
     /**
      * Get the name of the event icon.
      *
@@ -31,9 +30,12 @@ export default class DiscussionSplit extends EventPost {
      */
     descriptionData() {
         return {
-            'count': this.props.post.content()['count'],
-            'target': <a className="EventPost-Split-target" href={this.props.post.content()['url']}
-                         config={m.route}>{this.props.post.content()['title']}</a>
+            count: this.props.post.content()['count'],
+            target: (
+                <a className="EventPost-Split-target" href={this.props.post.content()['url']} config={m.route}>
+                    {this.props.post.content()['title']}
+                </a>
+            ),
         };
     }
 }
