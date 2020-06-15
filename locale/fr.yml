@@ -1,0 +1,15 @@
+fof-split:
+    admin:
+        permissions:
+            split_discussion_label: Déplacer les messages des discussions
+    forum:
+        post:
+            was_split_to: "{count} message a été déplacé vers {target}.|{count} messages ont été déplacés vers {target}."
+            was_split_from: "{count} message a été déplacé depuis {target}.|{count} messages ont été déplacés depuis {target}."
+        split:
+            from: Déplacer à partir d'ici
+            to: Déplacer vers ici
+        modal:
+            title: Déplacer la discussion
+            new_discussion_label: Spécifier le titre de la nouvelle discussion
+            submit_button: Déplacer
