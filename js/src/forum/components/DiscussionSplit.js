@@ -16,7 +16,7 @@ export default class DiscussionSplit extends EventPost {
      * @return {String}
      */
     descriptionKey() {
-        if (this.props.post.content()['toNew']) {
+        if (this.attrs.post.content()['toNew']) {
             return 'fof-split.forum.post.was_split_to';
         }
 
@@ -30,10 +30,10 @@ export default class DiscussionSplit extends EventPost {
      */
     descriptionData() {
         return {
-            count: this.props.post.content()['count'],
+            count: this.attrs.post.content()['count'],
             target: (
-                <a className="EventPost-Split-target" href={this.props.post.content()['url']} config={m.route}>
-                    {this.props.post.content()['title']}
+                <a className="EventPost-Split-target" route={this.attrs.post.content()['url']}>
+                    {this.attrs.post.content()['title']}
                 </a>
             ),
         };
