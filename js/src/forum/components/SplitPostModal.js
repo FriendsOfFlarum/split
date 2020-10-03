@@ -1,11 +1,12 @@
 import Modal from 'flarum/components/Modal';
 import Button from 'flarum/components/Button';
+import Stream from 'flarum/utils/Stream';
 
 export default class SplitPostModal extends Modal {
     oninit(vnode) {
         super.oninit(vnode);
 
-        this.newDiscussionTitle = m.stream('');
+        this.newDiscussionTitle = Stream('');
     }
 
     className() {
@@ -63,10 +64,10 @@ export default class SplitPostModal extends Modal {
             body: data,
         }).then((data) => {
             let discussion = {};
-            discussion.id = m.stream(data.data.id);
-            discussion.slug = m.stream(data.data.attributes.slug);
-            discussion.startUser = m.stream(data.data.attributes.startUser);
-            discussion.isUnread = m.stream(data.data.attributes.isUnread);
+            discussion.id = Stream(data.data.id);
+            discussion.slug = Stream(data.data.attributes.slug);
+            discussion.startUser = Stream(data.data.attributes.startUser);
+            discussion.isUnread = Stream(data.data.attributes.isUnread);
             this.hide();
             m.route.set(app.route.discussion(discussion));
         }, this.loaded.bind(this));
