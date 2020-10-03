@@ -1,4 +1,5 @@
 import EventPost from 'flarum/components/EventPost';
+import Link from 'flarum/components/Link';
 
 export default class DiscussionSplit extends EventPost {
     /**
@@ -32,9 +33,9 @@ export default class DiscussionSplit extends EventPost {
         return {
             count: this.attrs.post.content()['count'],
             target: (
-                <a className="EventPost-Split-target" route={this.attrs.post.content()['url']}>
+                <Link className="EventPost-Split-target" href={this.attrs.post.content()['url']}>
                     {this.attrs.post.content()['title']}
-                </a>
+                </Link>
             ),
         };
     }
