@@ -1,15 +1,12 @@
 import Modal from 'flarum/components/Modal';
 import Button from 'flarum/components/Button';
+import Stream from 'flarum/utils/Stream';
 
 export default class SplitPostModal extends Modal {
-    init() {
-        super.init();
+    oninit(vnode) {
+        super.oninit(vnode);
 
-        this.newDiscussionTitle = m.prop('');
-    }
-
-    setController(controller) {
-        this.split = controller;
+        this.newDiscussionTitle = Stream('');
     }
 
     className() {
@@ -29,8 +26,7 @@ export default class SplitPostModal extends Modal {
                         m('input', {
                             className: 'FormControl',
                             name: 'new_discussion_title',
-                            value: this.newDiscussionTitle(),
-                            oninput: m.withAttr('value', this.newDiscussionTitle),
+                            bidi: this.newDiscussionTitle,
                         }),
                     ]),
                     m('div', { className: 'Form-group' }, [
@@ -58,22 +54,22 @@ export default class SplitPostModal extends Modal {
         const data = new FormData();
 
         data.append('title', this.newDiscussionTitle());
-        data.append('start_post_id', this.split.startPostId);
-        data.append('end_post_number', this.split.endPostNumber);
+        data.append('start_post_id', this.attrs.split.startPostId);
+        data.append('end_post_number', this.attrs.post.number());
 
         app.request({
             method: 'POST',
             url: app.forum.attribute('apiUrl') + '/split',
             serialize: (raw) => raw,
-            data,
+            body: data,
         }).then((data) => {
             let discussion = {};
-            discussion.id = m.prop(data.data.id);
-            discussion.slug = m.prop(data.data.attributes.slug);
-            discussion.startUser = m.prop(data.data.attributes.startUser);
-            discussion.isUnread = m.prop(data.data.attributes.isUnread);
+            discussion.id = Stream(data.data.id);
+            discussion.slug = Stream(data.data.attributes.slug);
+            discussion.startUser = Stream(data.data.attributes.startUser);
+            discussion.isUnread = Stream(data.data.attributes.isUnread);
             this.hide();
-            m.route(app.route.discussion(discussion));
+            m.route.set(app.route.discussion(discussion));
         }, this.loaded.bind(this));
     }
 }

@@ -10,7 +10,7 @@ app.initializers.add('flagrow-split', (app) => {
 
     app.postComponents.discussionSplit = DiscussionSplit;
 
-    var splitController = new SplitController();
+    const splitController = new SplitController();
 
     addSplitControl(splitController);
 });

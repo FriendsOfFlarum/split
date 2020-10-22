@@ -27,7 +27,7 @@ export default function (controller) {
     });
 
     extend(CommentPost.prototype, 'footerItems', function (items) {
-        const post = this.props.post;
+        const post = this.attrs.post;
         const discussion = post.discussion();
 
         if (post.contentType() !== 'comment' || !discussion.canSplit() || post.number() == 1) return;
@@ -39,10 +39,7 @@ export default function (controller) {
                     icon: 'fas fa-code-branch',
                     className: 'flagrow-split-endSplitButton Button Button--link',
                     onclick: () => {
-                        controller.end(post.number());
-                        var splitModal = new SplitPostModal();
-                        splitModal.setController(controller);
-                        app.modal.show(splitModal);
+                        app.modal.show(SplitPostModal, { split: controller, post: post });
                     },
                     style: { display: 'none' },
                 },
