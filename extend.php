@@ -19,14 +19,20 @@ use Illuminate\Contracts\Events\Dispatcher;
 return [
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
+
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js'),
+
     (new Extend\Locales(__DIR__.'/locale')),
+
     (new Extend\Routes('api'))
         ->post('/split', 'fof.split.run', Api\Controllers\SplitController::class),
+
+    (new Extend\Event())
+        ->listen(Renamed::class, Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class),
+
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddSplitApi::class);
         $events->subscribe(Listeners\CreatePostWhenSplit::class);
-        $events->listen(Renamed::class, Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class);
     },
 ];

@@ -18,14 +18,11 @@ use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\AssertPermissionTrait;
 use Flarum\User\UserRepository;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
 {
-    use AssertPermissionTrait;
-
     /**
      * @var UserRepository
      */
@@ -91,7 +88,7 @@ class SplitDiscussionHandler
         // load the first selected post to split.
         $startPost = $this->posts->findOrFail($command->start_post_id, $command->actor);
 
-        $this->assertCan($command->actor, 'split', $startPost->discussion);
+        $command->actor->assertCan('split', $startPost->discussion);
 
         /** @var Discussion $originalDiscussion */
         $originalDiscussion = $startPost->discussion;
