@@ -12,9 +12,11 @@
 
 namespace FoF\Split;
 
+use Flarum\Api\Event\Serializing;
 use Flarum\Discussion\Event\Renamed;
+use Flarum\Event\ConfigurePostTypes;
 use Flarum\Extend;
-use Illuminate\Contracts\Events\Dispatcher;
+use FoF\Split\Events\DiscussionWasSplit;
 
 return [
     (new Extend\Frontend('admin'))
@@ -29,10 +31,8 @@ return [
         ->post('/split', 'fof.split.run', Api\Controllers\SplitController::class),
 
     (new Extend\Event())
-        ->listen(Renamed::class, Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class),
-
-    function (Dispatcher $events) {
-        $events->subscribe(Listeners\AddSplitApi::class);
-        $events->subscribe(Listeners\CreatePostWhenSplit::class);
-    },
+        ->listen(Renamed::class, Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class)
+        ->listen(Serializing::class, Listeners\AddSplitApi::class)
+        ->listen(ConfigurePostTypes::class, Listeners\AddPostType::class)
+        ->listen(DiscussionWasSplit::class, Listeners\CreatePostWhenSplit::class),
 ];
