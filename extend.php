@@ -12,27 +12,35 @@
 
 namespace FoF\Split;
 
-use Flarum\Api\Event\Serializing;
+use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Database\AbstractModel;
 use Flarum\Discussion\Event\Renamed;
-use Flarum\Event\ConfigurePostTypes;
 use Flarum\Extend;
 use FoF\Split\Events\DiscussionWasSplit;
+use FoF\Split\Posts\DiscussionSplitPost;
 
 return [
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->js(__DIR__ . '/js/dist/admin.js'),
 
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->js(__DIR__ . '/js/dist/forum.js'),
 
-    (new Extend\Locales(__DIR__.'/locale')),
+    (new Extend\Locales(__DIR__ . '/locale')),
 
     (new Extend\Routes('api'))
         ->post('/split', 'fof.split.run', Api\Controllers\SplitController::class),
 
     (new Extend\Event())
         ->listen(Renamed::class, Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class)
-        ->listen(Serializing::class, Listeners\AddSplitApi::class)
-        ->listen(ConfigurePostTypes::class, Listeners\AddPostType::class)
         ->listen(DiscussionWasSplit::class, Listeners\CreatePostWhenSplit::class),
+
+    (new Extend\Post())
+        ->type(DiscussionSplitPost::class),
+
+    (new Extend\ApiSerializer(DiscussionSerializer::class))
+        ->mutate(function (DiscussionSerializer $serializer, AbstractModel $discussion, array $attributes): array {
+            $attributes['canSplit'] = $serializer->getActor()->can('split', $discussion);
+            return $attributes;
+        }),
 ];
