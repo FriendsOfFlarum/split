@@ -1,6 +1,7 @@
 The MIT License (MIT)
 
-Copyright (c) Flagrow
+Coptright (c) 2020 FriendOfFlarum
+Copyright (c) Flagrow, Connor Davis (davis@produes.co), Matteo Pompili (matpompili@gmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

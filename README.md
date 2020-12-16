@@ -9,8 +9,6 @@ Allows splitting posts from discussions.
 
 ## Install
 
-Use [Bazaar](https://discuss.flarum.org/d/5151) or install manually:
-
 ```bash
 composer require "fof/split:*"
 ```
