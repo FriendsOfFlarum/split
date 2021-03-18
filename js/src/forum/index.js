@@ -1,5 +1,4 @@
-import { extend } from 'flarum/extend';
-import Model from 'flarum/Model';
+import Model from 'flarum/common/Model';
 
 import addSplitControl from './addSplitControl';
 import SplitController from './components/SplitController';

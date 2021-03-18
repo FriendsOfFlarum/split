@@ -1,5 +1,5 @@
-import EventPost from 'flarum/components/EventPost';
-import Link from 'flarum/components/Link';
+import EventPost from 'flarum/common/components/EventPost';
+import Link from 'flarum/common/components/Link';
 
 export default class DiscussionSplit extends EventPost {
     /**

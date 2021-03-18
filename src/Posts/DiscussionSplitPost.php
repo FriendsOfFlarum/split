@@ -120,7 +120,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     protected static function buildContent(string $title, int $postCount, int $discussionId, string $slug, bool $toNew)
     {
         /** @var UrlGenerator $url */
-        $url = app(UrlGenerator::class);
+        $url = resolve(UrlGenerator::class);
 
         return [
             'title' => $title,
