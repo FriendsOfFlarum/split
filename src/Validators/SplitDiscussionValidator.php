@@ -33,6 +33,8 @@ class SplitDiscussionValidator extends AbstractValidator
             'title' => [
                 'required',
                 'string',
+                'min:3',
+                'max:80'
             ],
         ];
     }

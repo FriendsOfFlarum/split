@@ -10,7 +10,7 @@ Allows splitting posts from discussions.
 ## Install
 
 ```bash
-composer require "fof/split:*"
+composer require fof/split:"*"
 ```
 
 ## Disclaimer
