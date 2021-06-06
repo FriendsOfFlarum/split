@@ -34,7 +34,7 @@ class SplitDiscussionValidator extends AbstractValidator
                 'required',
                 'string',
                 'min:3',
-                'max:80'
+                'max:80',
             ],
         ];
     }

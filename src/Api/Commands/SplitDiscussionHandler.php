@@ -12,13 +12,13 @@
 
 namespace FoF\Split\Api\Commands;
 
-use FoF\Split\Events\DiscussionWasSplit;
-use FoF\Split\Validators\SplitDiscussionValidator;
 use Flarum\Discussion\Discussion;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\UserRepository;
+use FoF\Split\Events\DiscussionWasSplit;
+use FoF\Split\Validators\SplitDiscussionValidator;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
