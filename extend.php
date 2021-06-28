@@ -21,15 +21,18 @@ use FoF\Split\Posts\DiscussionSplitPost;
 
 return [
     (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js'),
+        ->js(__DIR__ . '/js/dist/admin.js'),
 
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->js(__DIR__ . '/js/dist/forum.js'),
 
-    (new Extend\Locales(__DIR__.'/locale')),
+    (new Extend\Locales(__DIR__ . '/locale')),
 
     (new Extend\Routes('api'))
         ->post('/split', 'fof.split.run', Api\Controllers\SplitController::class),
+
+    (new Extend\Routes('api'))
+        ->post('/split_to', 'fof.split_to.run', Api\Controllers\SplitToController::class),
 
     (new Extend\Event())
         ->listen(Renamed::class, Listeners\UpdateSplitTitleAfterDiscussionWasRenamed::class)
