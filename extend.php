@@ -21,12 +21,13 @@ use FoF\Split\Posts\DiscussionSplitPost;
 
 return [
     (new Extend\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js'),
+        ->js(__DIR__.'/js/dist/admin.js'),
 
     (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->css(__DIR__.'/resources/less/forum.less'),
 
-    (new Extend\Locales(__DIR__ . '/locale')),
+    (new Extend\Locales(__DIR__.'/resources/locale')),
 
     (new Extend\Routes('api'))
         ->post('/split', 'fof.split.run', Api\Controllers\SplitController::class),
@@ -42,7 +43,7 @@ return [
         ->type(DiscussionSplitPost::class),
 
     (new Extend\ApiSerializer(DiscussionSerializer::class))
-        ->attributes(function (DiscussionSerializer $serializer, AbstractModel $discussion, array $attributes): array {
+        ->attributes(function (DiscussionSerializer $serializer, AbstractModel $discussion, array $attributes):array {
             $attributes['canSplit'] = $serializer->getActor()->can('split', $discussion);
 
             return $attributes;
