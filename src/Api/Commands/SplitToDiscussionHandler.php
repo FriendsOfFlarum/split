@@ -82,9 +82,9 @@ class SplitToDiscussionHandler
     public function handle(SplitToDiscussion $command): Discussion
     {
         $this->validator->assertValid([
-            'start_post_id' => $command->start_post_id,
+            'start_post_id'   => $command->start_post_id,
             'end_post_number' => $command->end_post_number,
-            'discussion_id' => $command->discussion_id,
+            'discussion_id'   => $command->discussion_id,
         ]);
 
         // load the first selected post to split.

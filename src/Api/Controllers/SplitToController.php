@@ -47,6 +47,7 @@ class SplitToController extends AbstractShowController
      *
      * @param ServerRequestInterface $request
      * @param Document               $document
+     *
      * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)
