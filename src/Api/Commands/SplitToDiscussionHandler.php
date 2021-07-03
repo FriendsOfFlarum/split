@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of fof/split.
  *
@@ -97,7 +96,6 @@ class SplitToDiscussionHandler
         /** @var Discussion $originalDiscussion */
         $originalDiscussion = $startPost->discussion;
 
-        //TODO get target discussion
         $discussion = Discussion::find($command->discussion_id);
 
         // update all posts that are split.
@@ -108,7 +106,9 @@ class SplitToDiscussionHandler
             $command->end_post_number
         );
 
+        $this->renumberDiscussion($originalDiscussion);
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
+
         $this->renumberDiscussion($discussion);
         $discussion = $this->refreshDiscussion($discussion);
 
@@ -124,29 +124,39 @@ class SplitToDiscussionHandler
      *
      * @param Discussion $originalDiscussion
      * @param Discussion $discussion
-     * @param            $start_post_number
-     * @param            $end_post_number
+     * @param            $startPostNumber
+     * @param            $endPostNumber
      *
      * @return Collection
      */
     protected function assignPostsToDiscussion(
         Discussion $originalDiscussion,
         Discussion $discussion,
-        $start_post_number,
-        $end_post_number
+        $startPostNumber,
+        $endPostNumber
     ): Collection
     {
+        $lastPostNumber = $this->posts
+            ->query()
+            ->where('discussion_id', $discussion->id)
+            ->max('number');
+
         $this->posts
             ->query()
             ->where('discussion_id', $originalDiscussion->id)
-            ->whereBetween('number', [$start_post_number, $end_post_number])
-            ->update(['discussion_id' => $discussion->id]);
-
-        $discussion->post_number_index = $end_post_number;
-        $discussion->save();
+            ->whereBetween('number', [$startPostNumber, $endPostNumber])
+            ->each(function (Post $post) use (&$lastPostNumber, $discussion) {
+                $lastPostNumber++;
+                $post->discussion_id = $discussion->id;
+                $post->number = $lastPostNumber;
+                $post->save();
+            });
 
         // Update relationship posts on new discussion.
         $discussion->load('posts');
+
+        $discussion->post_number_index = $lastPostNumber;
+        $discussion->save();
 
         return $discussion->posts;
     }
@@ -158,18 +168,14 @@ class SplitToDiscussionHandler
      */
     protected function renumberDiscussion(Discussion $discussion)
     {
-        $discussion->load('posts');
+        $sql = "
+            SET @maxNumber = (SELECT MAX(number) FROM posts WHERE discussion_id = ".$discussion->id.");
+            SET @rank = @maxNumber;
+            UPDATE posts SET number=@rank:=@rank+1 WHERE discussion_id = ".$discussion->id." ORDER BY created_at;
+            UPDATE posts SET number=number-@maxNumber WHERE discussion_id = ".$discussion->id.";
+        ";
 
-        $number = 0;
-
-        $discussion->posts->sortBy('created_at')->each(function (Post $post) use (&$number) {
-            $number++;
-            $post->number = $number;
-            $post->save();
-        });
-
-        $discussion->post_number_index = $number;
-        $discussion->save();
+        resolve('db')->unprepared($sql);
     }
 
     /**

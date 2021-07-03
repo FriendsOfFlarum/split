@@ -43,7 +43,7 @@ return [
         ->type(DiscussionSplitPost::class),
 
     (new Extend\ApiSerializer(DiscussionSerializer::class))
-        ->attributes(function (DiscussionSerializer $serializer, AbstractModel $discussion, array $attributes):array {
+        ->attributes(function (DiscussionSerializer $serializer, AbstractModel $discussion, array $attributes): array {
             $attributes['canSplit'] = $serializer->getActor()->can('split', $discussion);
 
             return $attributes;
