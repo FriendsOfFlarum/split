@@ -48,9 +48,9 @@ class SplitDiscussion
      * SplitDiscussion constructor.
      *
      * @param string $title
-     * @param int $start_post_id
-     * @param int $end_post_number
-     * @param User $actor
+     * @param int    $start_post_id
+     * @param int    $end_post_number
+     * @param User   $actor
      */
     public function __construct($title, $start_post_id, $end_post_number, User $actor)
     {

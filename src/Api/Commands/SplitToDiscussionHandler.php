@@ -51,11 +51,11 @@ class SplitToDiscussionHandler
     protected Dispatcher $events;
 
     /**
-     * @param UserRepository $users
-     * @param PostRepository $posts
+     * @param UserRepository              $users
+     * @param PostRepository              $posts
      * @param SettingsRepositoryInterface $settings
-     * @param Dispatcher $events
-     * @param SplitToDiscussionValidator $validator
+     * @param Dispatcher                  $events
+     * @param SplitToDiscussionValidator  $validator
      */
     public function __construct(
         UserRepository $users,
@@ -63,8 +63,7 @@ class SplitToDiscussionHandler
         SettingsRepositoryInterface $settings,
         Dispatcher $events,
         SplitToDiscussionValidator $validator
-    )
-    {
+    ) {
         $this->users = $users;
         $this->posts = $posts;
         $this->settings = $settings;
@@ -75,10 +74,10 @@ class SplitToDiscussionHandler
     /**
      * @param SplitToDiscussion $command
      *
-     * @return Discussion
+     * @throws PermissionDeniedException
      * @throws ValidationException
      *
-     * @throws PermissionDeniedException
+     * @return Discussion
      */
     public function handle(SplitToDiscussion $command): Discussion
     {
@@ -134,8 +133,7 @@ class SplitToDiscussionHandler
         Discussion $discussion,
         $startPostNumber,
         $endPostNumber
-    ): Collection
-    {
+    ): Collection {
         $lastPostNumber = $this->posts
             ->query()
             ->where('discussion_id', $discussion->id)
@@ -168,12 +166,12 @@ class SplitToDiscussionHandler
      */
     protected function renumberDiscussion(Discussion $discussion)
     {
-        $sql = "
-            SET @maxNumber = (SELECT MAX(number) FROM posts WHERE discussion_id = ".$discussion->id.");
+        $sql = '
+            SET @maxNumber = (SELECT MAX(number) FROM posts WHERE discussion_id = '.$discussion->id.');
             SET @rank = @maxNumber;
-            UPDATE posts SET number=@rank:=@rank+1 WHERE discussion_id = ".$discussion->id." ORDER BY created_at;
-            UPDATE posts SET number=number-@maxNumber WHERE discussion_id = ".$discussion->id.";
-        ";
+            UPDATE posts SET number=@rank:=@rank+1 WHERE discussion_id = '.$discussion->id.' ORDER BY created_at;
+            UPDATE posts SET number=number-@maxNumber WHERE discussion_id = '.$discussion->id.';
+        ';
 
         resolve('db')->unprepared($sql);
     }

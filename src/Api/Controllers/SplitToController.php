@@ -46,7 +46,7 @@ class SplitToController extends AbstractShowController
      * Get the data to be serialized and assigned to the response document.
      *
      * @param ServerRequestInterface $request
-     * @param Document $document
+     * @param Document               $document
      * @return mixed
      */
     protected function data(ServerRequestInterface $request, Document $document)
