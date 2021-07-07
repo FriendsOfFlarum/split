@@ -15,5 +15,5 @@ fof-split:
             type_existing_label: Split into existing discussion
             search_discussion_label: Select a discussion to which to split posts
             new_discussion_label: Specify the title for the new discussion
-            split_to_discussion_help: 'Posts will be split into <b>{title}</b>'
+            split_to_discussion_help: 'Posts will be split out and merged into <b>{title}</b>'
             submit_button: Split
