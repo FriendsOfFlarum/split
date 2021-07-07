@@ -55,7 +55,7 @@ class SplitToController extends AbstractShowController
         $discussion_id = Arr::get($request->getParsedBody(), 'discussion_id');
         $start_post_id = Arr::get($request->getParsedBody(), 'start_post_id');
         $end_post_number = Arr::get($request->getParsedBody(), 'end_post_number');
-        $actor = $request->getAttribute('actor');
+        $actor = RequestUtil::getActor($request);
 
         return $this->bus->dispatch(
             new SplitToDiscussion($discussion_id, $start_post_id, $end_post_number, $actor)
