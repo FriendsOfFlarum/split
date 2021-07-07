@@ -25,14 +25,17 @@ class SplitToDiscussionValidator extends AbstractValidator
             'start_post_id' => [
                 'required',
                 'int',
+                'exists:posts,id',
             ],
-            'end_post_id' => [
+            'end_post_id'   => [
                 'required',
                 'int',
+                'exists:posts,id',
             ],
             'discussion_id' => [
                 'required',
                 'int',
+                'exists:discussions,id',
             ],
         ];
     }

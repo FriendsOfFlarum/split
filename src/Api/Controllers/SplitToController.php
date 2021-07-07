@@ -14,6 +14,7 @@ namespace FoF\Split\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Http\RequestUtil;
 use FoF\Split\Api\Commands\SplitToDiscussion;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
