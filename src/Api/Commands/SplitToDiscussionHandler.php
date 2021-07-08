@@ -166,14 +166,12 @@ class SplitToDiscussionHandler
      */
     protected function renumberDiscussion(Discussion $discussion)
     {
-        $sql = '
-            SET @maxNumber = (SELECT MAX(number) FROM posts WHERE discussion_id = '.$discussion->id.');
-            SET @rank = @maxNumber;
-            UPDATE posts SET number=@rank:=@rank+1 WHERE discussion_id = '.$discussion->id.' ORDER BY created_at;
-            UPDATE posts SET number=number-@maxNumber WHERE discussion_id = '.$discussion->id.';
-        ';
+        $db = resolve('db');
 
-        resolve('db')->unprepared($sql);
+        $db->statement('SET @maxNumber = (SELECT MAX(number) FROM posts WHERE discussion_id = ?);', [$discussion->id]);
+        $db->statement('SET @rank = @maxNumber;');
+        $db->statement('UPDATE posts SET number=@rank:=@rank+1 WHERE discussion_id = ? ORDER BY created_at;', [$discussion->id]);
+        $db->statement('UPDATE posts SET number=number-@maxNumber WHERE discussion_id = ?;', [$discussion->id]);
     }
 
     /**
