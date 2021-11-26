@@ -41,9 +41,6 @@
         },
         "flagrow": {
             "discuss": "https://discuss.flarum.org/d/1903"
-        },
-        "branch-alias": {
-            "dev-master": "0.1.x-dev"
         }
     },
     "autoload": {
