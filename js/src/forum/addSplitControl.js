@@ -28,6 +28,10 @@ export default function () {
     }
   });
 
+  extend(CommentPost.prototype, 'oninit', function () {
+    this.subtree.check(() => app.__fof_split.splitting);
+  });
+
   extend(CommentPost.prototype, 'footerItems', function (items) {
     const post = this.attrs.post;
     const discussion = post.discussion();
