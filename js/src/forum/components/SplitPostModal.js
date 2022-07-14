@@ -19,32 +19,6 @@ export default class SplitPostModal extends Modal {
   }
 
   content() {
-    // return [
-    //   m('div', { className: 'Modal-body' }, [
-    //     m('div', { className: 'Form Form--centered' }, [
-    //       m('div', { className: 'Form-group' }, [
-    //         m('label', {}, app.translator.trans('fof-split.forum.modal.new_discussion_label')),
-    //         m('input', {
-    //           className: 'FormControl',
-    //           name: 'new_discussion_title',
-    //           bidi: this.newDiscussionTitle,
-    //         }),
-    //       ]),
-    //       m('div', { className: 'Form-group' }, [
-    //         m(
-    //           Button,
-    //           {
-    //             className: 'Button Button--primary Button--block',
-    //             type: 'submit',
-    //             loading: this.loading,
-    //             disabled: !this.newDiscussionTitle(),
-    //           },
-    //           app.translator.trans('fof-split.forum.modal.submit_button')
-    //         ),
-    //       ]),
-    //     ]),
-    //   ]),
-    // ];
     return [
       <div className="Modal-body">
         <div className="Form Form--centered">
