@@ -2,7 +2,7 @@ import app from 'flarum/forum/app';
 import Model from 'flarum/common/Model';
 
 import addSplitControl from './addSplitControl';
-import SplitController from './components/SplitController';
+import SplitController from './SplitController';
 import DiscussionSplit from './components/DiscussionSplit';
 
 app.initializers.add('fof-split', (app) => {
