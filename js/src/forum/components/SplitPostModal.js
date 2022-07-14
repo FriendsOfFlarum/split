@@ -19,31 +19,46 @@ export default class SplitPostModal extends Modal {
   }
 
   content() {
+    // return [
+    //   m('div', { className: 'Modal-body' }, [
+    //     m('div', { className: 'Form Form--centered' }, [
+    //       m('div', { className: 'Form-group' }, [
+    //         m('label', {}, app.translator.trans('fof-split.forum.modal.new_discussion_label')),
+    //         m('input', {
+    //           className: 'FormControl',
+    //           name: 'new_discussion_title',
+    //           bidi: this.newDiscussionTitle,
+    //         }),
+    //       ]),
+    //       m('div', { className: 'Form-group' }, [
+    //         m(
+    //           Button,
+    //           {
+    //             className: 'Button Button--primary Button--block',
+    //             type: 'submit',
+    //             loading: this.loading,
+    //             disabled: !this.newDiscussionTitle(),
+    //           },
+    //           app.translator.trans('fof-split.forum.modal.submit_button')
+    //         ),
+    //       ]),
+    //     ]),
+    //   ]),
+    // ];
     return [
-      m('div', { className: 'Modal-body' }, [
-        m('div', { className: 'Form Form--centered' }, [
-          m('div', { className: 'Form-group' }, [
-            m('label', {}, app.translator.trans('fof-split.forum.modal.new_discussion_label')),
-            m('input', {
-              className: 'FormControl',
-              name: 'new_discussion_title',
-              bidi: this.newDiscussionTitle,
-            }),
-          ]),
-          m('div', { className: 'Form-group' }, [
-            m(
-              Button,
-              {
-                className: 'Button Button--primary Button--block',
-                type: 'submit',
-                loading: this.loading,
-                disabled: !this.newDiscussionTitle(),
-              },
-              app.translator.trans('fof-split.forum.modal.submit_button')
-            ),
-          ]),
-        ]),
-      ]),
+      <div className="Modal-body">
+        <div className="Form Form--centered">
+          <div className="Form-group">
+            <label for="new_discussion_title">{app.translator.trans('fof-split.forum.modal.new_discussion_label')}</label>
+            <input className="FormControl" name="new_discussion_title" bidi={this.newDiscussionTitle} />
+          </div>
+          <div className="Form-group">
+            <Button className="Button Button--primary Button--block" type="submit" loading={this.loading} disabled={!this.newDiscussionTitle()}>
+              {app.translator.trans('fof-split.forum.modal.submit_button')}
+            </Button>
+          </div>
+        </div>
+      </div>,
     ];
   }
 

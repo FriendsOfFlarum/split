@@ -5,7 +5,7 @@ import addSplitControl from './addSplitControl';
 import SplitController from './SplitController';
 import DiscussionSplit from './components/DiscussionSplit';
 
-app.initializers.add('fof-split', (app) => {
+app.initializers.add('fof-split', () => {
   window.app.__fof_split = {
     splitting: false,
     showSplitTos: {},
