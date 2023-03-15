@@ -26,7 +26,7 @@ return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js'),
 
-    (new Extend\Locales(__DIR__.'/locale')),
+    new Extend\Locales(__DIR__.'/locale'),
 
     (new Extend\Routes('api'))
         ->post('/split', 'fof.split.run', Api\Controllers\SplitController::class),
