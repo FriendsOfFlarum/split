@@ -1,3 +1,5 @@
+import app from 'flarum/forum/app';
+
 export default class SplitController {
   constructor() {
     this.reset();
