@@ -12,6 +12,7 @@
 
 namespace FoF\Split\Posts;
 
+use Carbon\Carbon;
 use Flarum\Discussion\Discussion;
 use Flarum\Http\UrlGenerator;
 use Flarum\Post\AbstractEventPost;
@@ -99,7 +100,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     protected static function newReply(User $user, Discussion $discussion)
     {
         $post = new static();
-        $post->created_at = time();
+        $post->created_at = Carbon::now();
         $post->user_id = $user->id;
         $post->discussion_id = $discussion->id;
 
