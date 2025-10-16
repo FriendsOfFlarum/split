@@ -22,7 +22,7 @@ class SplitDiscussion
      * @param string $title
      * @param int    $start_post_id
      * @param int    $end_post_number
-    **/
+     **/
     public function __construct(public $title, public $start_post_id, public $end_post_number, public User $actor)
     {
     }

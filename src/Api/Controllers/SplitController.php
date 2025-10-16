@@ -45,7 +45,7 @@ class SplitController implements RequestHandlerInterface
             ->forResource(DiscussionResource::class)
             ->forEndpoint('show')
             ->handle(
-                $request->withUri($request->getUri()->withPath('/discussions/' . $discussion->id))
+                $request->withUri($request->getUri()->withPath('/discussions/'.$discussion->id))
                     ->withMethod('GET')
                     ->withParsedBody([])
             );

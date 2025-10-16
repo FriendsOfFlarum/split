@@ -35,8 +35,8 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      * @param Post $previous
      *
      * @return static The model resulting after the merge. If the merge is
-     *              unsuccessful, this should be the current model instance. Otherwise,
-     *              it should be the model that was merged into.
+     *                unsuccessful, this should be the current model instance. Otherwise,
+     *                it should be the model that was merged into.
      */
     public function saveAfter(?Post $previous = null): static
     {

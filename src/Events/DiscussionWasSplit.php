@@ -20,7 +20,6 @@ class DiscussionWasSplit
 {
     /**
      * DiscussionWasSplit constructor.
-     *
      */
     public function __construct(public User $actor, public Collection $posts, public Discussion $originalDiscussion, public Discussion $newDiscussion)
     {

@@ -12,14 +12,14 @@
 
 namespace FoF\Split;
 
-use Flarum\Discussion\Event\Renamed;
-use Flarum\Extend;
-use FoF\Split\Events\DiscussionWasSplit;
-use FoF\Split\Posts\DiscussionSplitPost;
 use Flarum\Api\Context;
 use Flarum\Api\Resource;
 use Flarum\Api\Schema;
 use Flarum\Discussion\Discussion;
+use Flarum\Discussion\Event\Renamed;
+use Flarum\Extend;
+use FoF\Split\Events\DiscussionWasSplit;
+use FoF\Split\Posts\DiscussionSplitPost;
 
 return [
     (new Extend\Frontend('admin'))
