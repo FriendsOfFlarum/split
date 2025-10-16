@@ -19,7 +19,7 @@ class SplitDiscussionValidator extends AbstractValidator
     /**
      * @return array
      */
-    protected function getRules()
+    protected function getRules(): array
     {
         return [
             'start_post_id' => [

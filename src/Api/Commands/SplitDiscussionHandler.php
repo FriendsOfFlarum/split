@@ -23,50 +23,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
 {
-    /**
-     * @var UserRepository
-     */
-    protected $users;
-
-    /**
-     * @var PostRepository
-     */
-    protected $posts;
-
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var SplitDiscussionValidator
-     */
-    protected $validator;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
-     * @param UserRepository              $users
-     * @param PostRepository              $posts
-     * @param SettingsRepositoryInterface $settings
-     * @param Dispatcher                  $events
-     * @param SplitDiscussionValidator    $validator
-     */
-    public function __construct(
-        UserRepository $users,
-        PostRepository $posts,
-        SettingsRepositoryInterface $settings,
-        Dispatcher $events,
-        SplitDiscussionValidator $validator
-    ) {
-        $this->users = $users;
-        $this->posts = $posts;
-        $this->settings = $settings;
-        $this->events = $events;
-        $this->validator = $validator;
+    public function __construct(protected UserRepository $users, protected PostRepository $posts, protected SettingsRepositoryInterface $settings, protected Dispatcher $events, protected SplitDiscussionValidator $validator)
+    {
     }
 
     /**

@@ -26,7 +26,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
     /**
      * @var string
      */
-    public static $type = 'discussionSplit';
+    public static string $type = 'discussionSplit';
 
     /**
      * Save the model, given that it is going to appear immediately after the
@@ -38,7 +38,7 @@ class DiscussionSplitPost extends AbstractEventPost implements MergeableInterfac
      *              unsuccessful, this should be the current model instance. Otherwise,
      *              it should be the model that was merged into.
      */
-    public function saveAfter(Post $previous = null)
+    public function saveAfter(?Post $previous = null): static
     {
         $this->save();
 

@@ -21,13 +21,8 @@ class UpdateSplitTitleAfterDiscussionWasRenamed
 {
     const CHUNK_LIMIT = 10;
 
-    protected $posts;
-    protected $url;
-
-    public function __construct(UrlGenerator $url, PostRepository $posts)
+    public function __construct(protected UrlGenerator $url, protected PostRepository $posts)
     {
-        $this->url = $url;
-        $this->posts = $posts;
     }
 
     /**
