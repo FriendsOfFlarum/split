@@ -12,12 +12,14 @@
 
 namespace FoF\Split;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
-use Flarum\Database\AbstractModel;
 use Flarum\Discussion\Event\Renamed;
 use Flarum\Extend;
 use FoF\Split\Events\DiscussionWasSplit;
 use FoF\Split\Posts\DiscussionSplitPost;
+use Flarum\Api\Context;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
+use Flarum\Discussion\Discussion;
 
 return [
     (new Extend\Frontend('admin'))
@@ -38,10 +40,9 @@ return [
     (new Extend\Post())
         ->type(DiscussionSplitPost::class),
 
-    (new Extend\ApiSerializer(DiscussionSerializer::class))
-        ->attributes(function (DiscussionSerializer $serializer, AbstractModel $discussion, array $attributes): array {
-            $attributes['canSplit'] = $serializer->getActor()->can('split', $discussion);
-
-            return $attributes;
-        }),
+    (new Extend\ApiResource(Resource\DiscussionResource::class))
+        ->fields(fn (): array => [
+            Schema\Boolean::make('canSplit')
+                ->get(fn (Discussion $discussion, Context $context) => $context->getActor()->can('split', $discussion)),
+        ]),
 ];

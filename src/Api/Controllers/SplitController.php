@@ -12,45 +12,42 @@
 
 namespace FoF\Split\Api\Controllers;
 
-use Flarum\Api\Controller\AbstractShowController;
-use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Api\JsonApi;
+use Flarum\Api\Resource\DiscussionResource;
 use Flarum\Http\RequestUtil;
 use FoF\Split\Api\Commands\SplitDiscussion;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class SplitController extends AbstractShowController
+class SplitController implements RequestHandlerInterface
 {
-    /**
-     * The serializer instance for this request.
-     *
-     * @var string
-     */
-    public $serializer = DiscussionSerializer::class;
-
-    public function __construct(protected Dispatcher $bus)
-    {
+    public function __construct(
+        protected Dispatcher $bus,
+        protected JsonApi $api
+    ) {
     }
 
-    /**
-     * Get the data to be serialized and assigned to the response document.
-     *
-     * @param ServerRequestInterface $request
-     * @param Document               $document
-     *
-     * @return mixed
-     */
-    protected function data(ServerRequestInterface $request, Document $document)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $title = Arr::get($request->getParsedBody(), 'title');
         $start_post_id = Arr::get($request->getParsedBody(), 'start_post_id');
         $end_post_number = Arr::get($request->getParsedBody(), 'end_post_number');
         $actor = RequestUtil::getActor($request);
 
-        return $this->bus->dispatch(
+        $discussion = $this->bus->dispatch(
             new SplitDiscussion($title, $start_post_id, $end_post_number, $actor)
         );
+
+        return $this->api
+            ->forResource(DiscussionResource::class)
+            ->forEndpoint('show')
+            ->handle(
+                $request->withUri($request->getUri()->withPath('/discussions/' . $discussion->id))
+                    ->withMethod('GET')
+                    ->withParsedBody([])
+            );
     }
 }

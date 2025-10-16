@@ -23,8 +23,50 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
 {
-    public function __construct(protected UserRepository $users, protected PostRepository $posts, protected SettingsRepositoryInterface $settings, protected Dispatcher $events, protected SplitDiscussionValidator $validator)
-    {
+    /**
+     * @var UserRepository
+     */
+    protected $users;
+
+    /**
+     * @var PostRepository
+     */
+    protected $posts;
+
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    protected $settings;
+
+    /**
+     * @var SplitDiscussionValidator
+     */
+    protected $validator;
+
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
+
+    /**
+     * @param UserRepository              $users
+     * @param PostRepository              $posts
+     * @param SettingsRepositoryInterface $settings
+     * @param Dispatcher                  $events
+     * @param SplitDiscussionValidator    $validator
+     */
+    public function __construct(
+        UserRepository $users,
+        PostRepository $posts,
+        SettingsRepositoryInterface $settings,
+        Dispatcher $events,
+        SplitDiscussionValidator $validator
+    ) {
+        $this->users = $users;
+        $this->posts = $posts;
+        $this->settings = $settings;
+        $this->events = $events;
+        $this->validator = $validator;
     }
 
     /**
@@ -101,7 +143,6 @@ class SplitDiscussionHandler
             ->whereBetween('number', [$start_post_number, $end_post_number])
             ->update(['discussion_id' => $discussion->id]);
 
-        $discussion->post_number_index = $end_post_number;
         $discussion->save();
 
         // Update relationship posts on new discussion.
@@ -121,13 +162,13 @@ class SplitDiscussionHandler
 
         $number = 0;
 
-        $discussion->posts->sortBy('created_at')->each(function (Post $post) use (&$number) {
+        $discussion->posts->sortBy('created_at')->each(function ($post) use (&$number) {
+            /** @var Post $post */
             $number++;
             $post->number = $number;
             $post->save();
         });
 
-        $discussion->post_number_index = $number;
         $discussion->save();
     }
 
