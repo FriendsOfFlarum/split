@@ -1,9 +1,10 @@
+import Form from 'flarum/common/components/Form';
 import app from 'flarum/forum/app';
-import Modal from 'flarum/common/components/Modal';
+import FormModal from 'flarum/common/components/FormModal';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
 
-export default class SplitPostModal extends Modal {
+export default class SplitPostModal extends FormModal {
   oninit(vnode) {
     super.oninit(vnode);
 
@@ -21,7 +22,7 @@ export default class SplitPostModal extends Modal {
   content() {
     return [
       <div className="Modal-body">
-        <div className="Form Form--centered">
+        <Form className="Form--centered">
           <div className="Form-group">
             <label for="new_discussion_title">{app.translator.trans('fof-split.forum.modal.new_discussion_label')}</label>
             <input className="FormControl" name="new_discussion_title" bidi={this.newDiscussionTitle} />
@@ -31,7 +32,7 @@ export default class SplitPostModal extends Modal {
               {app.translator.trans('fof-split.forum.modal.submit_button')}
             </Button>
           </div>
-        </div>
+        </Form>
       </div>,
     ];
   }
