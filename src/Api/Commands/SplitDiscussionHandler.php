@@ -32,7 +32,7 @@ class SplitDiscussionHandler
         protected SplitDiscussionValidator $validator,
         protected ExtensionManager $extensions,
     ) {
-}
+    }
 
     /**
      * @param \FoF\Split\Api\Commands\SplitDiscussion $command
