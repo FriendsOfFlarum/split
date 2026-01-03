@@ -28,7 +28,7 @@ class UpdateSplitTitleAfterDiscussionWasRenamed
     /**
      * @param Renamed $event
      */
-    public function handle(Renamed $event)
+    public function handle(Renamed $event): void
     {
         // get the url of the discussion that was just renamed (without slug)
         $shortUrl = $this->url->to('forum')->route('discussion', ['id' => $event->discussion->id]);

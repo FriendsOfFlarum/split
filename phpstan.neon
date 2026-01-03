@@ -2,7 +2,7 @@ includes:
   - vendor/flarum/phpstan/extension.neon
 
 parameters:
-  level: 5
+  level: 6
   paths:
     - extend.php
     - src

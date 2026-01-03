@@ -126,16 +126,16 @@ class SplitDiscussionHandler
      *
      * @param Discussion $originalDiscussion
      * @param Discussion $discussion
-     * @param            $start_post_number
-     * @param            $end_post_number
+     * @param int        $start_post_number
+     * @param int        $end_post_number
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     protected function assignPostsToDiscussion(
         Discussion $originalDiscussion,
         Discussion $discussion,
-        $start_post_number,
-        $end_post_number
+        int $start_post_number,
+        int $end_post_number
     ) {
         $this->posts
             ->query()
@@ -156,7 +156,7 @@ class SplitDiscussionHandler
      *
      * @param Discussion $discussion
      */
-    protected function renumberDiscussion(Discussion $discussion)
+    protected function renumberDiscussion(Discussion $discussion): void
     {
         $discussion->load('posts');
 
@@ -194,12 +194,15 @@ class SplitDiscussionHandler
     /**
      * Sets the tags for the new discussion based on the old one.
      *
-     * @param $originalDiscussion
-     * @param $discussion
+     * @param Discussion $originalDiscussion
+     * @param Discussion $discussion
      */
-    protected function assignTagsToDiscussion($originalDiscussion, $discussion)
+    protected function assignTagsToDiscussion(Discussion $originalDiscussion, Discussion $discussion): void
     {
-        if ($originalDiscussion->tags) {
+        // Check if the flarum/tags extension is available and tags are present
+        // @phpstan-ignore-next-line - tags property is added by flarum/tags extension
+        if (method_exists($originalDiscussion, 'tags') && $originalDiscussion->tags) {
+            // @phpstan-ignore-next-line - tags() method is added by flarum/tags extension
             $discussion->tags()->sync($originalDiscussion->tags);
         }
     }
