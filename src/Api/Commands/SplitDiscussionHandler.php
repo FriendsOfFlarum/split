@@ -13,6 +13,7 @@
 namespace FoF\Split\Api\Commands;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Extension\ExtensionManager;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -23,50 +24,14 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
 {
-    /**
-     * @var UserRepository
-     */
-    protected $users;
-
-    /**
-     * @var PostRepository
-     */
-    protected $posts;
-
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var SplitDiscussionValidator
-     */
-    protected $validator;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
-     * @param UserRepository              $users
-     * @param PostRepository              $posts
-     * @param SettingsRepositoryInterface $settings
-     * @param Dispatcher                  $events
-     * @param SplitDiscussionValidator    $validator
-     */
     public function __construct(
-        UserRepository $users,
-        PostRepository $posts,
-        SettingsRepositoryInterface $settings,
-        Dispatcher $events,
-        SplitDiscussionValidator $validator
+        protected UserRepository $users,
+        protected PostRepository $posts,
+        protected SettingsRepositoryInterface $settings,
+        protected Dispatcher $events,
+        protected SplitDiscussionValidator $validator,
+        protected ExtensionManager $extensions,
     ) {
-        $this->users = $users;
-        $this->posts = $posts;
-        $this->settings = $settings;
-        $this->events = $events;
-        $this->validator = $validator;
     }
 
     /**
@@ -126,16 +91,16 @@ class SplitDiscussionHandler
      *
      * @param Discussion $originalDiscussion
      * @param Discussion $discussion
-     * @param            $start_post_number
-     * @param            $end_post_number
+     * @param int        $start_post_number
+     * @param int        $end_post_number
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     protected function assignPostsToDiscussion(
         Discussion $originalDiscussion,
         Discussion $discussion,
-        $start_post_number,
-        $end_post_number
+        int $start_post_number,
+        int $end_post_number
     ) {
         $this->posts
             ->query()
@@ -156,7 +121,7 @@ class SplitDiscussionHandler
      *
      * @param Discussion $discussion
      */
-    protected function renumberDiscussion(Discussion $discussion)
+    protected function renumberDiscussion(Discussion $discussion): void
     {
         $discussion->load('posts');
 
@@ -194,12 +159,13 @@ class SplitDiscussionHandler
     /**
      * Sets the tags for the new discussion based on the old one.
      *
-     * @param $originalDiscussion
-     * @param $discussion
+     * @param Discussion $originalDiscussion
+     * @param Discussion $discussion
      */
-    protected function assignTagsToDiscussion($originalDiscussion, $discussion)
+    protected function assignTagsToDiscussion(Discussion $originalDiscussion, Discussion $discussion): void
     {
-        if ($originalDiscussion->tags) {
+        // Check if the flarum/tags extension is available and tags are present
+        if ($this->extensions->isEnabled('flarum-tags')) {
             $discussion->tags()->sync($originalDiscussion->tags);
         }
     }

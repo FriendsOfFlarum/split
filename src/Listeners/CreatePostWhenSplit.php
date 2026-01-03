@@ -20,7 +20,7 @@ class CreatePostWhenSplit
     /**
      * @param DiscussionWasSplit $event
      */
-    public function handle(DiscussionWasSplit $event)
+    public function handle(DiscussionWasSplit $event): void
     {
         foreach (['to', 'from'] as $direction) {
             forward_static_call_array(

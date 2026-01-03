@@ -2,8 +2,9 @@ includes:
   - vendor/flarum/phpstan/extension.neon
 
 parameters:
-  level: 5
+  level: 6
   paths:
+    - vendor/flarum/tags/extend.php
     - extend.php
     - src
   excludePaths:
