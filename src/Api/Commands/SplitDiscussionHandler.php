@@ -13,6 +13,7 @@
 namespace FoF\Split\Api\Commands;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Extension\ExtensionManager;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -23,51 +24,15 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class SplitDiscussionHandler
 {
-    /**
-     * @var UserRepository
-     */
-    protected $users;
-
-    /**
-     * @var PostRepository
-     */
-    protected $posts;
-
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    /**
-     * @var SplitDiscussionValidator
-     */
-    protected $validator;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    /**
-     * @param UserRepository              $users
-     * @param PostRepository              $posts
-     * @param SettingsRepositoryInterface $settings
-     * @param Dispatcher                  $events
-     * @param SplitDiscussionValidator    $validator
-     */
     public function __construct(
-        UserRepository $users,
-        PostRepository $posts,
-        SettingsRepositoryInterface $settings,
-        Dispatcher $events,
-        SplitDiscussionValidator $validator
+        protected UserRepository $users,
+        protected PostRepository $posts,
+        protected SettingsRepositoryInterface $settings,
+        protected Dispatcher $events,
+        protected SplitDiscussionValidator $validator,
+        protected ExtensionManager $extensions,
     ) {
-        $this->users = $users;
-        $this->posts = $posts;
-        $this->settings = $settings;
-        $this->events = $events;
-        $this->validator = $validator;
-    }
+}
 
     /**
      * @param \FoF\Split\Api\Commands\SplitDiscussion $command
@@ -200,9 +165,7 @@ class SplitDiscussionHandler
     protected function assignTagsToDiscussion(Discussion $originalDiscussion, Discussion $discussion): void
     {
         // Check if the flarum/tags extension is available and tags are present
-        // @phpstan-ignore-next-line - tags property is added by flarum/tags extension
-        if (method_exists($originalDiscussion, 'tags') && $originalDiscussion->tags) {
-            // @phpstan-ignore-next-line - tags() method is added by flarum/tags extension
+        if ($this->extensions->isEnabled('flarum-tags')) {
             $discussion->tags()->sync($originalDiscussion->tags);
         }
     }
