@@ -1,11 +1,14 @@
 import app from 'flarum/forum/app';
 
 export default class SplitController {
+  startPostId: string | null = null;
+  endPostNumber: number | null = null;
+
   constructor() {
     this.reset();
   }
 
-  start(postId, postNumber) {
+  start(postId: string, postNumber: number): void {
     this.reset();
 
     this.startPostId = postId;
@@ -16,13 +19,13 @@ export default class SplitController {
     m.redraw();
   }
 
-  end(postNumber) {
+  end(postNumber: number): void {
     this.endPostNumber = postNumber;
 
     app.__fof_split.splitting = false;
   }
 
-  reset() {
+  reset(): void {
     this.startPostId = null;
     this.endPostNumber = null;
 

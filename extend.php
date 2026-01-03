@@ -26,7 +26,8 @@ return [
         ->js(__DIR__.'/js/dist/admin.js'),
 
     (new Extend\Frontend('forum'))
-        ->js(__DIR__.'/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js')
+        ->jsDirectory(__DIR__.'/js/dist/forum'),
 
     new Extend\Locales(__DIR__.'/locale'),
 
