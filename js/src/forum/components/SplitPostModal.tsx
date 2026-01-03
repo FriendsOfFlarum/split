@@ -1,25 +1,33 @@
 import Form from 'flarum/common/components/Form';
 import app from 'flarum/forum/app';
-import FormModal from 'flarum/common/components/FormModal';
+import FormModal, { IFormModalAttrs } from 'flarum/common/components/FormModal';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
+import type Post from 'flarum/common/models/Post';
+import type Mithril from 'mithril';
 
-export default class SplitPostModal extends FormModal {
-  oninit(vnode) {
+export interface SplitPostModalAttrs extends IFormModalAttrs {
+  post: Post;
+}
+
+export default class SplitPostModal extends FormModal<SplitPostModalAttrs> {
+  newDiscussionTitle!: Stream<string>;
+
+  oninit(vnode: Mithril.Vnode<SplitPostModalAttrs, this>) {
     super.oninit(vnode);
 
     this.newDiscussionTitle = Stream('');
   }
 
-  className() {
+  className(): string {
     return 'SplitPostModal Modal--small';
   }
 
-  title() {
+  title(): Mithril.Children {
     return app.translator.trans('fof-split.forum.modal.title');
   }
 
-  content() {
+  content(): Mithril.Children {
     return [
       <div className="Modal-body">
         <Form className="Form--centered">
@@ -37,7 +45,7 @@ export default class SplitPostModal extends FormModal {
     ];
   }
 
-  onsubmit(e) {
+  onsubmit(e: Event): void {
     e.preventDefault();
 
     this.loading = true;
@@ -45,25 +53,25 @@ export default class SplitPostModal extends FormModal {
     const data = new FormData();
 
     data.append('title', this.newDiscussionTitle());
-    data.append('start_post_id', app.__fof_split.splitController.startPostId);
-    data.append('end_post_number', this.attrs.post.number());
+    data.append('start_post_id', app.__fof_split.splitController?.startPostId!);
+    data.append('end_post_number', this.attrs.post.number()!.toString());
 
     app
       .request({
         method: 'POST',
         url: app.forum.attribute('apiUrl') + '/split',
-        serialize: (raw) => raw,
+        serialize: (raw: any) => raw,
         body: data,
       })
-      .then((data) => {
-        let discussion = {};
+      .then((data: any) => {
+        let discussion: any = {};
 
         discussion.id = Stream(data.data.id);
         discussion.slug = Stream(data.data.attributes.slug);
         discussion.startUser = Stream(data.data.attributes.startUser);
         discussion.isUnread = Stream(data.data.attributes.isUnread);
 
-        app.__fof_split.splitController.reset();
+        app.__fof_split.splitController?.reset();
 
         this.hide();
         m.route.set(app.route.discussion(discussion));

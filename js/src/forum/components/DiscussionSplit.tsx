@@ -1,13 +1,20 @@
 import EventPost from 'flarum/forum/components/EventPost';
 import Link from 'flarum/common/components/Link';
 
+interface SplitContent {
+  toNew?: boolean;
+  count: number;
+  url: string;
+  title: string;
+}
+
 export default class DiscussionSplit extends EventPost {
   /**
    * Get the name of the event icon.
    *
    * @return {String}
    */
-  icon() {
+  icon(): string {
     return 'fas fa-code-branch';
   }
 
@@ -16,8 +23,9 @@ export default class DiscussionSplit extends EventPost {
    *
    * @return {String}
    */
-  descriptionKey() {
-    if (this.attrs.post.content()['toNew']) {
+  descriptionKey(): string {
+    const content = this.attrs.post.content() as unknown as SplitContent;
+    if (content['toNew']) {
       return 'fof-split.forum.post.was_split_to';
     }
 
@@ -29,12 +37,14 @@ export default class DiscussionSplit extends EventPost {
    *
    * @return {Object}
    */
-  descriptionData() {
+  descriptionData(): Record<string, any> {
+    const content = this.attrs.post.content() as unknown as SplitContent;
+
     return {
-      count: this.attrs.post.content()['count'],
+      count: content['count'],
       target: (
-        <Link className="EventPost-Split-target" href={this.attrs.post.content()['url']}>
-          {this.attrs.post.content()['title']}
+        <Link className="EventPost-Split-target" href={content['url']}>
+          {content['title']}
         </Link>
       ),
     };
