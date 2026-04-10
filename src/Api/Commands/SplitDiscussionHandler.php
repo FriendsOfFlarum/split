@@ -13,6 +13,7 @@
 namespace FoF\Split\Api\Commands;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Discussion\Event\Started;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -94,7 +95,7 @@ class SplitDiscussionHandler
         $originalDiscussion = $startPost->discussion;
 
         // create a new discussion for the user of the first splitted reply.
-        $discussion = Discussion::start($command->title, $startPost->user);
+        $discussion = $this->createDiscussionFromStartPost($command, $startPost);
         $discussion->setFirstPost($startPost);
 
         // persist the new discussion.
@@ -117,6 +118,19 @@ class SplitDiscussionHandler
         $this->events->dispatch(
             new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
         );
+
+        return $discussion;
+    }
+
+    protected function createDiscussionFromStartPost(SplitDiscussion $command, Post $startPost): Discussion
+    {
+        if ($startPost->user) {
+            return Discussion::start($command->title, $startPost->user);
+        }
+
+        $discussion = new Discussion();
+        $discussion->title = $command->title;
+        $discussion->raise(new Started($discussion));
 
         return $discussion;
     }
