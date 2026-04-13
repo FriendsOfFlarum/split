@@ -60,8 +60,15 @@ class SplitDiscussionHandler
 
         // Imported or edited posts can have no author; fall back to the acting user
         // so the new discussion still goes through the supported core start path.
-        $discussion = Discussion::start($command->title, $startPost->user ?? $command->actor);
+        $discussionAuthor = $startPost->user ?? $command->actor;
+
+        $discussion = Discussion::start($command->title, $discussionAuthor);
         $discussion->setFirstPost($startPost);
+
+        if ($startPost->user_id === null) {
+            $discussion->user_id = $discussionAuthor->id;
+            $discussion->setRelation('user', $discussionAuthor);
+        }
 
         // persist the new discussion.
         $discussion->save();
