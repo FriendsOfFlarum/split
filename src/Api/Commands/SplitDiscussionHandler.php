@@ -58,8 +58,9 @@ class SplitDiscussionHandler
         /** @var Discussion $originalDiscussion */
         $originalDiscussion = $startPost->discussion;
 
-        // create a new discussion for the user of the first splitted reply.
-        $discussion = Discussion::start($command->title, $startPost->user);
+        // Imported or edited posts can have no author; fall back to the acting user
+        // so the new discussion still goes through the supported core start path.
+        $discussion = Discussion::start($command->title, $startPost->user ?? $command->actor);
         $discussion->setFirstPost($startPost);
 
         // persist the new discussion.
