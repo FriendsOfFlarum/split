@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
+    backupGlobals="false"
+    bootstrap="integration/setup.php"
+    colors="true"
+    processIsolation="true"
+    stopOnFailure="false"
+>
+    <source>
+        <include>
+            <directory suffix=".php">../src/</directory>
+        </include>
+    </source>
+    <testsuites>
+        <testsuite name="Flarum Integration Tests">
+            <directory suffix="Test.php">./integration</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
