@@ -60,10 +60,18 @@
         "flarum/flags": "*"
     },
     "scripts": {
+        "test": [
+            "@php -r \"echo 'Available test commands:'.PHP_EOL.'  composer test:setup'.PHP_EOL.'  composer test:integration'.PHP_EOL;\""
+        ],
+        "test:setup": "@php tests/integration/setup.php",
+        "test:integration": "phpunit -c tests/phpunit.integration.xml",
         "analyse:phpstan": "phpstan analyse",
         "clear-cache:phpstan": "phpstan clear-result-cache"
     },
     "scripts-descriptions": {
+        "test": "Show available test commands",
+        "test:setup": "Set up integration test environment",
+        "test:integration": "Run integration tests",
         "analyse:phpstan": "Run static analysis"
     },
     "minimum-stability": "beta",
