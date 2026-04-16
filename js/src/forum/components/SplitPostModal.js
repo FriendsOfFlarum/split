@@ -63,9 +63,9 @@ export default class SplitPostModal extends Modal {
         discussion.isUnread = Stream(data.data.attributes.isUnread);
 
         app.__fof_split.splitController.reset();
-
-        this.hide();
-        m.route.set(app.route.discussion(discussion));
+        this.attrs.animateHide(() => {
+          m.route.set(app.route.discussion(discussion));
+        });
       }, this.loaded.bind(this));
   }
 }
