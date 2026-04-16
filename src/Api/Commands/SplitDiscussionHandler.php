@@ -13,6 +13,7 @@
 namespace FoF\Split\Api\Commands;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Discussion\UserState;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
@@ -82,6 +83,9 @@ class SplitDiscussionHandler
         $this->events->dispatch(
             new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
         );
+
+        $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
+        $this->clampReadStates($originalDiscussion);
 
         return $discussion;
     }
@@ -154,6 +158,14 @@ class SplitDiscussionHandler
         $discussion->save();
 
         return Discussion::find($discussion->id);
+    }
+
+    protected function clampReadStates(Discussion $discussion): void
+    {
+        UserState::query()
+            ->where('discussion_id', $discussion->id)
+            ->where('last_read_post_number', '>', $discussion->last_post_number)
+            ->update(['last_read_post_number' => $discussion->last_post_number]);
     }
 
     /**
