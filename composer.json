@@ -58,7 +58,8 @@
         "flarum/phpstan": "^2.0.0",
         "flarum/testing": "^2.0.0",
         "flarum/tags": "*",
-        "flarum/flags": "*"
+        "flarum/flags": "*",
+        "flarum/realtime": "*"
     },
     "scripts": {
         "analyse:phpstan": "phpstan analyse",
