@@ -14,3 +14,13 @@ fof-split:
             title: Split discussion
             new_discussion_label: Specify the title for the new discussion
             submit_button: Split
+
+# Labels for the audit log entries this extension produces, rendered by the (optional)
+# flarum/audit browser. Defined under the flarum-audit namespace so the audit frontend
+# resolves them, but shipped here so they travel with the extension that owns the actions.
+flarum-audit:
+  lib:
+    browser:
+      discussion:
+        split_away: Split {post_count} posts from {discussion} into {new_discussion}
+        split_into: Split {post_count} posts into new discussion {discussion}

@@ -15,6 +15,8 @@ namespace FoF\Split;
 use Flarum\Api\Context;
 use Flarum\Api\Resource;
 use Flarum\Api\Schema;
+use Flarum\Audit\AuditLogger;
+use Flarum\Audit\Extend\Audit;
 use Flarum\Discussion\Discussion;
 use Flarum\Discussion\Event\Renamed;
 use Flarum\Extend;
@@ -45,5 +47,26 @@ return [
         ->fields(fn (): array => [
             Schema\Boolean::make('canSplit')
                 ->get(fn (Discussion $discussion, Context $context) => $context->getActor()->can('split', $discussion)),
+        ]),
+
+    (new Extend\Conditional())
+        ->whenExtensionEnabled('flarum-audit', fn () => [
+            (new Audit())
+                ->group('fof-split')
+                ->register('discussion.split_away', 'discussion.split_into')
+                ->using(function () {
+                    resolve('events')->listen(DiscussionWasSplit::class, function (DiscussionWasSplit $event) {
+                        AuditLogger::log('discussion.split_away', [
+                            'discussion_id'     => $event->originalDiscussion->id,
+                            'new_discussion_id' => $event->newDiscussion->id,
+                            'post_count'        => $event->posts->count(),
+                        ]);
+                        AuditLogger::log('discussion.split_into', [
+                            'discussion_id'          => $event->newDiscussion->id,
+                            'original_discussion_id' => $event->originalDiscussion->id,
+                            'post_count'             => $event->posts->count(),
+                        ]);
+                    });
+                }),
         ]),
 ];
