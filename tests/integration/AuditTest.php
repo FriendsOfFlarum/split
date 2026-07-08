@@ -38,7 +38,7 @@ class AuditTest extends TestCase
         $date = Carbon::parse('2021-01-01T12:00:00+00:00');
 
         $this->prepareDatabase([
-            'audit_log' => [],
+            'audit_log'       => [],
             Discussion::class => [
                 ['id' => 10, 'title' => 'A', 'created_at' => $date, 'last_posted_at' => $date, 'first_post_id' => 1, 'comment_count' => 4],
             ],
@@ -56,9 +56,9 @@ class AuditTest extends TestCase
     {
         $response = $this->send($this->request('POST', '/api/split', [
             'authenticatedAs' => 1,
-            'json' => [
-                'title' => 'Split',
-                'start_post_id' => 2,
+            'json'            => [
+                'title'           => 'Split',
+                'start_post_id'   => 2,
                 'end_post_number' => 3,
             ],
         ]));
@@ -73,9 +73,9 @@ class AuditTest extends TestCase
         $this->assertNotNull($log);
         $this->assertEquals(1, $log->actor_id);
         $this->assertEquals([
-            'discussion_id' => 10,
+            'discussion_id'     => 10,
             'new_discussion_id' => $newDiscussionId,
-            'post_count' => 2,
+            'post_count'        => 2,
         ], $log->payload);
         $this->assertEquals('127.0.0.1', $log->ip_address);
 
@@ -83,9 +83,9 @@ class AuditTest extends TestCase
         $this->assertNotNull($log);
         $this->assertEquals(1, $log->actor_id);
         $this->assertEquals([
-            'discussion_id' => $newDiscussionId,
+            'discussion_id'          => $newDiscussionId,
             'original_discussion_id' => 10,
-            'post_count' => 2,
+            'post_count'             => 2,
         ], $log->payload);
         $this->assertEquals('127.0.0.1', $log->ip_address);
     }
