@@ -21,6 +21,7 @@ use Flarum\User\UserRepository;
 use FoF\Split\Events\DiscussionWasSplit;
 use FoF\Split\Validators\SplitDiscussionValidator;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\ConnectionInterface;
 
 class SplitDiscussionHandler
 {
@@ -29,6 +30,7 @@ class SplitDiscussionHandler
         protected PostRepository $posts,
         protected SettingsRepositoryInterface $settings,
         protected Dispatcher $events,
+        protected ConnectionInterface $db,
         protected SplitDiscussionValidator $validator,
         protected ExtensionManager $extensions,
     ) {
@@ -43,6 +45,13 @@ class SplitDiscussionHandler
      * @return \Flarum\Discussion\Discussion
      */
     public function handle(SplitDiscussion $command)
+    {
+        // Nobody sees a half-done split, e.g. the new discussion before the
+        // listeners have made it private, and a failed split leaves nothing behind.
+        return $this->db->transaction(fn () => $this->split($command));
+    }
+
+    protected function split(SplitDiscussion $command): Discussion
     {
         $this->validator->assertValid([
             'start_post_id'   => $command->start_post_id,
@@ -83,7 +92,10 @@ class SplitDiscussionHandler
             new DiscussionWasSplit($command->actor, $affectedPosts, $originalDiscussion, $discussion)
         );
 
-        return $discussion;
+        // Listeners can change what the saving hooks work out: fof/byobu copies the
+        // recipients across, and they decide is_private. Save the new discussion again
+        // from a fresh instance, so no relation loaded before the listeners ran is reused.
+        return $this->refreshDiscussion(Discussion::query()->findOrFail($discussion->id));
     }
 
     /**
