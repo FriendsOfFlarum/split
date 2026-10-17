@@ -13,6 +13,7 @@
 namespace FoF\Split\Api\Commands;
 
 use Flarum\Discussion\Discussion;
+use Flarum\Discussion\UserState;
 use Flarum\Extension\ExtensionManager;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
@@ -88,6 +89,7 @@ class SplitDiscussionHandler
         );
 
         $originalDiscussion = $this->refreshDiscussion($originalDiscussion);
+        $this->rewindReadPositions($originalDiscussion);
         $this->renumberDiscussion($discussion);
         $discussion = $this->refreshDiscussion($discussion);
 
@@ -169,6 +171,25 @@ class SplitDiscussionHandler
         $discussion->save();
 
         return Discussion::find($discussion->id);
+    }
+
+    /**
+     * Pulls read positions past the posts that remain back to the last of them.
+     *
+     * When the tail of a discussion is split off, users who had read into it keep
+     * a read position past the new end. Replies are numbered from that end again,
+     * and would count as read until they passed the old position.
+     *
+     * @param Discussion $discussion
+     */
+    protected function rewindReadPositions(Discussion $discussion): void
+    {
+        $lastNumber = $discussion->posts()->max('number');
+
+        UserState::query()
+            ->where('discussion_id', $discussion->id)
+            ->where('last_read_post_number', '>', $lastNumber)
+            ->update(['last_read_post_number' => $lastNumber]);
     }
 
     /**
