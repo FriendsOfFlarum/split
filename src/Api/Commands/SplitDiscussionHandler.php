@@ -67,8 +67,11 @@ class SplitDiscussionHandler
         /** @var Discussion $originalDiscussion */
         $originalDiscussion = $startPost->discussion;
 
-        // create a new discussion for the user of the first splitted reply.
-        $discussion = Discussion::start($command->title, $startPost->user);
+        // create a new discussion for the user of the first splitted reply. Not through
+        // Discussion::start(), which needs a User: the author may have been deleted, and
+        // setFirstPost() takes the author (or its absence) from the post either way.
+        $discussion = new Discussion();
+        $discussion->title = $command->title;
         $discussion->setFirstPost($startPost);
 
         // persist the new discussion.
