@@ -73,8 +73,9 @@ export default class SplitPostModal extends FormModal<SplitPostModalAttrs> {
 
         app.__fof_split.splitController?.reset();
 
-        this.hide();
-        m.route.set(app.route.discussion(discussion));
+        this.attrs.animateHide(() => {
+          m.route.set(app.route.discussion(discussion));
+        });
       }, this.loaded.bind(this));
   }
 }
