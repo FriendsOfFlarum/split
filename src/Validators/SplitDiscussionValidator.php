@@ -26,7 +26,7 @@ class SplitDiscussionValidator extends AbstractValidator
                 'required',
                 'int',
             ],
-            'end_post_id' => [
+            'end_post_number' => [
                 'required',
                 'int',
             ],

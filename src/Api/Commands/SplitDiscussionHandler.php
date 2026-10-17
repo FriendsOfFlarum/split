@@ -14,6 +14,8 @@ namespace FoF\Split\Api\Commands;
 
 use Flarum\Discussion\Discussion;
 use Flarum\Extension\ExtensionManager;
+use Flarum\Foundation\ValidationException;
+use Flarum\Locale\TranslatorInterface;
 use Flarum\Post\Post;
 use Flarum\Post\PostRepository;
 use Flarum\Settings\SettingsRepositoryInterface;
@@ -31,6 +33,7 @@ class SplitDiscussionHandler
         protected Dispatcher $events,
         protected SplitDiscussionValidator $validator,
         protected ExtensionManager $extensions,
+        protected TranslatorInterface $translator,
     ) {
     }
 
@@ -54,6 +57,16 @@ class SplitDiscussionHandler
         $startPost = $this->posts->findOrFail($command->start_post_id, $command->actor);
 
         $command->actor->assertCan('split', $startPost->discussion);
+
+        // Splitting from the opening post would leave the original discussion without
+        // one, and a range that ends before it starts would leave the new one without posts.
+        if ($startPost->id === $startPost->discussion->first_post_id) {
+            throw new ValidationException(['start_post_id' => $this->translator->trans('fof-split.api.errors.first_post')]);
+        }
+
+        if ($command->end_post_number < $startPost->number) {
+            throw new ValidationException(['end_post_number' => $this->translator->trans('fof-split.api.errors.end_before_start')]);
+        }
 
         /** @var Discussion $originalDiscussion */
         $originalDiscussion = $startPost->discussion;
