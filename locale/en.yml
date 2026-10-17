@@ -14,6 +14,10 @@ fof-split:
             title: Split discussion
             new_discussion_label: Specify the title for the new discussion
             submit_button: Split
+    api:
+        errors:
+            first_post: The opening post of a discussion can't be split off.
+            end_before_start: The split must end on or after the post it starts from.
 
 # Labels for the audit log entries this extension produces, rendered by the (optional)
 # flarum/audit browser. Defined under the flarum-audit namespace so the audit frontend
